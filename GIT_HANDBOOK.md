@@ -139,6 +139,97 @@ git push origin --delete branch-name
 git branch -D branch-name
 ```
 
+### Merging Feature Branch to Main
+
+#### Method 1: Via Pull Request (Recommended)
+```bash
+# 1. Ensure your feature branch is up to date
+git checkout your-feature-name
+git pull origin main
+git push origin your-feature-name
+
+# 2. Create Pull Request on GitHub
+# Go to: https://github.com/UnicornnGrg/AppliedMachineLearning/pulls
+# Click "New pull request"
+# Select: base: main <- compare: your-feature-name
+# Add description and request reviews
+
+# 3. After approval, merge on GitHub
+# Click "Merge pull request" → "Confirm merge"
+
+# 4. Update your local main branch
+git checkout main
+git pull origin main
+
+# 5. Delete the merged branch
+git branch -d your-feature-name
+git push origin --delete your-feature-name
+```
+
+#### Method 2: Direct Merge (Command Line)
+```bash
+# 1. Update main branch
+git checkout main
+git pull origin main
+
+# 2. Merge feature branch into main
+git merge your-feature-name
+
+# 3. Resolve any conflicts if they occur
+# (See "Handling Conflicts" section)
+
+# 4. Push merged changes to GitHub
+git push origin main
+
+# 5. Delete the merged feature branch
+git branch -d your-feature-name
+git push origin --delete your-feature-name
+```
+
+#### Method 3: Squash Merge (Clean History)
+```bash
+# 1. Update main branch
+git checkout main
+git pull origin main
+
+# 2. Squash merge feature branch (combines all commits into one)
+git merge --squash your-feature-name
+
+# 3. Commit the squashed changes
+git commit -m "Add feature: brief description of all changes"
+
+# 4. Push to GitHub
+git push origin main
+
+# 5. Delete the feature branch
+git branch -d your-feature-name
+git push origin --delete your-feature-name
+```
+
+#### Pre-Merge Checklist
+Before merging your feature branch to main:
+- [ ] All tests pass
+- [ ] Code has been reviewed (if using PR)
+- [ ] Feature branch is up to date with main
+- [ ] No merge conflicts
+- [ ] Documentation is updated
+- [ ] Committed all changes
+- [ ] Code follows team standards
+
+#### Post-Merge Steps
+```bash
+# 1. Notify team that main has been updated
+# (via Slack, Teams, or your communication channel)
+
+# 2. Team members should update their local main
+git checkout main
+git pull origin main
+
+# 3. Team members should update their feature branches
+git checkout their-feature-branch
+git merge main
+```
+
 ---
 
 ## 💻 Common Commands
