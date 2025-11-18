@@ -1,3 +1,3 @@
 # AppliedMachineLearning
 
-Welcome to our apllied machine learning
+Welcome to our applied machine learning hahah
