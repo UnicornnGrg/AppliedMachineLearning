@@ -1,0 +1,168 @@
+Create a Python script to apply PCA dimensionality reduction to business-selected features from PUMS census data, with business-context analysis.
+
+**File**: `05_fe_pca_business.py`
+
+**Purpose**: Reduce dimensionality of business-selected features using PCA while maintaining business interpretability and comparing to statistical PCA
+
+**Requirements**:
+
+1. **Load Data**:
+   - Load `feature_engineering/output/02_fe_business_categorical.csv`
+   - Load business metadata from `feature_engineering/output/02_fe_business_metadata.csv` (feature → business group mapping)
+   - Separate target variable (`medicaid_only`) from features
+   - Print: original dataset shape, features per business group
+
+2. **Preprocessing for PCA**:
+   
+   **Step 1: Load and Inspect Data Types**
+   - Separate target from features
+   - Use `df.dtypes` and `df.select_dtypes()` to identify feature types
+   - Print: "Numeric features: [N], Categorical features: [M]"
+   
+   **Step 2: Identify ALL Categorical Features**
+   - Explicitly check for: object dtype, category dtype, int64 with < 20 unique values
+   - Common categoricals in business features:
+     - Binary: `SEX`, `DIS`, disability flags, `has_wage_income`, `has_self_employment`, `full_time_employed`, `currently_enrolled`, `has_any_disability`, `has_work_disability`, `recent_marriage`, `recent_move`, `life_transition_flag`
+     - Ordinal/Nominal from raw data: `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `RELSHIPP`, `MIG`, `STATE`, `PUMA`, `REGION`, `DIVISION`, `RAC1P`, `HISP`, `NATIVITY`, `OCCP_2digit`, `INDP_2digit`
+     - Engineered categoricals: `poverty_band`, `employment_status_simple`, `employer_type`, `age_group`, `marital_status_simple`, `education_level`
+   - Track business group for each categorical
+   - Print full list of identified categorical features with business group labels
+   
+   **Step 3: Verify No Categoricals Missed**
+   - Check for any non-numeric dtypes
+   - Check numeric columns with < 20 unique values
+   - Print warning if potential categoricals found
+   
+   **Step 4: Create Dummy Variables with Business Group Tracking**
+   - Apply `pd.get_dummies(df, columns=categorical_cols, drop_first=True)`
+   - **Track business groups**: Maintain mapping of dummy columns → original feature → business group
+   - For example: `MAR_2`, `MAR_3`, ... all belong to "Demographics" business group
+   - Save mapping to dictionary
+   - Print: "Created [N] dummy columns from [M] categorical features"
+   - Print dummy count per business group
+   
+   **Step 5: Verify All Numeric**
+   - Verify all features are numeric
+   - Print: "Verification passed: all features are numeric"
+   
+   **Step 6: Handle Missing Values**
+   - Check for NaN values
+   - Impute with median
+   - Print: "Missing values after encoding: [count]"
+
+3. **Standardization**:
+   - Use `StandardScaler` to standardize all features (mean=0, std=1)
+   - Save scaler to `feature_engineering/output/05_fe_pca_business_scaler.pkl`
+
+4. **Apply PCA**:
+   - Use `PCA(n_components=0.95)` for 95% variance
+   - Fit and transform features
+   - Print:
+     - Number of components
+     - Total variance explained
+     - Variance per component (first 10)
+   - Save PCA model to `feature_engineering/output/05_fe_pca_business_model.pkl`
+
+5. **Business-Aware Component Analysis**:
+   - Extract component loadings
+   - For each of first 10 components:
+     - Identify top 10 features by absolute loading
+     - Map back to original features AND business groups
+     - Calculate business group contribution: sum of squared loadings from each group
+     - Label component by dominant business group (e.g., "PC1_Income_dominant", "PC2_Employment_Health")
+   - Calculate correlation of each PC with target
+   - Identify which business groups are most represented in top PCs
+   - Save enhanced loadings (with business group labels) to `feature_engineering/output/05_fe_pca_business_loadings.csv`
+
+6. **Comparison with Statistical PCA**:
+   - Load results from `04_fe_pca_statistical.csv` and `04_fe_pca_statistical_variance.csv`
+   - Compare:
+     - Number of components needed for 95% variance (statistical vs business)
+     - Variance explained per component (compare efficiency)
+     - Dimension reduction ratio
+   - Create comparison table
+   - Analysis: Does business feature selection lead to more efficient PCA?
+
+7. **Save Outputs**:
+   - **PCA dataset**: `feature_engineering/output/05_fe_pca_business.csv` (target + PCs)
+   - **Business analysis report**: `feature_engineering/output/05_fe_pca_business_report.txt`:
+     - Original vs PCA dimensions
+     - Variance explained
+     - Component interpretations with business context
+     - Business group contributions to each PC
+     - Comparison with statistical PCA (04)
+     - Recommendations for business use
+   - **Business group contributions**: CSV showing each business group's contribution to each PC, save to `feature_engineering/output/05_fe_pca_business_group_contributions.csv`
+
+8. **Visualizations**:
+   - **Scree plot**: Compare business (05) vs statistical (04) side-by-side
+   - **Cumulative variance**: Overlay both methods
+   - **Biplot**: PC1 vs PC2 colored by target
+   - **Business group contributions**: Stacked bar chart showing each PC's composition by business group
+   - **Loadings heatmap**: Components × features, organized by business group
+   - **Component-target correlation**: Bar chart comparing business vs statistical PCs
+   - Save all to `feature_engineering/output/` with prefix `05_fe_pca_business_` as PNG with 300 DPI
+
+9. **Business Insights Section**:
+   - Identify which business groups are most predictive (high correlation in top PCs)
+   - Recommend which PCs are most actionable for marketing
+   - Suggest interpretations for top 5 PCs in business terms
+
+10. **CATEGORICAL ENCODING VERIFICATION** (print to console):
+```
+========================================
+CATEGORICAL ENCODING VERIFICATION
+========================================
+Original categorical features by business group:
+- Income & Affordability: [N features] → [M dummies]
+- Employment Quality: [N features] → [M dummies]
+- Demographics: [N features] → [M dummies]
+- Education: [N features] → [M dummies]
+- Health: [N features] → [M dummies]
+- Geography: [N features] → [M dummies]
+
+Total categorical features: [N]
+Total dummy columns: [M]
+
+Final dataset before PCA:
+- Numeric features: [A]
+- Dummy features: [M]
+- Total features: [A + M]
+
+All features numeric: [True/False]
+Ready for PCA: [True/False]
+
+PCA Results:
+- Input dimensions: [A + M]
+- Output dimensions: [PCs]
+- Variance retained: [X]%
+
+Comparison with Statistical PCA:
+- Statistical: [X1] input → [Y1] PCs
+- Business: [X2] input → [Y2] PCs
+- Efficiency: Business is [better/worse/equal]
+========================================
+```
+
+**Code Structure**:
+- Create functions: `load_with_business_context()`, `apply_pca_with_tracking()`, `analyze_business_contributions()`, `compare_with_statistical()`
+- Maintain business group tracking throughout
+- Include extensive business interpretations in comments
+- Main execution in `if __name__ == "__main__":`
+
+**Key Difference from 04**:
+This script emphasizes business interpretability. Every component should be explainable in terms of the original 6 business groups (Income, Employment, Demographics, Education, Health, Geography).
+
+**Consistency Requirements**:
+- Same target definition: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)`
+- Same age filter: 18-65 years
+- Same output directory: `feature_engineering/output/`
+- Same naming convention: snake_case for all variables and files
+- All files print progress statements during execution
+- All files handle missing values explicitly
+- All files save both data outputs (CSV) and analysis reports (TXT)
+- All visualizations saved as PNG with 300 DPI
+- Use seaborn/matplotlib for visualizations with consistent style
+- Include `if __name__ == "__main__":` block
+- Add module-level docstring explaining file purpose
+- Handle edge cases (missing columns, empty categories, etc.)

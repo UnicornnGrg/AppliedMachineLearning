@@ -1,0 +1,144 @@
+Create a Python script for statistical feature selection from PUMS census data to predict Medicaid-only insurance status.
+
+**File**: `01_fe_statistical.py`
+
+**Purpose**: Data-driven feature selection using statistical criteria (correlation, variance, multicollinearity, mutual information)
+
+**Requirements**:
+
+1. **Load and Prepare Data**:
+   - Load `data/processed/psam_p38_cleaned.csv`
+   - Filter to ages 18-65: `AGEP >= 18` and `AGEP <= 65`
+   - Create target variable: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)` as binary (0/1)
+   - Print target distribution and class imbalance ratio
+   - Drop unnecessary columns: `PWGTP1` through `PWGTP80` (80 replicate weights), all columns starting with 'F' (allocation flags), `RT`, `SERIALNO`, `SPORDER`, `HINS1`, `HINS2`, `HINS3`, `HINS4`, `HINS5`, `HINS6`, `HINS7`, `PUBCOV`, `PRIVCOV`, `HICOV`, `NAICSP`, `SOCP`
+
+2. **Identify ALL Categorical Variables**:
+   
+   **Step 1: Automatic Detection**
+   - Identify object/category dtype columns: `df.select_dtypes(include=['object', 'category']).columns`
+   - For numeric columns, check unique value count: if `nunique() < 20`, print for manual review
+   - Special attention to: `SEX`, `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `DIS`, `DDRS`, `DEAR`, `DEYE`, `DOUT`, `DPHY`, `DREM`, `CIT`, `LANX`, `MIL`, `RELSHIPP`, `MIG`, `NATIVITY`, `RAC1P`, `HISP`, `WKL`, `WRK`, `REGION`, `DIVISION`, `STATE`, `PUMA`, `GCL`, `QTRBIR`, `RAC2P`, `RAC3P`, `RACAIAN`, `RACASN`, `RACBLK`, `RACNH`, `RACNUM`, `RACPI`, `RACSOR`, `RACWHT`, `RC`, `ANC`, `ANC1P`, `ANC2P`, `MSP`
+   
+   **Step 2: Group High-Cardinality Categoricals**
+   - **`OCCP`**: Convert to string, zero-pad to 4 digits (e.g., 20 → '0020'), extract first 2 digits → `OCCP_2digit`
+     - Example: OCCP=20 → '0020' → '00', OCCP=4720 → '4720' → '47'
+   - **`INDP`**: Convert to string, zero-pad to 4 digits (e.g., 170 → '0170'), extract first 2 digits → `INDP_2digit`
+     - Example: INDP=170 → '0170' → '01', INDP=6991 → '6991' → '69'
+   - Drop original `OCCP` and `INDP` after creating grouped versions
+   
+   **Step 3: Verify Categoricals**
+   - Print: "Identified categorical variables: [list with count]"
+   - Print: "Identified numeric variables: [list with count]"
+   - For ambiguous variables (numeric with < 20 unique values): print warning and decision
+   
+   **Step 4: Handle Missing Values**
+   - Numeric features: fill with median
+   - Categorical features: fill with 'Missing' category
+   - Binary features (1/2 coded): fill with mode
+
+3. **Statistical Feature Selection** (in order):
+   
+   **Step A: Low-Information Filtering**
+   - **For numeric features**:
+     - Remove features with near-zero variance: `std < 1e-4` OR same value in > 99% of rows
+     - Calculate: standard deviation and value_counts to check concentration
+   - **For categorical features**:
+     - Remove features with fewer than 2 unique values
+     - Remove features where single category appears in > 99% of observations
+   - Print: number of features removed (numeric + categorical), list of removed features
+   
+   **Step B: Redundancy Filtering (Highly Correlated Features)**
+   - **For numeric features**:
+     - Compute pairwise correlation matrix (Pearson)
+     - For any pair with `|correlation| > 0.98`, mark one feature for removal
+     - Removal priority: drop the feature with more missing values, or if tied, drop the one with lower MI score (calculate later)
+   - **Optionally for categorical features**:
+     - Compute Cramér's V between pairs
+     - Remove one feature when `V > 0.9`
+   - Print: features removed due to high redundancy
+   
+   **Step C: Mutual Information Selection (Main Relevance Step)**
+   - Encode categorical features appropriately for MI calculation:
+     - Use target encoding (mean target rate per category) OR ordinal encoding
+     - For one-hot encoded features, calculate MI for each dummy column
+   - Use `mutual_info_classif` from sklearn (classification task)
+   - Compute MI scores for all remaining features and rank by MI (descending)
+   - Keep top K features (60-80 features, or adapt K to dataset size)
+   - Optionally: also drop features with MI ≈ 0 (MI < 0.001)
+   - Print:
+     - Total number of features before/after MI selection
+     - List of selected features
+     - MI score table (feature → MI score)
+
+4. **Save Outputs**:
+   - **Categorical version**: `feature_engineering/output/01_fe_statistical_categorical.csv` (target + selected features in original form, ~60-80 columns)
+   - **Encoded version**: 
+     - Create dummy variables for ALL categorical features using `pd.get_dummies(df[categorical_cols], drop_first=True, prefix=categorical_cols)`
+     - For OCCP_2digit and INDP_2digit: prefix='OCCP_2digit' results in columns like 'OCCP_2digit_00', 'OCCP_2digit_11', etc.
+     - Combine with numeric features
+     - Save as `feature_engineering/output/01_fe_statistical_encoded.csv` (~120-150 columns)
+     - Print: "Categorical columns before encoding: [N], Dummy columns after encoding: [M]"
+   - **Selection report**: Save to `feature_engineering/output/01_fe_statistical_report.txt` with:
+     - Original feature count → final count
+     - Features removed at each step (with reasons)
+     - Top 30 selected features ranked by MI score + correlation
+     - Summary statistics
+   - **Feature importance CSV**: Save feature names, correlation, MI score, final rank to `feature_engineering/output/01_fe_statistical_importance.csv`
+
+5. **Visualizations**:
+   - Correlation heatmap of top 30 features
+   - Feature importance bar chart (MI scores)
+   - Selection funnel chart (features remaining after each step)
+   - Save all plots to `feature_engineering/output/` with prefix `01_fe_` as PNG with 300 DPI
+
+6. **CATEGORICAL VARIABLE VERIFICATION** (print to console):
+```
+========================================
+CATEGORICAL ENCODING VERIFICATION
+========================================
+Original categorical features identified: [N]
+List: [feature1, feature2, ...]
+
+Dummy encoding results:
+- Total dummy columns created: [M]
+- Breakdown by original feature:
+  * SEX: 1 dummy (from 2 categories)
+  * MAR: [X] dummies (from [Y] categories)
+  * OCCP_2digit: [X] dummies (from [Y] categories)
+  * INDP_2digit: [X] dummies (from [Y] categories)
+  * [etc.]
+
+Final dataset:
+- Numeric features (unchanged): [A]
+- Dummy-encoded features: [M]
+- Total features: [A + M]
+
+All features numeric: [True/False]
+Ready for modeling: [True/False]
+========================================
+```
+
+**Code Structure**:
+- Use functions for each major step (load_data, identify_categoricals, filter_correlation, filter_variance, etc.)
+- Use pandas for data manipulation, sklearn for statistical tests
+- Include detailed print statements showing progress
+- Add docstrings to all functions
+- Main execution in `if __name__ == "__main__":`
+
+**Output Console Display**:
+Show: dataset shape at each step, features removed at each step, final feature list summary, file save confirmations
+
+**Consistency Requirements**:
+- Same target definition: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)`
+- Same age filter: 18-65 years
+- Same output directory: `feature_engineering/output/`
+- Same naming convention: snake_case for all variables and files
+- All files print progress statements during execution
+- All files handle missing values explicitly
+- All files save both data outputs (CSV) and analysis reports (TXT)
+- All visualizations saved as PNG with 300 DPI
+- Use seaborn/matplotlib for visualizations with consistent style
+- Include `if __name__ == "__main__":` block
+- Add module-level docstring explaining file purpose
+- Handle edge cases (missing columns, empty categories, etc.)

@@ -1,0 +1,157 @@
+Create a Python script for business logic-driven feature selection from PUMS census data to predict Medicaid-only insurance status for private insurance marketing.
+
+**File**: `02_fe_business.py`
+
+**Purpose**: Domain-driven feature selection based on insurance industry knowledge and marketing priorities
+
+**Requirements**:
+
+1. **Load and Prepare Data**:
+   - Load `data/processed/psam_p38_cleaned.csv`
+   - Filter to ages 18-65: `AGEP >= 18` and `AGEP <= 65`
+   - Create target variable: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)` as binary (0/1)
+   - Print target distribution and class imbalance ratio
+   - Drop unnecessary columns: `PWGTP1-PWGTP80`, F* flags, IDs, insurance columns (HINS1-7, PUBCOV, PRIVCOV, HICOV), `NAICSP`, `SOCP`
+
+2. **Identify and Preprocess ALL Categorical Variables**:
+   
+   **Step 1: Categorical Detection**
+   - Identify all categorical variables using dtype and unique value analysis
+   - Separate into groups:
+     - **Binary indicators** (2 unique values): `SEX`, `DIS`, `DDRS`, `DEAR`, `DEYE`, `DOUT`, `DPHY`, `DREM`, `LANX`, `MIL`, `NATIVITY`, `GCL`, `RACAIAN`, `RACASN`, `RACBLK`, `RACNH`, `RACPI`, `RACWHT`, etc.
+     - **Low-cardinality** (3-15 values): `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `CIT`, `RELSHIPP`, `MIG`, `WKL`, `WRK`, `REGION`, `DIVISION`, `QTRBIR`, `RACNUM`, `RC`, etc.
+     - **Medium-cardinality** (15-50 values): `STATE`, `PUMA`, `RAC1P`, `HISP`, `RAC2P`, `RAC3P`, `ANC`, `ANC1P`, `ANC2P`, `MSP`
+     - **High-cardinality to group**: `OCCP`, `INDP`
+   - Print categorical breakdown by cardinality
+   
+   **Step 2: Group High-Cardinality Features**
+   - **`OCCP`**: Convert to string, zero-pad to 4 digits (20 → '0020'), extract first 2 → `OCCP_2digit`
+     - Example: OCCP=20 → '0020' → '00', OCCP=4720 → '4720' → '47'
+   - **`INDP`**: Convert to string, zero-pad to 4 digits (170 → '0170'), extract first 2 → `INDP_2digit`
+     - Example: INDP=170 → '0170' → '01', INDP=6991 → '6991' → '69'
+   - Drop original `OCCP` and `INDP`
+   
+   **Step 3: Handle Missing Values**
+   - Numeric: fill with median
+   - Categorical: fill with 'Missing' category (preserves signal of missingness)
+   - Document missing value patterns
+
+3. **Business Feature Groups** (select and engineer):
+
+   **GROUP 1: Income & Affordability (~5-10 features)**
+   - Raw features: `WAGP`, `POVPIP`, `SEMP`
+   - Engineer:
+     - `income_group`: categorize WAGP in 5 groups
+     - `income_source_count`: Count non-zero income sources
+     - `poverty_band`: Categorize POVPIP into '<100%', '100-138%', '138-200%', '200-400%', '>400%'
+     - `has_wage_income`: Binary (WAGP > 0)
+     - `has_self_employment`: Binary (SEMP > 0)
+
+   **GROUP 2: Employment Quality (~10-15 features)**
+   - Raw features: `ESR`, `COW`, `WKL`, `OCCP_2digit`, `INDP_2digit`
+   - Note: `ESR`, `COW`, `WKL` are ALL categorical - will need dummy encoding
+   - Engineer:
+     - `employment_status_simple`: Recode ESR to 'Employed', 'Unemployed', 'Not_in_labor_force'
+     - `employer_type`: Simplify COW to 'Private', 'Government', 'Self_employed', 'Unpaid'
+
+   **GROUP 3: Demographics & Life Stage (~10-12 features)**
+   - Raw features: `AGEP`, `SEX`, `MAR`, `MIG`, `NATIVITY`, `RAC1P`, `HISP`
+   - Engineer:
+     - `age_group`: Cut into '18-25', '26-35', '36-45', '46-55', '56-65'
+     - `marital_status_simple`: Recode MAR to 'Married', 'Divorced_Separated', 'Widowed', 'Never_married'
+
+   **GROUP 4: Education (~3-4 features)**
+   - Raw features: `SCHL`, `SCH`
+   - Engineer:
+     - `education_level`: Recode SCHL to 'Less_than_HS', 'HS_diploma', 'Some_college', 'Bachelors', 'Graduate'
+     - `currently_enrolled`: Binary (SCH in [2, 3])
+
+   **GROUP 5: Health & Disability (~4 features)**
+   - Raw features: `DIS`, `DEAR`, `DEYE`, `DPHY`
+   - Engineer:
+     - `has_any_disability`: Binary (DIS == 1)
+
+   **GROUP 6: Geography (~4-5 features)**
+   - Raw features: `STATE`, `PUMA`, `REGION`, `DIVISION`
+   - Keep as-is (categorical)
+
+4. **Feature Selection Logic**:
+   - Total target: ~50-70 features (including engineered)
+   - Prioritize features with clear business interpretation
+   - Document business rationale for each feature/group in code comments
+   - Calculate correlation with target for each business group
+
+5. **Save Outputs**:
+   - **Categorical version**: `feature_engineering/output/02_fe_business_categorical.csv` (~50-70 columns)
+   - **Encoded version**: 
+     - Identify all categorical columns in final business feature set
+     - Create dummy variables: `pd.get_dummies(df, columns=categorical_cols, drop_first=True)`
+     - Expected expansion: ~50-70 categorical features → ~100-130 dummy-encoded features
+     - Save as `feature_engineering/output/02_fe_business_encoded.csv`
+     - Print: "Categorical features: [list], Dummy columns created: [N]"
+   - **Business report**: Save to `feature_engineering/output/02_fe_business_report.txt` with:
+     - Feature count by business group
+     - Engineered feature definitions
+     - Business rationale for each group
+     - Correlation with target by feature and by group
+     - Marketing use cases for each feature group
+   - **Feature metadata CSV**: Feature name, business group, data type, engineering method to `feature_engineering/output/02_fe_business_metadata.csv`
+
+6. **Visualizations**:
+   - Bar chart: feature count by business group
+   - Bar chart: average correlation with target by business group
+   - Heatmap: correlation matrix organized by business groups
+   - Distribution plots: target rate by key categorical features (employment status, education level, poverty band)
+   - Save all to `feature_engineering/output/` with prefix `02_fe_` as PNG with 300 DPI
+
+7. **CATEGORICAL VARIABLE VERIFICATION** (print to console):
+```
+========================================
+CATEGORICAL ENCODING VERIFICATION
+========================================
+Original categorical features identified: [N]
+List: [feature1, feature2, ...]
+
+Dummy encoding results:
+- Total dummy columns created: [M]
+- Breakdown by original feature:
+  * employment_status_simple: [X] dummies
+  * education_level: [X] dummies
+  * OCCP_2digit: [X] dummies
+  * STATE: [X] dummies
+  * [etc.]
+
+Final dataset:
+- Numeric features (unchanged): [A]
+- Dummy-encoded features: [M]
+- Total features: [A + M]
+
+All features numeric: [True/False]
+Ready for modeling: [True/False]
+========================================
+```
+
+**Code Structure**:
+- Use separate functions for each business group engineering
+- Include detailed comments explaining business rationale
+- Use meaningful variable names reflecting business concepts
+- Main execution in `if __name__ == "__main__":`
+
+**Business Context to Include in Comments**:
+- Medicaid-only individuals are target market for private insurance upsell
+- Focus on affordability, employment stability, and life transitions
+- Features should be interpretable for marketing teams
+
+**Consistency Requirements**:
+- Same target definition: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)`
+- Same age filter: 18-65 years
+- Same output directory: `feature_engineering/output/`
+- Same naming convention: snake_case for all variables and files
+- All files print progress statements during execution
+- All files handle missing values explicitly
+- All files save both data outputs (CSV) and analysis reports (TXT)
+- All visualizations saved as PNG with 300 DPI
+- Use seaborn/matplotlib for visualizations with consistent style
+- Include `if __name__ == "__main__":` block
+- Add module-level docstring explaining file purpose
+- Handle edge cases (missing columns, empty categories, etc.)

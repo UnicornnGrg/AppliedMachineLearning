@@ -1,0 +1,74 @@
+======================================================================
+STATISTICAL FEATURE SELECTION REPORT
+======================================================================
+
+OVERVIEW
+----------------------------------------------------------------------
+Final feature count: 51
+Final encoded feature count: 557
+Target variable: medicaid_only
+Sample size: 4,534
+
+FEATURES REMOVED - LOW INFORMATION
+----------------------------------------------------------------------
+  - ADJINC: near-zero variance
+  - MARHD: 99.32% concentration
+  - MARHW: 99.89% concentration
+  - OC: near-zero variance
+  - RACPI: 99.89% concentration
+  - RACNH: 99.93% concentration
+  - DIVISION: only 1 unique values
+  - REGION: only 1 unique values
+  - STATE: only 1 unique values
+  - RC: only 1 unique values
+
+Total: 10
+
+FEATURES REMOVED - REDUNDANCY (HIGH CORRELATION)
+----------------------------------------------------------------------
+  None
+
+Total: 0
+
+TOP 30 SELECTED FEATURES (BY MI SCORE)
+----------------------------------------------------------------------
+Rank   Feature                   MI Score     Correlation  Type        
+----------------------------------------------------------------------
+25     POVPIP                    0.081356     -0.3544      numeric     
+23     PINCP                     0.058542     -0.2410      numeric     
+22     PERNP                     0.058420     -0.2561      numeric     
+65     OCCP_2digit               0.053329     N/A          categorical 
+19     WAGP                      0.049139     -0.2474      numeric     
+66     INDP_2digit               0.042518     N/A          categorical 
+63     ESR                       0.039350     N/A          categorical 
+52     ANC1P                     0.037277     N/A          categorical 
+60     WKL                       0.033112     N/A          categorical 
+48     SCHL                      0.029356     N/A          categorical 
+44     RELSHIPP                  0.028144     N/A          categorical 
+39     MSP                       0.025672     N/A          categorical 
+31     WRK                       0.025129     N/A          categorical 
+57     DIS                       0.022474     N/A          categorical 
+34     MAR                       0.022036     N/A          categorical 
+3      HIMRKS                    0.021087     -0.1311      numeric     
+46     DREM                      0.020104     N/A          categorical 
+64     RAC3P                     0.019727     N/A          categorical 
+62     DOUT                      0.018985     N/A          categorical 
+61     RAC2P                     0.018542     N/A          categorical 
+11     NWLK                      0.018270     -0.2061      numeric     
+17     SSIP                      0.015858     0.1949       numeric     
+10     NWLA                      0.015782     -0.1944      numeric     
+45     DPHY                      0.015487     N/A          categorical 
+43     RAC1P                     0.015262     N/A          categorical 
+37     DDRS                      0.015069     N/A          categorical 
+47     RACAIAN                   0.014813     N/A          categorical 
+8      NWAB                      0.013289     -0.1819      numeric     
+7      MARHYP                    0.010992     -0.0235      numeric     
+49     RACWHT                    0.010376     N/A          categorical 
+
+======================================================================
+SUMMARY STATISTICS
+======================================================================
+Mean MI Score: 0.018378
+Median MI Score: 0.015069
+Min MI Score: 0.001349
+Max MI Score: 0.081356

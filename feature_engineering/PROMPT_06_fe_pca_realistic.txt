@@ -1,0 +1,183 @@
+Create a Python script to apply PCA dimensionality reduction to realistic meta-features from PUMS census data.
+
+**File**: `06_fe_pca_realistic.py`
+
+**Purpose**: Apply PCA to human-engineered meta-features to find latent factors while maintaining high interpretability
+
+**Requirements**:
+
+1. **Load Data**:
+   - Load `feature_engineering/output/03_fe_realistic_categorical.csv`
+   - Load feature dictionary from `feature_engineering/output/03_fe_realistic_feature_dictionary.txt` (feature descriptions)
+   - Separate target variable (`medicaid_only`) from features
+   - Print: original dataset shape (~25-35 features)
+
+2. **Preprocessing for PCA**:
+   
+   **Step 1: Load and Inspect Data Types**
+   - Separate target from features
+   - Use `df.dtypes` and `df.select_dtypes()` to identify feature types
+   - Print: "Numeric features: [N], Categorical features: [M]"
+   
+   **Step 2: Identify Feature Types**
+   - Identify feature types:
+     - **Composite scores** (already numeric 0-100): `affordability_score`, `employment_quality_score`, `health_risk_score`, `insurance_readiness_score`
+     - **Categorical meta-features**: `poverty_level_category`, `income_tier`, `life_stage`, `family_stage`, `health_urgency_category`, `education_category`, `occupation_sector`, `industry_sector`, `primary_income_type`, `job_stability_category`, `state`, `urban_rural`
+     - **Binary flags**: `subsidy_eligible`, `recent_life_transition`, `aging_out_risk`, `career_transition_age`, `underemployed_flag`, `income_volatility_proxy`, `high_opportunity_state`
+   - Print breakdown by feature type
+   
+   **Step 3: Verify No Categoricals Missed**
+   - Check for any non-numeric dtypes
+   - Check numeric columns with < 10 unique values (might be categorical)
+   - Print warning if potential categoricals found
+   
+   **Step 4: Create Dummy Variables**
+   - Apply `pd.get_dummies(df, columns=categorical_meta_features, drop_first=True)` to categorical meta-features
+   - Track mapping: {original_meta_feature: [dummy_col1, dummy_col2, ...]}
+   - Keep composite scores and binary flags as-is (already numeric)
+   - Print: "Created [N] dummy columns from [M] categorical meta-features"
+   - Print: "Total features before encoding: [X], after encoding: [Y]"
+   
+   **Step 5: Verify All Numeric**
+   - Verify all features are numeric
+   - Print: "Verification passed: all features are numeric"
+   
+   **Step 6: Handle Missing Values**
+   - Check for NaN values
+   - Impute with median (should be minimal)
+   - Print: "Missing values after encoding: [count]"
+
+3. **Standardization**:
+   - Use `StandardScaler` to standardize all features
+   - Note: composite scores (0-100) will be standardized alongside dummy variables
+   - Save scaler to `feature_engineering/output/06_fe_pca_realistic_scaler.pkl`
+
+4. **Apply PCA**:
+   - Use `PCA(n_components=0.95)` for 95% variance
+   - Expected: Realistic features may compress more efficiently (fewer components needed)
+   - Fit and transform features
+   - Print:
+     - Number of components
+     - Total variance explained
+     - Variance per component (first 10)
+   - Save PCA model to `feature_engineering/output/06_fe_pca_realistic_model.pkl`
+
+5. **Interpretable Component Analysis**:
+   - Extract component loadings
+   - For each of first 10 components:
+     - Identify top 10 features by absolute loading
+     - Map dummy variables back to original meta-features
+     - Create business-friendly labels (e.g., "PC1_Insurance_Readiness", "PC2_Life_Transitions")
+     - Focus on composite scores in interpretation (more interpretable than dummies)
+   - Calculate correlation of each PC with target
+   - Save loadings to `feature_engineering/output/06_fe_pca_realistic_loadings.csv`
+
+6. **Three-Way Comparison**:
+   - Load results from `04_fe_pca_statistical.csv` and `05_fe_pca_business.csv`
+   - Load variance data from both methods
+   - Compare across all three methods:
+     - Number of components for 95% variance
+     - Original dimensions → PCA dimensions
+     - Dimension reduction efficiency (original/PCA ratio)
+     - Variance explained by PC1 (information concentration)
+     - Correlation of PC1 with target (predictive power)
+   - Create comprehensive comparison table
+   - Analysis: Which feature engineering approach is most PCA-efficient?
+
+7. **Save Outputs**:
+   - **PCA dataset**: `feature_engineering/output/06_fe_pca_realistic.csv` (target + PCs)
+   - **Analysis report**: `feature_engineering/output/06_fe_pca_realistic_report.txt`:
+     - Original vs PCA dimensions
+     - Variance explained
+     - Component interpretations in plain English
+     - Three-way comparison (statistical vs business vs realistic)
+     - Recommendations: which approach to use when
+   - **Comparison summary CSV**: `feature_engineering/output/06_fe_comparison_summary.csv`:
+     - Columns: Method | Original_features | PCA_components | Variance_explained | PC1_variance | PC1_target_corr | Reduction_ratio
+
+8. **Visualizations**:
+   - **Three-way scree plot**: Compare all three methods side-by-side
+   - **Three-way cumulative variance**: Overlay all methods
+   - **Efficiency comparison**: Bar chart showing dimension reduction ratio for all methods
+   - **Biplot**: PC1 vs PC2 for realistic features, colored by target
+   - **Loadings heatmap**: Components × meta-features
+   - **PC-target correlation**: Compare first 10 PCs across all three methods
+   - Save all to `feature_engineering/output/` with prefix `06_fe_pca_realistic_` as PNG with 300 DPI
+
+9. **Final Recommendations Section** (in report):
+   - **For maximum predictive power**: Use statistical selection (01 → 04)
+   - **For business interpretability**: Use business selection (02 → 05)
+   - **For stakeholder communication**: Use realistic meta-features (03 → 06)
+   - **For production models**: Recommendation based on comparison results
+   - Summary table of trade-offs: predictive power vs interpretability vs dimensionality
+
+10. **CATEGORICAL ENCODING VERIFICATION** (print to console):
+```
+========================================
+CATEGORICAL ENCODING VERIFICATION
+========================================
+Meta-feature breakdown:
+- Numeric scores (0-100): [N features] - no encoding needed
+- Binary flags: [N features] - no encoding needed
+- Categorical meta-features: [N features] → [M dummies]
+
+Categorical meta-features encoded:
+  * poverty_level_category: [X] dummies
+  * life_stage: [X] dummies
+  * occupation_sector: [X] dummies
+  * industry_sector: [X] dummies
+  * [etc.]
+
+Final dataset before PCA:
+- Numeric scores: [A]
+- Binary flags: [B]
+- Dummy features: [M]
+- Total features: [A + B + M]
+
+All features numeric: [True/False]
+Ready for PCA: [True/False]
+
+PCA Results:
+- Input dimensions: [A + B + M]
+- Output dimensions: [PCs]
+- Variance retained: [X]%
+
+THREE-WAY COMPARISON:
+========================================
+Method          | Input | Output | Variance | Ratio
+----------------|-------|--------|----------|------
+Statistical     | [X1]  | [Y1]   | [V1]%    | [R1]
+Business        | [X2]  | [Y2]   | [V2]%    | [R2]
+Realistic       | [X3]  | [Y3]   | [V3]%    | [R3]
+
+Winner by efficiency: [method]
+Winner by interpretability: [method]
+Winner by predictive power (PC1 correlation): [method]
+========================================
+```
+
+**Code Structure**:
+- Create functions: `load_realistic_features()`, `apply_pca_to_metafeatures()`, `compare_all_methods()`, `generate_recommendations()`
+- Focus on interpretability in all outputs
+- Include plain-English summaries alongside technical metrics
+- Main execution in `if __name__ == "__main__":`
+
+**Expected Insight**:
+Realistic meta-features (being pre-engineered composites) may show:
+- Fewer components needed for 95% variance (better information density)
+- First PC may be highly correlated with insurance_readiness_score
+- Components may align with meta-feature categories (affordability, employment, health, life stage)
+
+**Consistency Requirements**:
+- Same target definition: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)`
+- Same age filter: 18-65 years
+- Same output directory: `feature_engineering/output/`
+- Same naming convention: snake_case for all variables and files
+- All files print progress statements during execution
+- All files handle missing values explicitly
+- All files save both data outputs (CSV) and analysis reports (TXT)
+- All visualizations saved as PNG with 300 DPI
+- Use seaborn/matplotlib for visualizations with consistent style
+- Include `if __name__ == "__main__":` block
+- Add module-level docstring explaining file purpose
+- Handle edge cases (missing columns, empty categories, etc.)
