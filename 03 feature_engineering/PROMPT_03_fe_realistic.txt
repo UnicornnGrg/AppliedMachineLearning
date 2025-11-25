@@ -105,7 +105,7 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
 CATEGORICAL ENCODING VERIFICATION
 ========================================
 Original categorical meta-features: [N]
-List: [poverty_level_category, life_stage, ...]
+List: [feature1, feature2, ...]
 
 Dummy encoding results:
 - Total dummy columns created: [M]
