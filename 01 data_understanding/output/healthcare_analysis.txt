@@ -1,0 +1,19 @@
+Top 10 Healthcare Coverage Combinations (% of Total):
+hins_combination
+Employer-based                     59.327803
+Direct-purchase                    11.465646
+Medicaid                            6.062540
+No coverage at all                  5.190385
+Employer-based, Direct-purchase     2.893001
+Tricare/VA                          2.382472
+Medicare                            1.637949
+Medicare, Medicaid                  1.276324
+Medicaid, No coverage               1.127420
+Employer-based, Tricare/VA          0.914699
+
+Public vs. Private Insurance Status (% of Total):
+insurance_status
+Both public and private     5.849819
+Not insured                 5.892363
+Public only                13.507764
+Private only               74.750053

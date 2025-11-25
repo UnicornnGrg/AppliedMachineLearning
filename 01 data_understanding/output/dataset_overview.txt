@@ -1,0 +1,1474 @@
+================================================================================
+DATASET OVERVIEW
+================================================================================
+Number of rows: 4,701
+Number of columns: 287
+
+================================================================================
+COLUMN NAMES
+================================================================================
+  1. RT
+  2. SERIALNO
+  3. DIVISION
+  4. SPORDER
+  5. PUMA
+  6. REGION
+  7. STATE
+  8. ADJINC
+  9. PWGTP
+ 10. AGEP
+ 11. CIT
+ 12. CITWP
+ 13. COW
+ 14. DDRS
+ 15. DEAR
+ 16. DEYE
+ 17. DOUT
+ 18. DPHY
+ 19. DRAT
+ 20. DRATX
+ 21. DREM
+ 22. ENG
+ 23. FER
+ 24. GCL
+ 25. GCM
+ 26. GCR
+ 27. HIMRKS
+ 28. HINS1
+ 29. HINS2
+ 30. HINS3
+ 31. HINS4
+ 32. HINS5
+ 33. HINS6
+ 34. HINS7
+ 35. INTP
+ 36. JWMNP
+ 37. JWRIP
+ 38. JWTRNS
+ 39. LANX
+ 40. MAR
+ 41. MARHD
+ 42. MARHM
+ 43. MARHT
+ 44. MARHW
+ 45. MARHYP
+ 46. MIG
+ 47. MIL
+ 48. MLPA
+ 49. MLPB
+ 50. MLPCD
+ 51. MLPE
+ 52. MLPFG
+ 53. MLPH
+ 54. MLPIK
+ 55. MLPJ
+ 56. NWAB
+ 57. NWAV
+ 58. NWLA
+ 59. NWLK
+ 60. NWRE
+ 61. OIP
+ 62. PAP
+ 63. RELSHIPP
+ 64. RETP
+ 65. SCH
+ 66. SCHG
+ 67. SCHL
+ 68. SEMP
+ 69. SEX
+ 70. SSIP
+ 71. SSP
+ 72. WAGP
+ 73. WKHP
+ 74. WKL
+ 75. WKWN
+ 76. WRK
+ 77. YOEP
+ 78. ANC
+ 79. ANC1P
+ 80. ANC2P
+ 81. DECADE
+ 82. DIS
+ 83. DRIVESP
+ 84. ESP
+ 85. ESR
+ 86. FOD1P
+ 87. FOD2P
+ 88. HICOV
+ 89. HISP
+ 90. INDP
+ 91. JWAP
+ 92. JWDP
+ 93. LANP
+ 94. MIGPUMA
+ 95. MIGSP
+ 96. MSP
+ 97. NAICSP
+ 98. NATIVITY
+ 99. NOP
+100. OC
+101. OCCP
+102. PAOC
+103. PERNP
+104. PINCP
+105. POBP
+106. POVPIP
+107. POWPUMA
+108. POWSP
+109. PRIVCOV
+110. PUBCOV
+111. QTRBIR
+112. RAC1P
+113. RAC2P
+114. RAC3P
+115. RACAIAN
+116. RACASN
+117. RACBLK
+118. RACNH
+119. RACNUM
+120. RACPI
+121. RACSOR
+122. RACWHT
+123. RC
+124. SCIENGP
+125. SCIENGRLP
+126. SFN
+127. SFR
+128. SOCP
+129. VPS
+130. WAOB
+131. FAGEP
+132. FANCP
+133. FCITP
+134. FCITWP
+135. FCOWP
+136. FDDRSP
+137. FDEARP
+138. FDEYEP
+139. FDISP
+140. FDOUTP
+141. FDPHYP
+142. FDRATP
+143. FDRATXP
+144. FDREMP
+145. FENGP
+146. FESRP
+147. FFERP
+148. FFODP
+149. FGCLP
+150. FGCMP
+151. FGCRP
+152. FHICOVP
+153. FHIMRKSP
+154. FHINS1P
+155. FHINS2P
+156. FHINS3C
+157. FHINS3P
+158. FHINS4C
+159. FHINS4P
+160. FHINS5C
+161. FHINS5P
+162. FHINS6P
+163. FHINS7P
+164. FHISP
+165. FINDP
+166. FINTP
+167. FJWDP
+168. FJWMNP
+169. FJWRIP
+170. FJWTRNSP
+171. FLANP
+172. FLANXP
+173. FMARP
+174. FMARHDP
+175. FMARHMP
+176. FMARHTP
+177. FMARHWP
+178. FMARHYP
+179. FMIGP
+180. FMIGSP
+181. FMILPP
+182. FMILSP
+183. FOCCP
+184. FOIP
+185. FPAP
+186. FPERNP
+187. FPINCP
+188. FPOBP
+189. FPOWSP
+190. FPRIVCOVP
+191. FPUBCOVP
+192. FRACP
+193. FRELSHIPP
+194. FRETP
+195. FSCHGP
+196. FSCHLP
+197. FSCHP
+198. FSEMP
+199. FSEXP
+200. FSSIP
+201. FSSP
+202. FWAGP
+203. FWKHP
+204. FWKLP
+205. FWKWNP
+206. FWRKP
+207. FYOEP
+208. PWGTP1
+209. PWGTP2
+210. PWGTP3
+211. PWGTP4
+212. PWGTP5
+213. PWGTP6
+214. PWGTP7
+215. PWGTP8
+216. PWGTP9
+217. PWGTP10
+218. PWGTP11
+219. PWGTP12
+220. PWGTP13
+221. PWGTP14
+222. PWGTP15
+223. PWGTP16
+224. PWGTP17
+225. PWGTP18
+226. PWGTP19
+227. PWGTP20
+228. PWGTP21
+229. PWGTP22
+230. PWGTP23
+231. PWGTP24
+232. PWGTP25
+233. PWGTP26
+234. PWGTP27
+235. PWGTP28
+236. PWGTP29
+237. PWGTP30
+238. PWGTP31
+239. PWGTP32
+240. PWGTP33
+241. PWGTP34
+242. PWGTP35
+243. PWGTP36
+244. PWGTP37
+245. PWGTP38
+246. PWGTP39
+247. PWGTP40
+248. PWGTP41
+249. PWGTP42
+250. PWGTP43
+251. PWGTP44
+252. PWGTP45
+253. PWGTP46
+254. PWGTP47
+255. PWGTP48
+256. PWGTP49
+257. PWGTP50
+258. PWGTP51
+259. PWGTP52
+260. PWGTP53
+261. PWGTP54
+262. PWGTP55
+263. PWGTP56
+264. PWGTP57
+265. PWGTP58
+266. PWGTP59
+267. PWGTP60
+268. PWGTP61
+269. PWGTP62
+270. PWGTP63
+271. PWGTP64
+272. PWGTP65
+273. PWGTP66
+274. PWGTP67
+275. PWGTP68
+276. PWGTP69
+277. PWGTP70
+278. PWGTP71
+279. PWGTP72
+280. PWGTP73
+281. PWGTP74
+282. PWGTP75
+283. PWGTP76
+284. PWGTP77
+285. PWGTP78
+286. PWGTP79
+287. PWGTP80
+
+================================================================================
+DATA TYPES
+================================================================================
+RT            object
+SERIALNO      object
+DIVISION       int64
+SPORDER        int64
+PUMA           int64
+REGION         int64
+STATE          int64
+ADJINC         int64
+PWGTP          int64
+AGEP           int64
+CIT            int64
+CITWP        float64
+COW          float64
+DDRS         float64
+DEAR           int64
+DEYE           int64
+DOUT         float64
+DPHY         float64
+DRAT         float64
+DRATX        float64
+DREM         float64
+ENG          float64
+FER          float64
+GCL          float64
+GCM          float64
+GCR          float64
+HIMRKS         int64
+HINS1          int64
+HINS2          int64
+HINS3          int64
+HINS4          int64
+HINS5          int64
+HINS6          int64
+HINS7          int64
+INTP         float64
+JWMNP        float64
+JWRIP        float64
+JWTRNS       float64
+LANX         float64
+MAR            int64
+MARHD        float64
+MARHM        float64
+MARHT        float64
+MARHW        float64
+MARHYP       float64
+MIG          float64
+MIL          float64
+MLPA         float64
+MLPB         float64
+MLPCD        float64
+MLPE         float64
+MLPFG        float64
+MLPH         float64
+MLPIK        float64
+MLPJ         float64
+NWAB         float64
+NWAV         float64
+NWLA         float64
+NWLK         float64
+NWRE         float64
+OIP          float64
+PAP          float64
+RELSHIPP       int64
+RETP         float64
+SCH          float64
+SCHG         float64
+SCHL         float64
+SEMP         float64
+SEX            int64
+SSIP         float64
+SSP          float64
+WAGP         float64
+WKHP         float64
+WKL          float64
+WKWN         float64
+WRK          float64
+YOEP         float64
+ANC            int64
+ANC1P          int64
+ANC2P          int64
+DECADE       float64
+DIS            int64
+DRIVESP      float64
+ESP          float64
+ESR          float64
+FOD1P        float64
+FOD2P        float64
+HICOV          int64
+HISP           int64
+INDP         float64
+JWAP         float64
+JWDP         float64
+LANP         float64
+MIGPUMA      float64
+MIGSP        float64
+MSP          float64
+NAICSP        object
+NATIVITY       int64
+NOP          float64
+OC           float64
+OCCP         float64
+PAOC         float64
+PERNP        float64
+PINCP        float64
+POBP           int64
+POVPIP       float64
+POWPUMA      float64
+POWSP        float64
+PRIVCOV        int64
+PUBCOV         int64
+QTRBIR         int64
+RAC1P          int64
+RAC2P          int64
+RAC3P          int64
+RACAIAN        int64
+RACASN         int64
+RACBLK         int64
+RACNH          int64
+RACNUM         int64
+RACPI          int64
+RACSOR         int64
+RACWHT         int64
+RC           float64
+SCIENGP      float64
+SCIENGRLP    float64
+SFN          float64
+SFR          float64
+SOCP          object
+VPS          float64
+WAOB           int64
+FAGEP          int64
+FANCP          int64
+FCITP          int64
+FCITWP         int64
+FCOWP          int64
+FDDRSP         int64
+FDEARP         int64
+FDEYEP         int64
+FDISP          int64
+FDOUTP         int64
+FDPHYP         int64
+FDRATP         int64
+FDRATXP        int64
+FDREMP         int64
+FENGP          int64
+FESRP          int64
+FFERP          int64
+FFODP          int64
+FGCLP          int64
+FGCMP          int64
+FGCRP          int64
+FHICOVP        int64
+FHIMRKSP       int64
+FHINS1P        int64
+FHINS2P        int64
+FHINS3C      float64
+FHINS3P        int64
+FHINS4C      float64
+FHINS4P        int64
+FHINS5C      float64
+FHINS5P        int64
+FHINS6P        int64
+FHINS7P        int64
+FHISP          int64
+FINDP          int64
+FINTP          int64
+FJWDP          int64
+FJWMNP         int64
+FJWRIP         int64
+FJWTRNSP       int64
+FLANP          int64
+FLANXP         int64
+FMARP          int64
+FMARHDP        int64
+FMARHMP        int64
+FMARHTP        int64
+FMARHWP        int64
+FMARHYP        int64
+FMIGP          int64
+FMIGSP         int64
+FMILPP         int64
+FMILSP         int64
+FOCCP          int64
+FOIP           int64
+FPAP           int64
+FPERNP         int64
+FPINCP         int64
+FPOBP          int64
+FPOWSP         int64
+FPRIVCOVP      int64
+FPUBCOVP       int64
+FRACP          int64
+FRELSHIPP      int64
+FRETP          int64
+FSCHGP         int64
+FSCHLP         int64
+FSCHP          int64
+FSEMP          int64
+FSEXP          int64
+FSSIP          int64
+FSSP           int64
+FWAGP          int64
+FWKHP          int64
+FWKLP          int64
+FWKWNP         int64
+FWRKP          int64
+FYOEP          int64
+PWGTP1         int64
+PWGTP2         int64
+PWGTP3         int64
+PWGTP4         int64
+PWGTP5         int64
+PWGTP6         int64
+PWGTP7         int64
+PWGTP8         int64
+PWGTP9         int64
+PWGTP10        int64
+PWGTP11        int64
+PWGTP12        int64
+PWGTP13        int64
+PWGTP14        int64
+PWGTP15        int64
+PWGTP16        int64
+PWGTP17        int64
+PWGTP18        int64
+PWGTP19        int64
+PWGTP20        int64
+PWGTP21        int64
+PWGTP22        int64
+PWGTP23        int64
+PWGTP24        int64
+PWGTP25        int64
+PWGTP26        int64
+PWGTP27        int64
+PWGTP28        int64
+PWGTP29        int64
+PWGTP30        int64
+PWGTP31        int64
+PWGTP32        int64
+PWGTP33        int64
+PWGTP34        int64
+PWGTP35        int64
+PWGTP36        int64
+PWGTP37        int64
+PWGTP38        int64
+PWGTP39        int64
+PWGTP40        int64
+PWGTP41        int64
+PWGTP42        int64
+PWGTP43        int64
+PWGTP44        int64
+PWGTP45        int64
+PWGTP46        int64
+PWGTP47        int64
+PWGTP48        int64
+PWGTP49        int64
+PWGTP50        int64
+PWGTP51        int64
+PWGTP52        int64
+PWGTP53        int64
+PWGTP54        int64
+PWGTP55        int64
+PWGTP56        int64
+PWGTP57        int64
+PWGTP58        int64
+PWGTP59        int64
+PWGTP60        int64
+PWGTP61        int64
+PWGTP62        int64
+PWGTP63        int64
+PWGTP64        int64
+PWGTP65        int64
+PWGTP66        int64
+PWGTP67        int64
+PWGTP68        int64
+PWGTP69        int64
+PWGTP70        int64
+PWGTP71        int64
+PWGTP72        int64
+PWGTP73        int64
+PWGTP74        int64
+PWGTP75        int64
+PWGTP76        int64
+PWGTP77        int64
+PWGTP78        int64
+PWGTP79        int64
+PWGTP80        int64
+================================================================================
+MISSING VALUES
+================================================================================
+   Column  Missing_Count  Missing_Percentage
+      ESP           4701              100.00
+      NOP           4701              100.00
+      GCM           4678               99.51
+      SFR           4673               99.40
+      SFN           4673               99.40
+      GCR           4652               98.96
+    CITWP           4629               98.47
+     DRAT           4611               98.09
+    FOD2P           4539               96.55
+  FHINS5C           4498               95.68
+     YOEP           4483               95.36
+   DECADE           4483               95.36
+  FHINS3C           4445               94.55
+     LANP           4439               94.43
+      ENG           4439               94.43
+    MLPIK           4407               93.75
+      VPS           4407               93.75
+    MLPFG           4407               93.75
+     MLPH           4407               93.75
+     MLPE           4407               93.75
+    MLPCD           4407               93.75
+     MLPB           4407               93.75
+     MLPA           4407               93.75
+     MLPJ           4407               93.75
+    DRATX           4343               92.38
+  FHINS4C           4200               89.34
+     SCHG           4149               88.26
+    MIGSP           3994               84.96
+  MIGPUMA           3994               84.96
+    FOD1P           3260               69.35
+  SCIENGP           3260               69.35
+SCIENGRLP           3260               69.35
+      FER           3240               68.92
+     PAOC           2573               54.73
+  DRIVESP           1605               34.14
+    JWRIP           1605               34.14
+    MARHM           1419               30.19
+    MARHW           1419               30.19
+    MARHT           1419               30.19
+    MARHD           1419               30.19
+   MARHYP           1419               30.19
+    JWMNP           1399               29.76
+     JWAP           1399               29.76
+     JWDP           1399               29.76
+      GCL           1116               23.74
+   JWTRNS           1062               22.59
+  POWPUMA           1062               22.59
+    POWSP           1062               22.59
+     WKHP            649               13.81
+     WKWN            649               13.81
+      WRK            511               10.87
+      COW            373                7.93
+     INDP            373                7.93
+   NAICSP            373                7.93
+     OCCP            373                7.93
+     SOCP            373                7.93
+       OC            306                6.51
+       RC            306                6.51
+   POVPIP            250                5.32
+================================================================================
+FIRST 5 ROWS
+================================================================================
+  RT       SERIALNO  DIVISION  SPORDER  PUMA  REGION  STATE   ADJINC  PWGTP  AGEP  CIT  CITWP  COW  DDRS  DEAR  DEYE  DOUT  DPHY  DRAT  DRATX  DREM  ENG  FER  GCL  GCM  GCR  HIMRKS  HINS1  HINS2  HINS3  HINS4  HINS5  HINS6  HINS7    INTP  JWMNP  JWRIP  JWTRNS  LANX  MAR  MARHD  MARHM  MARHT  MARHW  MARHYP  MIG  MIL  MLPA  MLPB  MLPCD  MLPE  MLPFG  MLPH  MLPIK  MLPJ  NWAB  NWAV  NWLA  NWLK  NWRE  OIP  PAP  RELSHIPP  RETP  SCH  SCHG  SCHL    SEMP  SEX  SSIP  SSP     WAGP  WKHP  WKL  WKWN  WRK  YOEP  ANC  ANC1P  ANC2P  DECADE  DIS  DRIVESP  ESP  ESR  FOD1P  FOD2P  HICOV  HISP    INDP   JWAP  JWDP  LANP  MIGPUMA  MIGSP  MSP NAICSP  NATIVITY  NOP  OC    OCCP  PAOC    PERNP    PINCP  POBP  POVPIP  POWPUMA  POWSP  PRIVCOV  PUBCOV  QTRBIR  RAC1P  RAC2P  RAC3P  RACAIAN  RACASN  RACBLK  RACNH  RACNUM  RACPI  RACSOR  RACWHT  RC  SCIENGP  SCIENGRLP  SFN  SFR    SOCP  VPS  WAOB  FAGEP  FANCP  FCITP  FCITWP  FCOWP  FDDRSP  FDEARP  FDEYEP  FDISP  FDOUTP  FDPHYP  FDRATP  FDRATXP  FDREMP  FENGP  FESRP  FFERP  FFODP  FGCLP  FGCMP  FGCRP  FHICOVP  FHIMRKSP  FHINS1P  FHINS2P  FHINS3C  FHINS3P  FHINS4C  FHINS4P  FHINS5C  FHINS5P  FHINS6P  FHINS7P  FHISP  FINDP  FINTP  FJWDP  FJWMNP  FJWRIP  FJWTRNSP  FLANP  FLANXP  FMARP  FMARHDP  FMARHMP  FMARHTP  FMARHWP  FMARHYP  FMIGP  FMIGSP  FMILPP  FMILSP  FOCCP  FOIP  FPAP  FPERNP  FPINCP  FPOBP  FPOWSP  FPRIVCOVP  FPUBCOVP  FRACP  FRELSHIPP  FRETP  FSCHGP  FSCHLP  FSCHP  FSEMP  FSEXP  FSSIP  FSSP  FWAGP  FWKHP  FWKLP  FWKWNP  FWRKP  FYOEP  PWGTP1  PWGTP2  PWGTP3  PWGTP4  PWGTP5  PWGTP6  PWGTP7  PWGTP8  PWGTP9  PWGTP10  PWGTP11  PWGTP12  PWGTP13  PWGTP14  PWGTP15  PWGTP16  PWGTP17  PWGTP18  PWGTP19  PWGTP20  PWGTP21  PWGTP22  PWGTP23  PWGTP24  PWGTP25  PWGTP26  PWGTP27  PWGTP28  PWGTP29  PWGTP30  PWGTP31  PWGTP32  PWGTP33  PWGTP34  PWGTP35  PWGTP36  PWGTP37  PWGTP38  PWGTP39  PWGTP40  PWGTP41  PWGTP42  PWGTP43  PWGTP44  PWGTP45  PWGTP46  PWGTP47  PWGTP48  PWGTP49  PWGTP50  PWGTP51  PWGTP52  PWGTP53  PWGTP54  PWGTP55  PWGTP56  PWGTP57  PWGTP58  PWGTP59  PWGTP60  PWGTP61  PWGTP62  PWGTP63  PWGTP64  PWGTP65  PWGTP66  PWGTP67  PWGTP68  PWGTP69  PWGTP70  PWGTP71  PWGTP72  PWGTP73  PWGTP74  PWGTP75  PWGTP76  PWGTP77  PWGTP78  PWGTP79  PWGTP80
+0  P  2023GQ0000978         4        1   600       2     38  1019518      5    41    1    NaN  NaN   2.0     2     2   1.0   1.0   NaN    NaN   1.0  NaN  NaN  2.0  NaN  NaN       0      2      2      2      1      2      2      2     0.0    NaN    NaN     NaN   2.0    3    2.0    2.0    1.0    2.0  2009.0  1.0  4.0   NaN   NaN    NaN   NaN    NaN   NaN    NaN   NaN   2.0   5.0   2.0   2.0   3.0  0.0  0.0        38   0.0  1.0   NaN  16.0     0.0    1   0.0  0.0      0.0   NaN  3.0   NaN  2.0   NaN    4    999    999     NaN    1      NaN  NaN  6.0    NaN    NaN      1     1     NaN    NaN   NaN   NaN      NaN    NaN  4.0    NaN         1  NaN NaN     NaN   NaN      0.0      0.0    39     0.0      NaN    NaN        2       1       4      1   1000      1        0       0       0      0       1      0       0       1 NaN      NaN        NaN  NaN  NaN     NaN  NaN     1      0      0      0       0      0       1       1       1      1       0       0       0        0       0      0      0      0      0      0      0      0        0         0        0        0      NaN        0      0.0        0      NaN        0        0        0      0      0      1      0       0       0         0      0       1      1        1        1        1        1        1      0       0       0       0      0     1     1       0       1      1       0          0         0      0          0      1       0       1      0      0      0      1     1      0      0      0       0      0      0       5       5       5       6       5       5       5       4       5        5        5        5        5        5        7        5        4        7        4        4        7        5        6        8        5        5        4        5        5        5        4        5        5        7        7        6        5        5        7        7        5        5        5        4        5        5        7        4        4        5        7        8        8        7        8        7        5        7        4        5        4        4        5        7        5        8        7        4        5        4        7        6        5        5        7        7        4        4        5        5
+1  P  2023GQ0001384         4        1   600       2     38  1019518    113    22    1    NaN  3.0   2.0     2     2   2.0   2.0   NaN    NaN   2.0  NaN  NaN  NaN  NaN  NaN       2      2      1      2      2      2      2      2     0.0    NaN    NaN     NaN   2.0    5    NaN    NaN    NaN    NaN     NaN  1.0  4.0   NaN   NaN    NaN   NaN    NaN   NaN    NaN   NaN   3.0   5.0   3.0   3.0   3.0  0.0  0.0        38   0.0  2.0  15.0  19.0     0.0    1   0.0  0.0   3000.0  30.0  1.0  12.0  NaN   NaN    4    999    999     NaN    2      NaN  NaN  6.0    NaN    NaN      1     1  4971.0    NaN   NaN   NaN      NaN    NaN  6.0  44511         1  NaN NaN  9620.0   NaN   3000.0   3000.0    27     NaN      NaN    NaN        1       2       3      1   1000      1        0       0       0      0       1      0       0       1 NaN      NaN        NaN  NaN  NaN  537062  NaN     1      0      0      0       0      1       1       1       1      1       1       1       0        0       1      0      1      0      0      0      0      0        1         1        1        1      NaN        1      NaN        1      NaN        1        1        1      0      1      1      0       0       0         0      0       1      1        0        0        0        0        0      0       0       0       1      1     1     1       1       1      1       0          1         1      0          0      1       0       0      0      1      0      1     1      1      1      1       1      0      0     113       7     278     172       9     139     191       9     130        9       91      111      121      191       86      168      100       95      264      217      137      231        9       10      302       82       70      148       72      155       88      114      134       12      112       18      118      108       10       12      121        9      243      185        8      116      196       12      112       10       92      139      116      165       97      161       84       96      274      231      119      210       10       10      265      111       70      148       80      146       86       97      131       13      120       17      107      108        7       12
+2  P  2023GQ0002487         4        1   600       2     38  1019518    129    21    1    NaN  1.0   2.0     2     2   2.0   2.0   NaN    NaN   2.0  NaN  NaN  NaN  NaN  NaN       2      1      1      2      2      2      2      2 -1100.0   12.0    NaN    12.0   2.0    5    NaN    NaN    NaN    NaN     NaN  1.0  4.0   NaN   NaN    NaN   NaN    NaN   NaN    NaN   NaN   3.0   5.0   3.0   3.0   3.0  0.0  0.0        38   0.0  2.0  15.0  19.0     0.0    1   0.0  0.0   5200.0  30.0  1.0  16.0  NaN   NaN    4    999    999     NaN    2      NaN  NaN  1.0    NaN    NaN      1     1  4881.0  108.0  67.0   NaN      NaN    NaN  6.0  44414         1  NaN NaN  4720.0   NaN   5200.0   4100.0    27     NaN    600.0   38.0        1       2       2      1   1000      1        0       0       0      0       1      0       0       1 NaN      NaN        NaN  NaN  NaN  412010  NaN     1      0      0      0       0      1       1       1       1      1       1       1       0        0       1      0      1      0      0      0      0      0        1         1        1        1      NaN        1      NaN        1      NaN        1        1        1      1      1      1      1       1       0         1      0       1      1        0        0        0        0        0      1       0       0       1      1     1     1       1       1      1       1          1         1      1          0      1       0       0      0      1      0      1     1      1      1      1       1      0      0       9     117      12     120     122     150     260     110     248      122      143      217      134       12      234      261       11      126      140        8       12      120       14      139      120      106      231      126      230      126      131      264      116       12      230      263       12      140      148       11       12      130       11      128      126      122      266      117      217      131      137      262      133       11      267      238       11      132      142       11        9      111       12      129      107      141      236      128      243      113      129      229      113       12      243      256       10      139      136       12
+3  P  2023GQ0002750         4        1   300       2     38  1019518     24    20    1    NaN  1.0   2.0     2     2   2.0   2.0   NaN    NaN   2.0  NaN  NaN  NaN  NaN  NaN       2      2      1      2      2      2      2      2     0.0    NaN    NaN     NaN   2.0    5    NaN    NaN    NaN    NaN     NaN  1.0  4.0   NaN   NaN    NaN   NaN    NaN   NaN    NaN   NaN   3.0   5.0   3.0   3.0   3.0  0.0  0.0        38   0.0  3.0  15.0  19.0  2400.0    1   0.0  0.0   3300.0   7.0  1.0  17.0  NaN   NaN    1    795    999     NaN    2      NaN  NaN  6.0    NaN    NaN      1     1  8563.0    NaN   NaN   NaN      NaN    NaN  6.0   711M         1  NaN NaN  4120.0   NaN   5700.0   5700.0     6     NaN      NaN    NaN        1       2       1      6   4025     10        0       1       0      0       1      0       0       0 NaN      NaN        NaN  NaN  NaN  353041  NaN     1      0      0      0       0      1       1       1       1      1       1       1       0        0       1      0      1      0      0      0      0      0        1         1        1        1      NaN        1      NaN        1      NaN        1        1        1      0      1      1      0       0       0         0      0       1      1        0        0        0        0        0      0       0       0       0      1     1     1       1       1      1       0          1         1      0          0      1       0       0      0      1      0      1     1      1      1      1       1      0      0      24       2       3      35      47       3      19      44       0        2       31       27       53       20       16       32       26       38       29       25       22       40       37        2        2       43       30        0       57       45       21       17        0       25       29       20       22        2       19       21       20       46       43        2        2       44       26        2       54       46       21       20        2       29       37       19       20        0       20       24       21        2        2       39       42        3       19       50        0        3       25       32       55       19       16       26       22       41       31       23
+4  P  2023GQ0003212         4        1   300       2     38  1019518     37    19    1    NaN  1.0   2.0     2     2   2.0   2.0   NaN    NaN   2.0  NaN  NaN  NaN  NaN  NaN       2      2      1      2      2      2      2      2     0.0    NaN    NaN     NaN   2.0    5    NaN    NaN    NaN    NaN     NaN  1.0  4.0   NaN   NaN    NaN   NaN    NaN   NaN    NaN   NaN   2.0   3.0   2.0   2.0   3.0  0.0  0.0        38   0.0  2.0  15.0  16.0     0.0    1   0.0  0.0  32000.0  75.0  1.0  24.0  2.0   NaN    1     22    999     NaN    2      NaN  NaN  6.0    NaN    NaN      1     1   170.0    NaN   NaN   NaN      NaN    NaN  6.0    111         1  NaN NaN  6050.0   NaN  32000.0  32000.0    38     NaN      NaN    NaN        1       2       2      1   1000      1        0       0       0      0       1      0       0       1 NaN      NaN        NaN  NaN  NaN  4520XX  NaN     1      0      0      0       0      0       0       0       0      0       0       0       0        0       0      0      0      0      0      0      0      0        1         1        0        1      NaN        0      NaN        0      NaN        0        0        0      0      0      0      0       0       0         0      0       0      0        0        0        0        0        0      0       0       0       0      0     0     0       0       0      0       0          1         0      0          0      0       0       0      0      0      0      0     0      0      0      0       0      0      0      56      37      39       3       5      57      53       3      32       54        3        5       43       36       54       38       35       35       38       36       61       35       37        3        3       41       51        6       29       60        3        6       44       36       57       37       32       39       43       35        6       36       32       67       60        3        3       51       39        3       63       52       33       32        6       34       36       32       31       38        3       31       34       68       54        7        3       52       41        3       66       47       29       35        2       35       37       33       32       37
+================================================================================
+BASIC STATISTICS
+================================================================================
+       DIVISION      SPORDER         PUMA  REGION   STATE     ADJINC        PWGTP         AGEP          CIT        CITWP          COW         DDRS         DEAR         DEYE         DOUT         DPHY       DRAT       DRATX         DREM         ENG          FER          GCL        GCM        GCR       HIMRKS        HINS1        HINS2        HINS3        HINS4        HINS5        HINS6        HINS7           INTP        JWMNP        JWRIP       JWTRNS         LANX          MAR        MARHD        MARHM        MARHT        MARHW       MARHYP          MIG          MIL        MLPA        MLPB       MLPCD        MLPE  MLPFG   MLPH  MLPIK   MLPJ         NWAB         NWAV         NWLA         NWLK         NWRE           OIP           PAP     RELSHIPP           RETP          SCH        SCHG         SCHL           SEMP          SEX          SSIP           SSP           WAGP         WKHP          WKL         WKWN          WRK         YOEP          ANC        ANC1P        ANC2P      DECADE          DIS      DRIVESP  ESP          ESR        FOD1P        FOD2P        HICOV         HISP         INDP         JWAP         JWDP         LANP       MIGPUMA       MIGSP          MSP     NATIVITY  NOP      OC         OCCP         PAOC          PERNP          PINCP         POBP       POVPIP      POWPUMA        POWSP      PRIVCOV       PUBCOV       QTRBIR        RAC1P        RAC2P        RAC3P      RACAIAN       RACASN       RACBLK        RACNH       RACNUM        RACPI       RACSOR       RACWHT      RC      SCIENGP    SCIENGRLP   SFN        SFR         VPS         WAOB        FAGEP   FANCP        FCITP       FCITWP        FCOWP       FDDRSP       FDEARP       FDEYEP        FDISP       FDOUTP       FDPHYP       FDRATP      FDRATXP       FDREMP        FENGP        FESRP        FFERP        FFODP        FGCLP        FGCMP        FGCRP      FHICOVP     FHIMRKSP      FHINS1P      FHINS2P     FHINS3C      FHINS3P     FHINS4C      FHINS4P     FHINS5C      FHINS5P      FHINS6P      FHINS7P        FHISP        FINDP        FINTP        FJWDP       FJWMNP       FJWRIP     FJWTRNSP        FLANP       FLANXP        FMARP      FMARHDP      FMARHMP      FMARHTP      FMARHWP      FMARHYP        FMIGP       FMIGSP       FMILPP       FMILSP        FOCCP         FOIP         FPAP       FPERNP       FPINCP        FPOBP       FPOWSP    FPRIVCOVP     FPUBCOVP        FRACP    FRELSHIPP        FRETP       FSCHGP       FSCHLP        FSCHP        FSEMP   FSEXP        FSSIP         FSSP        FWAGP        FWKHP        FWKLP       FWKWNP        FWRKP        FYOEP       PWGTP1       PWGTP2       PWGTP3       PWGTP4       PWGTP5       PWGTP6       PWGTP7       PWGTP8      PWGTP9      PWGTP10      PWGTP11      PWGTP12      PWGTP13      PWGTP14      PWGTP15      PWGTP16      PWGTP17      PWGTP18      PWGTP19      PWGTP20      PWGTP21      PWGTP22      PWGTP23      PWGTP24      PWGTP25      PWGTP26      PWGTP27      PWGTP28      PWGTP29      PWGTP30      PWGTP31      PWGTP32      PWGTP33      PWGTP34      PWGTP35      PWGTP36      PWGTP37      PWGTP38      PWGTP39      PWGTP40      PWGTP41      PWGTP42      PWGTP43      PWGTP44      PWGTP45      PWGTP46      PWGTP47      PWGTP48      PWGTP49      PWGTP50      PWGTP51      PWGTP52      PWGTP53      PWGTP54      PWGTP55      PWGTP56      PWGTP57      PWGTP58      PWGTP59      PWGTP60      PWGTP61      PWGTP62      PWGTP63      PWGTP64      PWGTP65      PWGTP66      PWGTP67      PWGTP68      PWGTP69      PWGTP70      PWGTP71      PWGTP72      PWGTP73      PWGTP74      PWGTP75      PWGTP76      PWGTP77     PWGTP78      PWGTP79      PWGTP80
+count    4701.0  4701.000000  4701.000000  4701.0  4701.0     4701.0  4701.000000  4701.000000  4701.000000    72.000000  4328.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  90.000000  358.000000  4701.000000  262.000000  1461.000000  3585.000000  23.000000  49.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000    4701.000000  3302.000000  3096.000000  3639.000000  4701.000000  4701.000000  3282.000000  3282.000000  3282.000000  3282.000000  3282.000000  4701.000000  4701.000000  294.000000  294.000000  294.000000  294.000000  294.0  294.0  294.0  294.0  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000   4701.000000   4701.000000  4701.000000    4701.000000  4701.000000  552.000000  4701.000000    4701.000000  4701.000000   4701.000000   4701.000000    4701.000000  4052.000000  4701.000000  4052.000000  4190.000000   218.000000  4701.000000  4701.000000  4701.000000  218.000000  4701.000000  3096.000000  0.0  4701.000000  1441.000000   162.000000  4701.000000  4701.000000  4328.000000  3302.000000  3302.000000   262.000000    707.000000  707.000000  4701.000000  4701.000000  0.0  4395.0  4328.000000  2128.000000    4701.000000    4701.000000  4701.000000  4451.000000  3639.000000  3639.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4395.0  1441.000000  1441.000000  28.0  28.000000  294.000000  4701.000000  4701.000000  4701.0  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  256.000000  4701.000000  501.000000  4701.000000  203.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.0  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.00000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.000000  4701.00000  4701.000000  4701.000000
+mean        4.0     1.556265   376.707084     2.0    38.0  1019518.0   101.452670    42.125292     1.148054  2011.138889     2.350508     1.982131     1.969794     1.979579     1.960434     1.959583   3.611111    1.748603     1.951074    1.400763     1.926762     1.986332   3.869565   1.530612     0.291640     1.324612     1.834503     1.945544     1.893427     1.956818     1.976813     1.965965    1813.694959    20.582071     1.192506     2.419621     1.944267     2.429909     1.989945     1.974101     1.209019     1.998477  2003.263559     1.293980     3.848330    0.622449    0.333333    0.312925    0.003401    0.0    0.0    0.0    0.0     2.755797     4.852585     2.746650     2.747926     2.958307    544.522442     36.445437    22.397788    1460.370985     1.133589   14.985507    18.684110    6746.216124     1.473304    198.957669    706.624123   46231.775792    41.057009     1.219102    47.038253     1.201671  2006.761468     1.980855   376.116784   704.441608    7.009174     1.891087     1.187339  NaN     2.075516  4243.086051  4087.469136     1.058924     1.164433  5761.960952    98.423077    51.936705  2127.320611   1193.564356   46.172560     2.862582     1.036801  NaN     0.0  4174.359750     3.260808   52977.991917   57738.607530    45.463093   358.835992   387.304204    37.820280     1.167198     1.840672     2.540311     1.703467  1755.152946     2.679855     0.061051     0.020634     0.022123     0.000638     1.057222     0.001064     0.033823     0.917890     0.0     1.709230     1.844552   1.0   2.714286    3.782313     1.172729     0.008934     0.0     0.069134     0.002340     0.148266     0.107211     0.102531     0.107211     0.125931     0.107211     0.106148     0.000425     0.005531     0.107424     0.006382     0.103808     0.032759     0.045310     0.000425     0.000425     0.001489     0.171240     0.044033     0.137418     0.145501    0.011719     0.147628    0.031936     0.147203    0.009852     0.153372     0.154010     0.155924     0.008722     0.149117     0.198043     0.176558     0.125718     0.098702     0.106360     0.009998     0.099766     0.058285     0.064242     0.047649     0.068496     0.063603     0.072963     0.083599     0.027228     0.008934     0.094023     0.161242     0.184216     0.183578     0.206126     0.279940     0.122314     0.134652     0.163157     0.165497     0.017869     0.003404     0.187407     0.014252     0.089343     0.076367     0.145288     0.0     0.177835     0.181025     0.192938     0.134865     0.127632     0.130398     0.005743     0.007871   100.976175   101.696660   101.553287   101.368432   101.610083   101.099553   101.513295   101.589236   101.26973   101.724527   101.426505   101.592002   101.403318   101.319719   101.659009   101.405020   101.384812   101.347798   101.593065   101.088066   101.290364   101.466071   101.559243   101.538183   101.763880   101.466071   101.465433   101.540098   101.081685   101.503084   101.562008   101.423952   101.597107   101.230164   101.697937   101.599234   101.726228   101.609232   101.520315   101.884067   101.354818   101.603489   101.497341   101.414593   101.273984   101.502659   100.921719   101.422251   101.573495   101.813231   101.560732   101.436077   101.326314   101.639651   101.257179   101.532440   101.563923   101.306318   101.397362   101.525420   101.114869   101.590725   101.797064   101.967879   101.316316   101.491598   101.104020   101.410976   101.800468   101.566475   101.603914   101.267815   101.877898   101.672623   101.298447   101.692831   101.453946   101.31823   101.148054   101.179962
+std         0.0     0.807988   166.822256     0.0     0.0        0.0   122.400998    14.308569     0.699385    13.100162     1.957444     0.132488     0.171173     0.141451     0.194958     0.196956   1.419720    0.434423     0.215736    0.663556     0.260615     0.116125   1.575504   0.504234     0.677474     0.468279     0.371668     0.226940     0.308603     0.203289     0.150512     0.181339   15427.830307    23.149379     0.641400     3.433506     0.229429     1.799655     0.099784     0.158858     0.474466     0.039008    12.670526     0.703444     0.552915    0.485601    0.472208    0.464475    0.058321    0.0    0.0    0.0    0.0     0.457945     0.712628     0.454589     0.477648     0.227768   4229.102371    553.704258     4.881143    9407.000970     0.384848    0.620117     2.819986   37329.902669     0.499340   1516.773233   3522.185085   56319.791037    14.078174     0.577287    11.692504     0.401295    15.562213     1.119867   430.326341   431.924214    1.367802     0.311563     0.596528  NaN     1.998840  1869.400844  1798.631841     0.235507     1.565172  3167.564657    36.666075    25.407016  1835.251378   3700.957191   56.636045     2.259883     0.188292  NaN     0.0  2792.497374     1.053851   65430.137569   68240.522103    57.363991   152.856496   223.090181     1.834138     0.373193     0.366020     1.099479     2.058952  2093.343831     6.464159     0.239449     0.142170     0.147099     0.025256     0.243908     0.032599     0.180792     0.274562     0.0     0.454275     0.362457   0.0   0.599824    4.106961     0.848747     0.094108     0.0     0.253709     0.048321     0.355402     0.309415     0.303378     0.309415     0.331806     0.309415     0.308059     0.020624     0.074171     0.309684     0.079638     0.305043     0.178024     0.208004     0.020624     0.020624     0.038564     0.376759     0.205191     0.344324     0.352643    0.107828     0.354769    0.176006     0.354346    0.099012     0.360384     0.360997     0.362822     0.092991     0.356242     0.398567     0.381335     0.331566     0.298294     0.308331     0.099499     0.299720     0.234307     0.245209     0.213046     0.252622     0.244071     0.260104     0.276815     0.162765     0.094108     0.291891     0.367793     0.387702     0.387181     0.404565     0.449017     0.327683     0.341388     0.369548     0.371668     0.132488     0.058247     0.390279     0.118542     0.285268     0.265612     0.352429     0.0     0.382414     0.385080     0.394646     0.341616     0.333716     0.336776     0.075576     0.088376   136.736850   139.650822   143.585094   137.996980   135.416076   140.425902   146.683987   138.425514   139.56970   141.972178   141.547523   141.812342   135.784331   135.977078   141.844293   133.867018   138.342201   142.297890   141.312943   138.635448   134.463219   142.893823   141.264602   137.143775   140.050237   134.669858   135.854069   141.726632   137.281521   139.459015   145.954590   140.893115   136.770834   136.193768   143.326221   141.460011   139.193446   139.998112   144.343144   143.418171   138.672906   139.022079   137.361820   135.681776   134.342813   137.518547   136.775201   140.213158   142.311364   139.002801   135.618956   144.196900   137.143138   143.207090   143.154056   140.862047   141.113096   141.919356   137.712644   140.628069   140.797481   140.961485   146.964182   144.573804   136.776647   134.265235   132.699685   139.043629   139.938353   141.140312   139.524901   137.619117   141.521754   140.438678   141.505461   141.555684   141.727776   137.88939   135.954724   141.702909
+min         4.0     1.000000   100.000000     2.0    38.0  1019518.0     1.000000    18.000000     1.000000  1964.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000   1.000000    1.000000     1.000000    1.000000     1.000000     1.000000   1.000000   1.000000     0.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000   -1100.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000  1973.000000     1.000000     1.000000    0.000000    0.000000    0.000000    0.000000    0.0    0.0    0.0    0.0     1.000000     1.000000     1.000000     1.000000     1.000000      0.000000      0.000000    20.000000       0.000000     1.000000   11.000000     1.000000   -6700.000000     1.000000      0.000000      0.000000       0.000000     1.000000     1.000000     1.000000     1.000000  1959.000000     1.000000     3.000000     3.000000    2.000000     1.000000     1.000000  NaN     1.000000  1100.000000  1101.000000     1.000000     1.000000   170.000000     1.000000     1.000000  1055.000000      1.000000    1.000000     1.000000     1.000000  NaN     0.0    10.000000     1.000000   -6700.000000   -6700.000000     1.000000     0.000000   100.000000     8.000000     1.000000     1.000000     1.000000     1.000000  1000.000000     1.000000     0.000000     0.000000     0.000000     0.000000     1.000000     0.000000     0.000000     0.000000     0.0     1.000000     1.000000   1.0   1.000000    1.000000     1.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    0.000000     0.000000    0.000000     0.000000    0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.00000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.00000     0.000000     0.000000
+25%         4.0     1.000000   200.000000     2.0    38.0  1019518.0    26.000000    30.000000     1.000000  2007.000000     1.000000     2.000000     2.000000     2.000000     2.000000     2.000000   2.000000    1.250000     2.000000    1.000000     2.000000     2.000000   2.500000   1.000000     0.000000     1.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000       0.000000     7.000000     1.000000     1.000000     2.000000     1.000000     2.000000     2.000000     1.000000     2.000000  1993.000000     1.000000     4.000000    0.000000    0.000000    0.000000    0.000000    0.0    0.0    0.0    0.0     3.000000     5.000000     3.000000     3.000000     3.000000      0.000000      0.000000    20.000000       0.000000     1.000000   15.000000    16.000000       0.000000     1.000000      0.000000      0.000000    5000.000000    40.000000     1.000000    52.000000     1.000000  1999.000000     1.000000    32.000000    89.000000    6.000000     2.000000     1.000000  NaN     1.000000  2309.000000  2311.000000     1.000000     1.000000  3180.000000    81.000000    37.000000  1200.000000    200.000000   38.000000     1.000000     1.000000  NaN     0.0  2014.000000     2.000000   11000.000000   17000.000000    30.000000   244.000000   200.000000    38.000000     1.000000     2.000000     2.000000     1.000000  1000.000000     1.000000     0.000000     0.000000     0.000000     0.000000     1.000000     0.000000     0.000000     1.000000     0.0     1.000000     2.000000   1.0   3.000000    1.000000     1.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    0.000000     0.000000    0.000000     0.000000    0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    22.000000    21.000000    22.000000    22.000000    22.000000    21.000000    22.000000    22.000000    20.00000    22.000000    21.000000    22.000000    23.000000    21.000000    22.000000    21.000000    21.000000    22.000000    22.000000    20.000000    21.000000    21.000000    22.000000    22.000000    23.000000    22.000000    22.000000    21.000000    22.000000    23.000000    21.000000    21.000000    23.000000    21.000000    21.000000    22.000000    22.000000    21.000000    21.000000    20.000000    21.000000    22.000000    23.000000    22.000000    22.000000    22.000000    21.000000    22.000000    22.000000    22.000000    22.000000    21.000000    22.000000    21.000000    21.000000    22.000000    21.000000    22.000000    22.000000    21.000000    22.000000    21.000000    22.000000    22.000000    22.000000    22.000000    22.000000    22.000000    22.000000    22.000000    22.000000    21.000000    23.000000    21.000000    21.000000    22.000000    21.000000    21.00000    22.000000    20.000000
+50%         4.0     1.000000   400.000000     2.0    38.0  1019518.0    60.000000    42.000000     1.000000  2016.000000     1.000000     2.000000     2.000000     2.000000     2.000000     2.000000   4.000000    2.000000     2.000000    1.000000     2.000000     2.000000   5.000000   2.000000     0.000000     1.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000       0.000000    15.000000     1.000000     1.000000     2.000000     1.000000     2.000000     2.000000     1.000000     2.000000  2005.000000     1.000000     4.000000    1.000000    0.000000    0.000000    0.000000    0.0    0.0    0.0    0.0     3.000000     5.000000     3.000000     3.000000     3.000000      0.000000      0.000000    21.000000       0.000000     1.000000   15.000000    19.000000       0.000000     1.000000      0.000000      0.000000   38000.000000    40.000000     1.000000    52.000000     1.000000  2011.500000     2.000000    82.000000   999.000000    8.000000     2.000000     1.000000  NaN     1.000000  5098.000000  4007.000000     1.000000     1.000000  6992.000000    91.000000    49.000000  1200.000000    400.000000   38.000000     1.000000     1.000000  NaN     0.0  4140.000000     4.000000   41900.000000   45000.000000    38.000000   403.000000   400.000000    38.000000     1.000000     2.000000     3.000000     1.000000  1000.000000     1.000000     0.000000     0.000000     0.000000     0.000000     1.000000     0.000000     0.000000     1.000000     0.0     2.000000     2.000000   1.0   3.000000    2.000000     1.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    0.000000     0.000000    0.000000     0.000000    0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    53.000000    52.000000    52.000000    53.000000    54.000000    50.000000    51.000000    53.000000    50.00000    51.000000    51.000000    50.000000    52.000000    51.000000    52.000000    52.000000    53.000000    51.000000    52.000000    52.000000    53.000000    51.000000    52.000000    52.000000    53.000000    51.000000    53.000000    50.000000    52.000000    53.000000    51.000000    50.000000    53.000000    52.000000    51.000000    52.000000    52.000000    52.000000    51.000000    51.000000    51.000000    52.000000    52.000000    51.000000    53.000000    52.000000    52.000000    53.000000    50.000000    52.000000    52.000000    51.000000    52.000000    51.000000    51.000000    52.000000    52.000000    52.000000    52.000000    51.000000    52.000000    52.000000    52.000000    51.000000    54.000000    53.000000    53.000000    52.000000    52.000000    51.000000    53.000000    50.000000    53.000000    51.000000    51.000000    51.000000    51.000000    51.00000    52.000000    50.000000
+75%         4.0     2.000000   500.000000     2.0    38.0  1019518.0   133.000000    55.000000     1.000000  2020.250000     3.000000     2.000000     2.000000     2.000000     2.000000     2.000000   5.000000    2.000000     2.000000    2.000000     2.000000     2.000000   5.000000   2.000000     0.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000       0.000000    25.000000     1.000000     1.000000     2.000000     5.000000     2.000000     2.000000     1.000000     2.000000  2014.000000     1.000000     4.000000    1.000000    1.000000    1.000000    0.000000    0.0    0.0    0.0    0.0     3.000000     5.000000     3.000000     3.000000     3.000000      0.000000      0.000000    21.000000       0.000000     1.000000   15.000000    21.000000       0.000000     2.000000      0.000000      0.000000   65000.000000    45.000000     1.000000    52.000000     1.000000  2019.000000     2.000000   939.000000   999.000000    8.000000     2.000000     1.000000  NaN     1.000000  6107.000000  6106.750000     1.000000     1.000000  8191.000000    98.000000    55.000000  2242.500000    600.000000   38.000000     6.000000     1.000000  NaN     0.0  6050.000000     4.000000   70000.000000   75000.000000    38.000000   501.000000   500.000000    38.000000     1.000000     2.000000     4.000000     1.000000  1000.000000     1.000000     0.000000     0.000000     0.000000     0.000000     1.000000     0.000000     0.000000     1.000000     0.0     2.000000     2.000000   1.0   3.000000    4.000000     1.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000    0.000000     0.000000    0.000000     0.000000    0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     1.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.0     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000   128.000000   130.000000   128.000000   131.000000   131.000000   126.000000   126.000000   130.000000   130.00000   126.000000   128.000000   129.000000   131.000000   129.000000   129.000000   131.000000   132.000000   126.000000   129.000000   131.000000   132.000000   127.000000   125.000000   133.000000   130.000000   131.000000   128.000000   131.000000   131.000000   125.000000   127.000000   129.000000   130.000000   129.000000   128.000000   129.000000   130.000000   130.000000   129.000000   131.000000   125.000000   128.000000   130.000000   132.000000   130.000000   130.000000   130.000000   131.000000   130.000000   132.000000   129.000000   126.000000   130.000000   128.000000   130.000000   124.000000   123.000000   128.000000   129.000000   131.000000   127.000000   127.000000   125.000000   128.000000   130.000000   129.000000   132.000000   129.000000   129.000000   128.000000   127.000000   130.000000   128.000000   129.000000   127.000000   127.000000   126.000000   128.00000   133.000000   128.000000
+max         4.0    12.000000   600.000000     2.0    38.0  1019518.0  1362.000000    65.000000     5.000000  2023.000000     9.000000     2.000000     2.000000     2.000000     2.000000     2.000000   5.000000    2.000000     2.000000    4.000000     2.000000     2.000000   5.000000   2.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000     2.000000  325000.000000   153.000000    10.000000    12.000000     2.000000     5.000000     2.000000     2.000000     3.000000     2.000000  2023.000000     3.000000     4.000000    1.000000    1.000000    1.000000    1.000000    0.0    0.0    0.0    0.0     3.000000     5.000000     3.000000     3.000000     3.000000  76000.000000  17500.000000    38.000000  160000.000000     3.000000   16.000000    24.000000  405000.000000     2.000000  23500.000000  40100.000000  468000.000000    99.000000     3.000000    52.000000     2.000000  2023.000000     4.000000   999.000000   999.000000    8.000000     2.000000     6.000000  NaN     6.000000  6402.000000  6402.000000     2.000000    24.000000  9920.000000   285.000000   150.000000  7124.000000  35000.000000  469.000000     6.000000     2.000000  NaN     0.0  9920.000000     4.000000  873000.000000  948000.000000   512.000000   501.000000  5500.000000    56.000000     2.000000     2.000000     4.000000     9.000000  9000.000000    96.000000     1.000000     1.000000     1.000000     1.000000     4.000000     1.000000     1.000000     1.000000     0.0     2.000000     2.000000   1.0   3.000000   12.000000     8.000000     1.000000     0.0     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000    1.000000     1.000000    1.000000     1.000000    1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     0.0     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000     1.000000  1465.000000  2015.000000  2275.000000  1996.000000  1539.000000  1586.000000  1888.000000  1900.000000  1587.00000  1728.000000  2037.000000  1621.000000  1554.000000  1942.000000  1708.000000  1540.000000  1890.000000  1898.000000  1696.000000  1792.000000  1582.000000  1763.000000  1806.000000  1948.000000  2097.000000  1631.000000  1770.000000  1758.000000  1726.000000  1873.000000  1836.000000  1560.000000  2116.000000  1386.000000  1424.000000  1755.000000  1534.000000  1534.000000  2073.000000  1739.000000  1571.000000  1703.000000  1785.000000  2212.000000  1674.000000  1835.000000  1472.000000  1532.000000  1479.000000  1718.000000  1694.000000  1596.000000  1591.000000  2014.000000  1666.000000  1696.000000  1762.000000  1619.000000  1768.000000  2238.000000  1810.000000  1456.000000  1894.000000  2085.000000  1727.000000  1458.000000  1873.000000  1952.000000  1661.000000  1362.000000  1676.000000  1435.000000  1899.000000  1646.000000  1491.000000  1878.000000  1653.000000  1778.00000  1733.000000  1595.000000
+================================================================================
+UNIQUE VALUES PER COLUMN (for categorical-looking columns)
+================================================================================
+
+RT: 1 unique values
+RT
+P    4701
+DIVISION: 1 unique values
+DIVISION
+4    4701
+SPORDER: 12 unique values
+SPORDER
+1     2643
+2     1699
+3      253
+4       59
+5       28
+6        9
+7        4
+8        2
+9        1
+10       1
+PUMA: 6 unique values
+PUMA
+400    1007
+600     930
+500     860
+200     793
+100     559
+300     552
+REGION: 1 unique values
+REGION
+2    4701
+STATE: 1 unique values
+STATE
+38    4701
+ADJINC: 1 unique values
+ADJINC
+1019518    4701
+CIT: 5 unique values
+CIT
+1    4483
+5     101
+4      72
+3      31
+2      14
+COW: 9 unique values
+COW
+1.0    2506
+2.0     409
+3.0     393
+6.0     366
+4.0     243
+5.0     203
+7.0     185
+8.0      15
+9.0       8
+DDRS: 2 unique values
+DDRS
+2.0    4617
+1.0      84
+DEAR: 2 unique values
+DEAR
+2    4559
+1     142
+DEYE: 2 unique values
+DEYE
+2    4605
+1      96
+DOUT: 2 unique values
+DOUT
+2.0    4515
+1.0     186
+DPHY: 2 unique values
+DPHY
+2.0    4511
+1.0     190
+DRAT: 5 unique values
+DRAT
+5.0    38
+2.0    23
+4.0    14
+3.0     9
+1.0     6
+DRATX: 2 unique values
+DRATX
+2.0    268
+1.0     90
+DREM: 2 unique values
+DREM
+2.0    4471
+1.0     230
+ENG: 4 unique values
+ENG
+1.0    181
+2.0     59
+3.0     20
+4.0      2
+FER: 2 unique values
+FER
+2.0    1354
+1.0     107
+GCL: 2 unique values
+GCL
+2.0    3536
+1.0      49
+GCM: 5 unique values
+GCM
+5.0    14
+1.0     3
+2.0     3
+3.0     2
+4.0     1
+GCR: 2 unique values
+GCR
+2.0    26
+1.0    23
+HIMRKS: 3 unique values
+HIMRKS
+0    3923
+2     593
+1     185
+HINS1: 2 unique values
+HINS1
+1    3175
+2    1526
+HINS2: 2 unique values
+HINS2
+2    3923
+1     778
+HINS3: 2 unique values
+HINS3
+2    4445
+1     256
+HINS4: 2 unique values
+HINS4
+2    4200
+1     501
+HINS5: 2 unique values
+HINS5
+2    4498
+1     203
+HINS6: 2 unique values
+HINS6
+2    4592
+1     109
+HINS7: 2 unique values
+HINS7
+2    4541
+1     160
+JWRIP: 9 unique values
+JWRIP
+1.0     2719
+2.0      250
+3.0       81
+4.0       22
+5.0       12
+6.0        6
+7.0        4
+8.0        1
+10.0       1
+JWTRNS: 9 unique values
+JWTRNS
+1.0     3096
+11.0     337
+10.0     140
+12.0      33
+2.0       10
+9.0       10
+8.0        8
+6.0        3
+7.0        2
+LANX: 2 unique values
+LANX
+2.0    4439
+1.0     262
+MAR: 5 unique values
+MAR
+1    2742
+5    1419
+3     434
+2      70
+4      36
+MARHD: 2 unique values
+MARHD
+2.0    3249
+1.0      33
+MARHM: 2 unique values
+MARHM
+2.0    3197
+1.0      85
+MARHT: 3 unique values
+MARHT
+1.0    2694
+2.0     490
+3.0      98
+MARHW: 2 unique values
+MARHW
+2.0    3277
+1.0       5
+MIG: 3 unique values
+MIG
+1.0    3994
+3.0     675
+2.0      32
+MIL: 4 unique values
+MIL
+4.0    4343
+2.0     233
+3.0      64
+1.0      61
+MLPA: 2 unique values
+MLPA
+1.0    183
+0.0    111
+MLPB: 2 unique values
+MLPB
+0.0    196
+1.0     98
+MLPCD: 2 unique values
+MLPCD
+0.0    202
+1.0     92
+MLPE: 2 unique values
+MLPE
+0.0    293
+1.0      1
+MLPFG: 1 unique values
+MLPFG
+0.0    294
+MLPH: 1 unique values
+MLPH
+0.0    294
+MLPIK: 1 unique values
+MLPIK
+0.0    294
+MLPJ: 1 unique values
+MLPJ
+0.0    294
+NWAB: 3 unique values
+NWAB
+3.0    3612
+2.0    1030
+1.0      59
+NWAV: 4 unique values
+NWAV
+5.0    4494
+1.0     133
+3.0      61
+2.0      13
+NWLA: 3 unique values
+NWLA
+3.0    3551
+2.0    1109
+1.0      41
+NWLK: 3 unique values
+NWLK
+3.0    3609
+2.0     999
+1.0      93
+NWRE: 3 unique values
+NWRE
+3.0    4533
+2.0     140
+1.0      28
+RELSHIPP: 17 unique values
+RELSHIPP
+20    2337
+21    1345
+25     316
+38     237
+22     175
+34      70
+37      69
+36      36
+28      28
+30      21
+SCH: 3 unique values
+SCH
+1.0    4149
+2.0     476
+3.0      76
+SCHG: 6 unique values
+SCHG
+15.0    392
+16.0     83
+14.0     67
+13.0      7
+12.0      2
+11.0      1
+SCHL: 18 unique values
+SCHL
+21.0    1026
+16.0    1004
+19.0     752
+20.0     682
+18.0     373
+22.0     293
+17.0     165
+14.0      82
+15.0      73
+23.0      61
+SEX: 2 unique values
+SEX
+1    2476
+2    2225
+WKL: 3 unique values
+WKL
+1.0    4052
+3.0     381
+2.0     268
+WRK: 2 unique values
+WRK
+1.0    3345
+2.0     845
+ANC: 4 unique values
+ANC
+1    2073
+2    1565
+4     920
+3     143
+DECADE: 7 unique values
+DECADE
+8.0    115
+7.0     46
+6.0     25
+5.0     16
+4.0      9
+3.0      6
+2.0      1
+DIS: 2 unique values
+DIS
+2    4189
+1     512
+DRIVESP: 6 unique values
+DRIVESP
+1.0    2719
+2.0     250
+3.0      81
+4.0      22
+5.0      18
+6.0       6
+ESP: 0 unique values
+Series([], )
+ESR: 5 unique values
+ESR
+1.0    3576
+6.0     931
+3.0      81
+4.0      63
+2.0      50
+HICOV: 2 unique values
+HICOV
+1    4424
+2     277
+HISP: 16 unique values
+HISP
+1     4538
+2      105
+24      12
+3        8
+4        6
+11       6
+5        4
+16       4
+7        4
+8        3
+MSP: 6 unique values
+MSP
+1.0    2667
+6.0    1419
+4.0     434
+2.0      75
+3.0      70
+5.0      36
+NATIVITY: 2 unique values
+NATIVITY
+1    4528
+2     173
+NOP: 0 unique values
+Series([], )
+OC: 1 unique values
+OC
+0.0    4395
+PAOC: 4 unique values
+PAOC
+4.0    1345
+2.0     418
+1.0     186
+3.0     179
+POWSP: 12 unique values
+POWSP
+38.0    3534
+27.0      68
+46.0      17
+30.0       7
+48.0       3
+56.0       2
+47.0       2
+31.0       2
+8.0        1
+20.0       1
+PRIVCOV: 2 unique values
+PRIVCOV
+1    3915
+2     786
+PUBCOV: 2 unique values
+PUBCOV
+2    3952
+1     749
+QTRBIR: 4 unique values
+QTRBIR
+3    1263
+2    1181
+4    1178
+1    1079
+RAC1P: 9 unique values
+RAC1P
+1    4072
+9     258
+3     162
+6      70
+8      58
+2      54
+5      25
+7       1
+4       1
+RACAIAN: 2 unique values
+RACAIAN
+0    4414
+1     287
+RACASN: 2 unique values
+RACASN
+0    4604
+1      97
+RACBLK: 2 unique values
+RACBLK
+0    4597
+1     104
+RACNH: 2 unique values
+RACNH
+0    4698
+1       3
+RACNUM: 4 unique values
+RACNUM
+1    4443
+2     249
+3       7
+4       2
+RACPI: 2 unique values
+RACPI
+0    4696
+1       5
+RACSOR: 2 unique values
+RACSOR
+0    4542
+1     159
+RACWHT: 2 unique values
+RACWHT
+1    4315
+0     386
+RC: 1 unique values
+RC
+0.0    4395
+SCIENGP: 2 unique values
+SCIENGP
+2.0    1022
+1.0     419
+SCIENGRLP: 2 unique values
+SCIENGRLP
+2.0    1217
+1.0     224
+SFN: 1 unique values
+SFN
+1.0    28
+SFR: 3 unique values
+SFR
+3.0    22
+2.0     4
+1.0     2
+VPS: 5 unique values
+VPS
+1.0     140
+4.0      55
+12.0     55
+2.0      43
+6.0       1
+WAOB: 8 unique values
+WAOB
+1    4483
+4      66
+6      46
+3      33
+7      28
+5      27
+2      14
+8       4
+FAGEP: 2 unique values
+FAGEP
+0    4659
+1      42
+FANCP: 1 unique values
+FANCP
+0    4701
+FCITP: 2 unique values
+FCITP
+0    4376
+1     325
+FCITWP: 2 unique values
+FCITWP
+0    4690
+1      11
+FCOWP: 2 unique values
+FCOWP
+0    4004
+1     697
+FDDRSP: 2 unique values
+FDDRSP
+0    4197
+1     504
+FDEARP: 2 unique values
+FDEARP
+0    4219
+1     482
+FDEYEP: 2 unique values
+FDEYEP
+0    4197
+1     504
+FDISP: 2 unique values
+FDISP
+0    4109
+1     592
+FDOUTP: 2 unique values
+FDOUTP
+0    4197
+1     504
+FDPHYP: 2 unique values
+FDPHYP
+0    4202
+1     499
+FDRATP: 2 unique values
+FDRATP
+0    4699
+1       2
+FDRATXP: 2 unique values
+FDRATXP
+0    4675
+1      26
+FDREMP: 2 unique values
+FDREMP
+0    4196
+1     505
+FENGP: 2 unique values
+FENGP
+0    4671
+1      30
+FESRP: 2 unique values
+FESRP
+0    4213
+1     488
+FFERP: 2 unique values
+FFERP
+0    4547
+1     154
+FFODP: 2 unique values
+FFODP
+0    4488
+1     213
+FGCLP: 2 unique values
+FGCLP
+0    4699
+1       2
+FGCMP: 2 unique values
+FGCMP
+0    4699
+1       2
+FGCRP: 2 unique values
+FGCRP
+0    4694
+1       7
+FHICOVP: 2 unique values
+FHICOVP
+0    3896
+1     805
+FHIMRKSP: 2 unique values
+FHIMRKSP
+0    4494
+1     207
+FHINS1P: 2 unique values
+FHINS1P
+0    4055
+1     646
+FHINS2P: 2 unique values
+FHINS2P
+0    4017
+1     684
+FHINS3C: 2 unique values
+FHINS3C
+0.0    253
+1.0      3
+FHINS3P: 2 unique values
+FHINS3P
+0    4007
+1     694
+FHINS4C: 2 unique values
+FHINS4C
+0.0    485
+1.0     16
+FHINS4P: 2 unique values
+FHINS4P
+0    4009
+1     692
+FHINS5C: 2 unique values
+FHINS5C
+0.0    201
+1.0      2
+FHINS5P: 2 unique values
+FHINS5P
+0    3980
+1     721
+FHINS6P: 2 unique values
+FHINS6P
+0    3977
+1     724
+FHINS7P: 2 unique values
+FHINS7P
+0    3968
+1     733
+FHISP: 2 unique values
+FHISP
+0    4660
+1      41
+FINDP: 2 unique values
+FINDP
+0    4000
+1     701
+FINTP: 2 unique values
+FINTP
+0    3770
+1     931
+FJWDP: 2 unique values
+FJWDP
+0    3871
+1     830
+FJWMNP: 2 unique values
+FJWMNP
+0    4110
+1     591
+FJWRIP: 2 unique values
+FJWRIP
+0    4237
+1     464
+FJWTRNSP: 2 unique values
+FJWTRNSP
+0    4201
+1     500
+FLANP: 2 unique values
+FLANP
+0    4654
+1      47
+FLANXP: 2 unique values
+FLANXP
+0    4232
+1     469
+FMARP: 2 unique values
+FMARP
+0    4427
+1     274
+FMARHDP: 2 unique values
+FMARHDP
+0    4399
+1     302
+FMARHMP: 2 unique values
+FMARHMP
+0    4477
+1     224
+FMARHTP: 2 unique values
+FMARHTP
+0    4379
+1     322
+FMARHWP: 2 unique values
+FMARHWP
+0    4402
+1     299
+FMARHYP: 2 unique values
+FMARHYP
+0    4358
+1     343
+FMIGP: 2 unique values
+FMIGP
+0    4308
+1     393
+FMIGSP: 2 unique values
+FMIGSP
+0    4573
+1     128
+FMILPP: 2 unique values
+FMILPP
+0    4659
+1      42
+FMILSP: 2 unique values
+FMILSP
+0    4259
+1     442
+FOCCP: 2 unique values
+FOCCP
+0    3943
+1     758
+FOIP: 2 unique values
+FOIP
+0    3835
+1     866
+FPAP: 2 unique values
+FPAP
+0    3838
+1     863
+FPERNP: 2 unique values
+FPERNP
+0    3732
+1     969
+FPINCP: 2 unique values
+FPINCP
+0    3385
+1    1316
+FPOBP: 2 unique values
+FPOBP
+0    4126
+1     575
+FPOWSP: 2 unique values
+FPOWSP
+0    4068
+1     633
+FPRIVCOVP: 2 unique values
+FPRIVCOVP
+0    3934
+1     767
+FPUBCOVP: 2 unique values
+FPUBCOVP
+0    3923
+1     778
+FRACP: 2 unique values
+FRACP
+0    4617
+1      84
+FRELSHIPP: 2 unique values
+FRELSHIPP
+0    4685
+1      16
+FRETP: 2 unique values
+FRETP
+0    3820
+1     881
+FSCHGP: 2 unique values
+FSCHGP
+0    4634
+1      67
+FSCHLP: 2 unique values
+FSCHLP
+0    4281
+1     420
+FSCHP: 2 unique values
+FSCHP
+0    4342
+1     359
+FSEMP: 2 unique values
+FSEMP
+0    4018
+1     683
+FSEXP: 1 unique values
+FSEXP
+0    4701
+FSSIP: 2 unique values
+FSSIP
+0    3865
+1     836
+FSSP: 2 unique values
+FSSP
+0    3850
+1     851
+FWAGP: 2 unique values
+FWAGP
+0    3794
+1     907
+FWKHP: 2 unique values
+FWKHP
+0    4067
+1     634
+FWKLP: 2 unique values
+FWKLP
+0    4101
+1     600
+FWKWNP: 2 unique values
+FWKWNP
+0    4088
+1     613
+FWRKP: 2 unique values
+FWRKP
+0    4674
+1      27
+FYOEP: 2 unique values
+FYOEP
+0    4664
+1      37
