@@ -12,9 +12,6 @@ Approach:
 - Remove highly correlated features (reduce redundancy)
 - Select top features by mutual information (relevance to target)
 - Save categorical and encoded versions for modeling
-
-Author: Applied Machine Learning Team
-Date: November 2025
 """
 
 import pandas as pd
@@ -31,10 +28,6 @@ warnings.filterwarnings('ignore')
 
 # Set plot style
 fe_utils.setup_environment()
-
-
-
-
 
 def filter_low_information(df, categorical_cols, numeric_cols, target='medicaid_only'):
     """
@@ -502,8 +495,8 @@ def main():
     print("=" * 80)
     
     # Configuration
-    input_file = 'data/processed/psam_p38_cleaned.csv'
-    output_dir = 'feature_engineering/output'
+    input_file = '00 data/processed/psam_p38_cleaned.csv'
+    output_dir = '03 feature_engineering/output'
     top_k_features = 70
     
     # Step 1: Load and prepare data
