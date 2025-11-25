@@ -25,215 +25,15 @@ from sklearn.feature_selection import mutual_info_classif
 from sklearn.preprocessing import LabelEncoder
 import warnings
 import os
+import fe_utils
 
 warnings.filterwarnings('ignore')
 
 # Set plot style
-sns.set_style('whitegrid')
-plt.rcParams['figure.dpi'] = 300
+fe_utils.setup_environment()
 
 
-def load_and_prepare_data(filepath):
-    """
-    Load PUMS data, filter to ages 18-65, create target variable.
-    
-    Parameters:
-    -----------
-    filepath : str
-        Path to cleaned PUMS CSV file
-    
-    Returns:
-    --------
-    df : pd.DataFrame
-        Prepared dataframe with target variable
-    """
-    print("=" * 60)
-    print("STEP 1: LOAD AND PREPARE DATA")
-    print("=" * 60)
-    
-    # Load data
-    print(f"\nLoading data from: {filepath}")
-    df = pd.read_csv(filepath)
-    print(f"Initial shape: {df.shape}")
-    
-    # Filter to ages 18-65
-    print("\nFiltering to ages 18-65...")
-    df = df[(df['AGEP'] >= 18) & (df['AGEP'] <= 65)].copy()
-    print(f"Shape after age filter: {df.shape}")
-    
-    # Create target variable
-    print("\nCreating target variable: medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)")
-    df['medicaid_only'] = ((df['HINS4'] == 1) & (df['PRIVCOV'] == 2)).astype(int)
-    
-    # Print target distribution
-    target_counts = df['medicaid_only'].value_counts().sort_index()
-    print("\nTarget distribution:")
-    print(target_counts)
-    class_ratio = target_counts[0] / target_counts[1] if target_counts[1] > 0 else float('inf')
-    print(f"Class imbalance ratio (0:1): {class_ratio:.2f}:1")
-    print(f"Medicaid-only rate: {df['medicaid_only'].mean():.2%}")
-    
-    # Drop unnecessary columns
-    print("\nDropping unnecessary columns...")
-    cols_to_drop = []
-    
-    # Replicate weights (PWGTP1 through PWGTP80)
-    weight_cols = [f'PWGTP{i}' for i in range(1, 81)]
-    cols_to_drop.extend([col for col in weight_cols if col in df.columns])
-    
-    # Allocation flags (columns starting with 'F')
-    f_cols = [col for col in df.columns if col.startswith('F')]
-    cols_to_drop.extend(f_cols)
-    
-    # Specific columns to drop
-    specific_drops = ['RT', 'SERIALNO', 'SPORDER', 'HINS1', 'HINS2', 'HINS3', 
-                      'HINS4', 'HINS5', 'HINS6', 'HINS7', 'PUBCOV', 'PRIVCOV', 
-                      'HICOV', 'NAICSP', 'SOCP']
-    cols_to_drop.extend([col for col in specific_drops if col in df.columns])
-    
-    # Remove duplicates and drop
-    cols_to_drop = list(set(cols_to_drop))
-    df = df.drop(columns=cols_to_drop, errors='ignore')
-    print(f"Dropped {len(cols_to_drop)} columns")
-    print(f"Shape after dropping columns: {df.shape}")
-    
-    return df
 
-
-def identify_and_process_categoricals(df):
-    """
-    Identify all categorical variables and process high-cardinality ones.
-    
-    Parameters:
-    -----------
-    df : pd.DataFrame
-        Input dataframe
-    
-    Returns:
-    --------
-    df : pd.DataFrame
-        Dataframe with processed categoricals
-    categorical_cols : list
-        List of categorical column names
-    numeric_cols : list
-        List of numeric column names
-    """
-    print("\n" + "=" * 60)
-    print("STEP 2: IDENTIFY CATEGORICAL VARIABLES")
-    print("=" * 60)
-    
-    # Step 1: Automatic Detection
-    print("\nStep 1: Automatic Detection")
-    print("-" * 40)
-    
-    # Object/category dtypes
-    auto_categorical = df.select_dtypes(include=['object', 'category']).columns.tolist()
-    print(f"Object/category dtype columns: {len(auto_categorical)}")
-    if auto_categorical:
-        print(f"  {auto_categorical}")
-    
-    # Known categorical variables (from data dictionary)
-    known_categoricals = [
-        'SEX', 'MAR', 'ESR', 'COW', 'SCHL', 'SCH', 'DIS', 'DDRS', 'DEAR', 
-        'DEYE', 'DOUT', 'DPHY', 'DREM', 'CIT', 'LANX', 'MIL', 'RELSHIPP', 
-        'MIG', 'NATIVITY', 'RAC1P', 'HISP', 'WKL', 'WRK', 'REGION', 'DIVISION', 
-        'STATE', 'PUMA', 'GCL', 'QTRBIR', 'RAC2P', 'RAC3P', 'RACAIAN', 'RACASN', 
-        'RACBLK', 'RACNH', 'RACNUM', 'RACPI', 'RACSOR', 'RACWHT', 'RC', 
-        'ANC', 'ANC1P', 'ANC2P', 'MSP', 'OCCP', 'INDP'
-    ]
-    
-    # Check numeric columns with few unique values
-    print("\nNumeric columns with < 20 unique values (potential categoricals):")
-    numeric_cols_temp = df.select_dtypes(include=[np.number]).columns.tolist()
-    if 'medicaid_only' in numeric_cols_temp:
-        numeric_cols_temp.remove('medicaid_only')
-    
-    ambiguous_cols = []
-    for col in numeric_cols_temp:
-        nunique = df[col].nunique()
-        if nunique < 20:
-            print(f"  {col}: {nunique} unique values", end="")
-            if col in known_categoricals:
-                print(" → CATEGORICAL (known)")
-                ambiguous_cols.append(col)
-            else:
-                print(" → NUMERIC (continuous/count variable)")
-    
-    # Combine all categorical columns
-    categorical_cols = list(set(auto_categorical + [col for col in known_categoricals if col in df.columns]))
-    
-    # Step 2: Group High-Cardinality Categoricals
-    print("\n\nStep 2: Group High-Cardinality Categoricals")
-    print("-" * 40)
-    
-    # Process OCCP
-    if 'OCCP' in df.columns:
-        print("\nProcessing OCCP:")
-        original_unique = df['OCCP'].nunique()
-        print(f"  Original unique values: {original_unique}")
-        
-        # Convert to string and zero-pad to 4 digits
-        df['OCCP_2digit'] = df['OCCP'].apply(
-            lambda x: str(int(x)).zfill(4)[:2] if pd.notna(x) else 'Missing'
-        )
-        print(f"  Created OCCP_2digit with {df['OCCP_2digit'].nunique()} categories")
-        print(f"  Examples: OCCP=20 → '{str(20).zfill(4)}' → '{str(20).zfill(4)[:2]}'")
-        
-        # Drop original and add new to categorical list
-        df = df.drop(columns=['OCCP'])
-        categorical_cols.remove('OCCP')
-        categorical_cols.append('OCCP_2digit')
-    
-    # Process INDP
-    if 'INDP' in df.columns:
-        print("\nProcessing INDP:")
-        original_unique = df['INDP'].nunique()
-        print(f"  Original unique values: {original_unique}")
-        
-        # Convert to string and zero-pad to 4 digits
-        df['INDP_2digit'] = df['INDP'].apply(
-            lambda x: str(int(x)).zfill(4)[:2] if pd.notna(x) else 'Missing'
-        )
-        print(f"  Created INDP_2digit with {df['INDP_2digit'].nunique()} categories")
-        print(f"  Examples: INDP=170 → '{str(170).zfill(4)}' → '{str(170).zfill(4)[:2]}'")
-        
-        # Drop original and add new to categorical list
-        df = df.drop(columns=['INDP'])
-        categorical_cols.remove('INDP')
-        categorical_cols.append('INDP_2digit')
-    
-    # Step 3: Finalize lists
-    print("\n\nStep 3: Verify Categoricals")
-    print("-" * 40)
-    
-    # Remove target and non-existent columns
-    categorical_cols = [col for col in categorical_cols if col in df.columns and col != 'medicaid_only']
-    numeric_cols = [col for col in df.columns if col not in categorical_cols and col != 'medicaid_only']
-    
-    print(f"\nIdentified categorical variables: {len(categorical_cols)}")
-    print(f"  {sorted(categorical_cols)}")
-    print(f"\nIdentified numeric variables: {len(numeric_cols)}")
-    print(f"  {sorted(numeric_cols)}")
-    
-    # Step 4: Handle Missing Values
-    print("\n\nStep 4: Handle Missing Values")
-    print("-" * 40)
-    
-    # Numeric features: fill with median
-    for col in numeric_cols:
-        if df[col].isna().sum() > 0:
-            median_val = df[col].median()
-            df[col] = df[col].fillna(median_val)
-            print(f"  {col}: filled {df[col].isna().sum()} missing with median={median_val:.2f}")
-    
-    # Categorical features: fill with 'Missing'
-    for col in categorical_cols:
-        if df[col].isna().sum() > 0:
-            missing_count = df[col].isna().sum()
-            df[col] = df[col].fillna('Missing')
-            print(f"  {col}: filled {missing_count} missing with 'Missing'")
-    
-    return df, categorical_cols, numeric_cols
 
 
 def filter_low_information(df, categorical_cols, numeric_cols, target='medicaid_only'):
@@ -479,9 +279,7 @@ def select_features_by_mutual_information(df, categorical_cols, numeric_cols,
     }).sort_values('mi_score', ascending=False)
     
     # Also calculate correlation for numeric features
-    correlations = {}
-    for col in numeric_cols:
-        correlations[col] = df[col].corr(df[target])
+    correlations = fe_utils.calculate_target_correlation(df, target)
     
     mi_scores['correlation'] = mi_scores['feature'].map(correlations)
     
@@ -525,74 +323,7 @@ def select_features_by_mutual_information(df, categorical_cols, numeric_cols,
     return df_selected, categorical_cols_selected, numeric_cols_selected, selected_mi, selection_counts
 
 
-def create_encoded_version(df, categorical_cols, target='medicaid_only'):
-    """
-    Create one-hot encoded version of the dataset.
-    
-    Parameters:
-    -----------
-    df : pd.DataFrame
-        Input dataframe with categorical features
-    categorical_cols : list
-        List of categorical columns to encode
-    target : str
-        Target variable name
-    
-    Returns:
-    --------
-    df_encoded : pd.DataFrame
-        Dataframe with one-hot encoded features
-    """
-    print("\n" + "=" * 60)
-    print("CREATING ENCODED VERSION")
-    print("=" * 60)
-    
-    print(f"\nCategorical columns before encoding: {len(categorical_cols)}")
-    
-    # Separate numeric and categorical features
-    numeric_cols = [col for col in df.columns if col not in categorical_cols and col != target]
-    
-    # Create dummy variables for categorical features
-    # Process each categorical column separately to maintain proper prefixes
-    dummy_dfs = []
-    for cat_col in categorical_cols:
-        dummies = pd.get_dummies(df[cat_col], prefix=cat_col, drop_first=True, dtype=int)
-        dummy_dfs.append(dummies)
-    
-    if dummy_dfs:
-        df_encoded = pd.concat(dummy_dfs, axis=1)
-    else:
-        df_encoded = pd.DataFrame(index=df.index)
-    
-    print(f"Dummy columns after encoding: {len(df_encoded.columns)}")
-    
-    # Print breakdown by feature
-    print("\nBreakdown by original feature:")
-    for cat_col in sorted(categorical_cols):
-        dummy_cols = [col for col in df_encoded.columns if col.startswith(f"{cat_col}_")]
-        n_dummies = len(dummy_cols)
-        n_categories = df[cat_col].nunique()
-        print(f"  * {cat_col}: {n_dummies} dummies (from {n_categories} categories)")
-    
-    # Combine with numeric features and target
-    df_encoded = pd.concat([
-        df[[target]],
-        df[numeric_cols],
-        df_encoded
-    ], axis=1)
-    
-    print(f"\nFinal encoded dataset:")
-    print(f"  - Target: 1")
-    print(f"  - Numeric features: {len(numeric_cols)}")
-    print(f"  - Dummy-encoded features: {len(df_encoded.columns) - len(numeric_cols) - 1}")
-    print(f"  - Total columns: {len(df_encoded.columns)}")
-    
-    # Verify all features are numeric
-    all_numeric = df_encoded.drop(columns=[target]).select_dtypes(include=[np.number]).shape[1] == df_encoded.shape[1] - 1
-    print(f"\nAll features numeric: {all_numeric}")
-    print(f"Ready for modeling: {all_numeric}")
-    
-    return df_encoded
+
 
 
 def save_outputs(df_categorical, df_encoded, mi_scores, removed_low_info, 
@@ -615,29 +346,13 @@ def save_outputs(df_categorical, df_encoded, mi_scores, removed_low_info,
     output_dir : str
         Output directory path
     """
-    print("\n" + "=" * 60)
-    print("STEP 4: SAVING OUTPUTS")
-    print("=" * 60)
-    
-    # Create output directory
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Save categorical version
-    categorical_path = os.path.join(output_dir, '01_fe_statistical_categorical.csv')
-    df_categorical.to_csv(categorical_path, index=False)
-    print(f"\n✓ Saved categorical version: {categorical_path}")
-    print(f"  Shape: {df_categorical.shape}")
-    
-    # Save encoded version
-    encoded_path = os.path.join(output_dir, '01_fe_statistical_encoded.csv')
-    df_encoded.to_csv(encoded_path, index=False)
-    print(f"\n✓ Saved encoded version: {encoded_path}")
-    print(f"  Shape: {df_encoded.shape}")
+    # Save datasets using shared util
+    fe_utils.save_datasets(df_categorical, df_encoded, output_dir, '01_fe_statistical')
     
     # Save feature importance
     importance_path = os.path.join(output_dir, '01_fe_statistical_importance.csv')
     mi_scores.to_csv(importance_path, index=False)
-    print(f"\n✓ Saved feature importance: {importance_path}")
+    print(f"Saved feature importance: {importance_path}")
     
     # Save selection report
     report_path = os.path.join(output_dir, '01_fe_statistical_report.txt')
@@ -722,55 +437,20 @@ def create_visualizations(df_encoded, mi_scores, removed_low_info, removed_redun
     print("=" * 60)
     
     # 1. Feature Importance Bar Chart (Top 30)
-    print("\nCreating feature importance bar chart...")
-    plt.figure(figsize=(12, 10))
-    top_features = mi_scores.head(30)
-    colors = ['#2ecc71' if ft == 'numeric' else '#e74c3c' 
-              for ft in top_features['feature_type']]
-    plt.barh(range(len(top_features)), top_features['mi_score'], color=colors)
-    plt.yticks(range(len(top_features)), top_features['feature'])
-    plt.xlabel('Mutual Information Score', fontsize=12)
-    plt.ylabel('Feature', fontsize=12)
-    plt.title('Top 30 Features by Mutual Information Score', fontsize=14, fontweight='bold')
-    plt.gca().invert_yaxis()
+    fe_utils.plot_feature_ranking(
+        mi_scores['feature'], 
+        mi_scores['mi_score'], 
+        'Mutual Information Score', 
+        os.path.join(output_dir, '01_fe_importance.png')
+    )
     
-    # Add legend
-    from matplotlib.patches import Patch
-    legend_elements = [
-        Patch(facecolor='#2ecc71', label='Numeric'),
-        Patch(facecolor='#e74c3c', label='Categorical')
-    ]
-    plt.legend(handles=legend_elements, loc='lower right')
-    
-    plt.tight_layout()
-    importance_path = os.path.join(output_dir, '01_fe_importance.png')
-    plt.savefig(importance_path, dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"✓ Saved: {importance_path}")
-    
-    # 2. Correlation Heatmap (Top 30 features, numeric only)
-    print("\nCreating correlation heatmap...")
+    # 2. Correlation Heatmap (Top 30 features)
     top_30_features = mi_scores.head(30)['feature'].tolist()
-    # Filter to numeric features only for correlation
-    numeric_features = [f for f in top_30_features if f in df_encoded.columns]
-    numeric_features = df_encoded[numeric_features].select_dtypes(include=[np.number]).columns.tolist()
-    
-    if len(numeric_features) > 1:
-        # Limit to top 30 numeric for readability
-        numeric_features = numeric_features[:min(30, len(numeric_features))]
-        corr_data = df_encoded[numeric_features + [target]].corr()
-        
-        plt.figure(figsize=(14, 12))
-        sns.heatmap(corr_data, annot=False, cmap='coolwarm', center=0, 
-                   square=True, linewidths=0.5, cbar_kws={"shrink": 0.8})
-        plt.title('Correlation Heatmap - Top Numeric Features', fontsize=14, fontweight='bold')
-        plt.tight_layout()
-        heatmap_path = os.path.join(output_dir, '01_fe_correlation_heatmap.png')
-        plt.savefig(heatmap_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        print(f"✓ Saved: {heatmap_path}")
-    else:
-        print("  Skipping heatmap: insufficient numeric features")
+    fe_utils.plot_correlation_heatmap(
+        df_encoded, 
+        os.path.join(output_dir, '01_fe_correlation_heatmap.png'),
+        top_features=top_30_features
+    )
     
     # 3. Selection Funnel Chart
     print("\nCreating selection funnel chart...")
@@ -810,57 +490,7 @@ def create_visualizations(df_encoded, mi_scores, removed_low_info, removed_redun
     print("\n✓ All visualizations created successfully")
 
 
-def print_categorical_verification(df_categorical, df_encoded, categorical_cols, 
-                                   numeric_cols, target='medicaid_only'):
-    """
-    Print comprehensive categorical encoding verification.
-    
-    Parameters:
-    -----------
-    df_categorical : pd.DataFrame
-        Dataset with categorical features
-    df_encoded : pd.DataFrame
-        Dataset with encoded features
-    categorical_cols : list
-        List of categorical columns
-    numeric_cols : list
-        List of numeric columns
-    target : str
-        Target variable name
-    """
-    print("\n" + "=" * 80)
-    print("CATEGORICAL ENCODING VERIFICATION")
-    print("=" * 80)
-    
-    print(f"\nOriginal categorical features identified: {len(categorical_cols)}")
-    print(f"List: {sorted(categorical_cols)}")
-    
-    print("\nDummy encoding results:")
-    total_dummies = len(df_encoded.columns) - len(numeric_cols) - 1  # -1 for target
-    print(f"- Total dummy columns created: {total_dummies}")
-    print("- Breakdown by original feature:")
-    
-    for cat_col in sorted(categorical_cols):
-        dummy_cols = [col for col in df_encoded.columns if col.startswith(f"{cat_col}_")]
-        n_dummies = len(dummy_cols)
-        n_categories = df_categorical[cat_col].nunique()
-        print(f"  * {cat_col}: {n_dummies} dummies (from {n_categories} categories)")
-    
-    print("\nFinal dataset:")
-    print(f"- Target: 1 ({target})")
-    print(f"- Numeric features (unchanged): {len(numeric_cols)}")
-    print(f"- Dummy-encoded features: {total_dummies}")
-    print(f"- Total features: {len(df_encoded.columns) - 1}")
-    print(f"- Total columns (including target): {len(df_encoded.columns)}")
-    
-    # Verify all features are numeric
-    feature_cols = [col for col in df_encoded.columns if col != target]
-    all_numeric = all(df_encoded[col].dtype in [np.int64, np.float64, np.int32, np.float32] 
-                     for col in feature_cols)
-    
-    print(f"\nAll features numeric: {all_numeric}")
-    print(f"Ready for modeling: {all_numeric}")
-    print("=" * 80)
+
 
 
 def main():
@@ -877,10 +507,10 @@ def main():
     top_k_features = 70
     
     # Step 1: Load and prepare data
-    df = load_and_prepare_data(input_file)
+    df = fe_utils.load_and_prepare_data(input_file)
     
     # Step 2: Identify categorical variables
-    df, categorical_cols, numeric_cols = identify_and_process_categoricals(df)
+    df, categorical_cols, numeric_cols = fe_utils.run_preprocessing_pipeline(df)
     
     # Step 3A: Filter low-information features
     df, categorical_cols, numeric_cols, removed_low_info = filter_low_information(
@@ -899,7 +529,7 @@ def main():
         )
     
     # Create encoded version
-    df_encoded = create_encoded_version(df_selected, categorical_cols_final)
+    df_encoded = fe_utils.create_encoded_dataset(df_selected, categorical_cols_final)
     
     # Save outputs
     save_outputs(df_selected, df_encoded, mi_scores, removed_low_info, 
@@ -910,8 +540,7 @@ def main():
                          selection_counts, output_dir=output_dir)
     
     # Print verification
-    print_categorical_verification(df_selected, df_encoded, categorical_cols_final, 
-                                   numeric_cols_final)
+    fe_utils.print_verification(df_encoded)
     
     print("\n" + "=" * 80)
     print("✓ STATISTICAL FEATURE SELECTION COMPLETE")

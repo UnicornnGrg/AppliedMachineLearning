@@ -24,216 +24,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 import warnings
+import fe_utils
+
 warnings.filterwarnings('ignore')
 
 # Set visualization style
-sns.set_style('whitegrid')
-plt.rcParams['figure.dpi'] = 300
-plt.rcParams['savefig.dpi'] = 300
+fe_utils.setup_environment()
 
 
-def load_and_prepare_data(filepath):
-    """
-    Load PUMS data and create target variable with age filtering.
-    
-    Business Rationale:
-        - Focus on working-age adults (18-65) as primary insurance market
-        - Medicaid-only status indicates potential for private insurance conversion
-    """
-    print("=" * 60)
-    print("LOADING AND PREPARING DATA")
-    print("=" * 60)
-    
-    df = pd.read_csv(filepath)
-    print(f"Initial dataset shape: {df.shape}")
-    
-    # Filter to working-age adults (18-65)
-    df = df[(df['AGEP'] >= 18) & (df['AGEP'] <= 65)].copy()
-    print(f"After age filter (18-65): {df.shape}")
-    
-    # Create target variable: Medicaid-only (no private coverage)
-    df['medicaid_only'] = ((df['HINS4'] == 1) & (df['PRIVCOV'] == 2)).astype(int)
-    
-    # Print target distribution
-    target_counts = df['medicaid_only'].value_counts()
-    target_pct = df['medicaid_only'].value_counts(normalize=True) * 100
-    
-    print(f"\nTarget Variable Distribution:")
-    print(f"  Not Medicaid-only (0): {target_counts[0]:,} ({target_pct[0]:.2f}%)")
-    print(f"  Medicaid-only (1):     {target_counts[1]:,} ({target_pct[1]:.2f}%)")
-    print(f"  Class imbalance ratio: {target_counts[0] / target_counts[1]:.2f}:1")
-    
-    # Drop unnecessary columns
-    cols_to_drop = []
-    
-    # Person weights
-    cols_to_drop.extend([col for col in df.columns if col.startswith('PWGTP')])
-    
-    # Flag columns
-    cols_to_drop.extend([col for col in df.columns if col.startswith('F')])
-    
-    # Insurance columns (used only for target creation)
-    insurance_cols = ['HINS1', 'HINS2', 'HINS3', 'HINS4', 'HINS5', 'HINS6', 'HINS7', 
-                     'PUBCOV', 'PRIVCOV', 'HICOV']
-    cols_to_drop.extend([col for col in insurance_cols if col in df.columns])
-    
-    # Industry/occupation codes (will use grouped versions)
-    if 'NAICSP' in df.columns:
-        cols_to_drop.append('NAICSP')
-    if 'SOCP' in df.columns:
-        cols_to_drop.append('SOCP')
-    
-    # Remove duplicates and non-existent columns
-    cols_to_drop = list(set([col for col in cols_to_drop if col in df.columns]))
-    
-    df = df.drop(columns=cols_to_drop)
-    print(f"\nAfter dropping {len(cols_to_drop)} columns: {df.shape}")
-    
-    return df
 
 
-def identify_categorical_variables(df):
-    """
-    Identify and categorize all categorical variables by cardinality.
-    
-    Business Rationale:
-        - Different cardinality levels require different encoding strategies
-        - High-cardinality features need grouping for interpretability
-        - Binary indicators are valuable for simple business rules
-    """
-    print("\n" + "=" * 60)
-    print("IDENTIFYING CATEGORICAL VARIABLES")
-    print("=" * 60)
-    
-    categorical_vars = {
-        'binary': [],
-        'low_cardinality': [],
-        'medium_cardinality': [],
-        'high_cardinality': []
-    }
-    
-    for col in df.columns:
-        if col == 'medicaid_only':  # Skip target
-            continue
-            
-        # Check if categorical (object type or integer with few unique values)
-        n_unique = df[col].nunique()
-        
-        # Consider as categorical if object type or integer with <= 50 unique values
-        if df[col].dtype == 'object' or (df[col].dtype in ['int64', 'float64'] and n_unique <= 50):
-            if n_unique == 2:
-                categorical_vars['binary'].append(col)
-            elif n_unique <= 15:
-                categorical_vars['low_cardinality'].append(col)
-            elif n_unique <= 50:
-                categorical_vars['medium_cardinality'].append(col)
-            else:
-                categorical_vars['high_cardinality'].append(col)
-    
-    # Print breakdown
-    print(f"\nCategorical Variable Breakdown:")
-    print(f"  Binary (2 values):          {len(categorical_vars['binary'])} features")
-    print(f"  Low cardinality (3-15):     {len(categorical_vars['low_cardinality'])} features")
-    print(f"  Medium cardinality (15-50): {len(categorical_vars['medium_cardinality'])} features")
-    print(f"  High cardinality (>50):     {len(categorical_vars['high_cardinality'])} features")
-    
-    print(f"\nBinary indicators: {categorical_vars['binary']}")
-    print(f"Low cardinality: {categorical_vars['low_cardinality']}")
-    print(f"Medium cardinality: {categorical_vars['medium_cardinality']}")
-    print(f"High cardinality: {categorical_vars['high_cardinality']}")
-    
-    return categorical_vars
 
 
-def group_high_cardinality_features(df):
-    """
-    Group high-cardinality occupation and industry codes.
-    
-    Business Rationale:
-        - Full occupation/industry codes are too granular for marketing segmentation
-        - 2-digit codes represent major categories (e.g., Healthcare, Tech, Manufacturing)
-        - Enables broader industry/occupation-based targeting strategies
-    """
-    print("\n" + "=" * 60)
-    print("GROUPING HIGH-CARDINALITY FEATURES")
-    print("=" * 60)
-    
-    # OCCP: Occupation code
-    if 'OCCP' in df.columns:
-        print(f"\nOCCP original unique values: {df['OCCP'].nunique()}")
-        # Convert to string, zero-pad to 4 digits, extract first 2
-        df['OCCP_2digit'] = df['OCCP'].fillna(0).astype(int).astype(str).str.zfill(4).str[:2]
-        print(f"OCCP_2digit unique values: {df['OCCP_2digit'].nunique()}")
-        print(f"Example mapping: OCCP=20 -> '0020' -> '00', OCCP=4720 -> '4720' -> '47'")
-        df = df.drop(columns=['OCCP'])
-    
-    # INDP: Industry code
-    if 'INDP' in df.columns:
-        print(f"\nINDP original unique values: {df['INDP'].nunique()}")
-        # Convert to string, zero-pad to 4 digits, extract first 2
-        df['INDP_2digit'] = df['INDP'].fillna(0).astype(int).astype(str).str.zfill(4).str[:2]
-        print(f"INDP_2digit unique values: {df['INDP_2digit'].nunique()}")
-        print(f"Example mapping: INDP=170 -> '0170' -> '01', INDP=6991 -> '6991' -> '69'")
-        df = df.drop(columns=['INDP'])
-    
-    return df
 
 
-def handle_missing_values(df):
-    """
-    Handle missing values with domain-appropriate strategies.
-    
-    Business Rationale:
-        - Missing values often carry business meaning (e.g., no employment, no education)
-        - Numeric: median imputation preserves distribution
-        - Categorical: 'Missing' category preserves missingness signal for modeling
-    """
-    print("\n" + "=" * 60)
-    print("HANDLING MISSING VALUES")
-    print("=" * 60)
-    
-    missing_summary = []
-    
-    for col in df.columns:
-        if col == 'medicaid_only':
-            continue
-            
-        n_missing = df[col].isna().sum()
-        if n_missing > 0:
-            pct_missing = (n_missing / len(df)) * 100
-            
-            if df[col].dtype in ['int64', 'float64']:
-                # Numeric: fill with median
-                median_val = df[col].median()
-                df[col] = df[col].fillna(median_val)
-                missing_summary.append({
-                    'column': col,
-                    'n_missing': n_missing,
-                    'pct_missing': pct_missing,
-                    'strategy': 'median',
-                    'fill_value': median_val
-                })
-            else:
-                # Categorical: fill with 'Missing'
-                df[col] = df[col].fillna('Missing')
-                missing_summary.append({
-                    'column': col,
-                    'n_missing': n_missing,
-                    'pct_missing': pct_missing,
-                    'strategy': 'category',
-                    'fill_value': 'Missing'
-                })
-    
-    if missing_summary:
-        print(f"\nImputed missing values in {len(missing_summary)} columns:")
-        for item in missing_summary[:10]:  # Show first 10
-            print(f"  {item['column']}: {item['n_missing']:,} ({item['pct_missing']:.2f}%) - {item['strategy']}")
-        if len(missing_summary) > 10:
-            print(f"  ... and {len(missing_summary) - 10} more columns")
-    else:
-        print("\nNo missing values found.")
-    
-    return df
+
 
 
 def engineer_income_affordability_features(df):
@@ -606,46 +411,16 @@ def identify_final_categorical_features(df):
 
 def create_encoded_dataset(df, categorical_features):
     """
-    Create dummy-encoded version of the dataset.
-    
-    Business Rationale:
-        - Machine learning models require numeric inputs
-        - One-hot encoding preserves categorical information
-        - drop_first=True avoids multicollinearity
+    Create dummy-encoded version using shared utility.
     """
-    print("\n" + "=" * 60)
-    print("CREATING DUMMY-ENCODED DATASET")
-    print("=" * 60)
+    df_encoded = fe_utils.create_encoded_dataset(df, categorical_features)
     
-    print(f"\nCategorical features to encode: {len(categorical_features)}")
-    print(f"Features: {categorical_features}")
-    
-    # Separate target
-    y = df['medicaid_only'].copy()
-    X = df.drop(columns=['medicaid_only'])
-    
-    # Get dummy variables
-    X_encoded = pd.get_dummies(X, columns=categorical_features, drop_first=True)
-    
-    # Add target back
-    df_encoded = X_encoded.copy()
-    df_encoded['medicaid_only'] = y
-    
-    # Calculate dummy columns created per feature
+    # Calculate dummy breakdown for report
     dummy_breakdown = {}
     for cat_feat in categorical_features:
-        dummy_cols = [col for col in X_encoded.columns if col.startswith(f"{cat_feat}_")]
+        dummy_cols = [col for col in df_encoded.columns if col.startswith(f"{cat_feat}_")]
         dummy_breakdown[cat_feat] = len(dummy_cols)
-    
-    print(f"\nDummy encoding results:")
-    print(f"  Original features: {X.shape[1]}")
-    print(f"  Encoded features: {X_encoded.shape[1]}")
-    print(f"  Total dummy columns created: {X_encoded.shape[1] - (X.shape[1] - len(categorical_features))}")
-    
-    print(f"\nBreakdown by original feature:")
-    for feat, count in sorted(dummy_breakdown.items(), key=lambda x: x[1], reverse=True)[:15]:
-        print(f"  {feat}: {count} dummies")
-    
+        
     return df_encoded, dummy_breakdown
 
 
@@ -657,16 +432,8 @@ def calculate_feature_correlations(df, feature_groups):
     print("CALCULATING FEATURE CORRELATIONS WITH TARGET")
     print("=" * 60)
     
-    correlations = {}
-    
-    for col in df.columns:
-        if col == 'medicaid_only':
-            continue
-        
-        # Only calculate for numeric features
-        if df[col].dtype in ['int64', 'float64']:
-            corr = df[col].corr(df['medicaid_only'])
-            correlations[col] = corr
+    # Use shared utility
+    correlations = fe_utils.calculate_target_correlation(df)
     
     # Calculate average correlation by group
     group_correlations = {}
@@ -675,11 +442,6 @@ def calculate_feature_correlations(df, feature_groups):
         group_corrs = [correlations[feat] for feat in group_features if feat in correlations]
         if group_corrs:
             group_correlations[group] = np.mean(np.abs(group_corrs))
-    
-    print(f"\nTop 10 features by absolute correlation with target:")
-    top_corrs = sorted(correlations.items(), key=lambda x: abs(x[1]), reverse=True)[:10]
-    for feat, corr in top_corrs:
-        print(f"  {feat}: {corr:.4f}")
     
     print(f"\nAverage absolute correlation by business group:")
     for group, corr in sorted(group_correlations.items(), key=lambda x: x[1], reverse=True):
@@ -693,24 +455,10 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
     """
     Save all output files.
     """
-    print("\n" + "=" * 60)
-    print("SAVING OUTPUTS")
-    print("=" * 60)
+    # Save datasets using shared util
+    fe_utils.save_datasets(df_categorical, df_encoded, output_dir, '02_fe_business')
     
     output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    # 1. Categorical version
-    categorical_path = output_dir / '02_fe_business_categorical.csv'
-    df_categorical.to_csv(categorical_path, index=False)
-    print(f"\nSaved categorical dataset: {categorical_path}")
-    print(f"  Shape: {df_categorical.shape}")
-    
-    # 2. Encoded version
-    encoded_path = output_dir / '02_fe_business_encoded.csv'
-    df_encoded.to_csv(encoded_path, index=False)
-    print(f"\nSaved encoded dataset: {encoded_path}")
-    print(f"  Shape: {df_encoded.shape}")
     
     # 3. Feature metadata
     metadata = []
@@ -917,19 +665,11 @@ def create_visualizations(df_categorical, df_encoded, feature_groups,
             group_top = sorted(group_features, key=lambda x: abs(correlations[x]), reverse=True)[:3]
             features_to_plot.extend(group_top)
         
-        features_to_plot.append('medicaid_only')
-        
-        if len(features_to_plot) > 1:
-            plt.figure(figsize=(14, 12))
-            corr_matrix = df_categorical[features_to_plot].corr()
-            sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', 
-                       center=0, square=True, linewidths=1, cbar_kws={"shrink": 0.8})
-            plt.title('Correlation Matrix (Top Features by Business Group)', 
-                     fontsize=14, fontweight='bold')
-            plt.tight_layout()
-            plt.savefig(output_dir / '02_fe_business_correlation_heatmap.png', dpi=300, bbox_inches='tight')
-            plt.close()
-            print("Saved: 02_fe_business_correlation_heatmap.png")
+        fe_utils.plot_correlation_heatmap(
+            df_categorical, 
+            output_dir / '02_fe_business_correlation_heatmap.png',
+            top_features=features_to_plot
+        )
     
     # 4. Target rate by key categorical features
     categorical_to_plot = []
@@ -968,45 +708,7 @@ def create_visualizations(df_categorical, df_encoded, feature_groups,
     print(f"\nAll visualizations saved to: {output_dir}")
 
 
-def print_categorical_verification(df_categorical, df_encoded, categorical_features, dummy_breakdown):
-    """
-    Print comprehensive categorical encoding verification.
-    """
-    print("\n" + "=" * 80)
-    print("CATEGORICAL ENCODING VERIFICATION")
-    print("=" * 80)
-    
-    print(f"\nOriginal categorical features identified: {len(categorical_features)}")
-    print(f"List: {categorical_features}")
-    
-    print(f"\nDummy encoding results:")
-    print(f"  - Total dummy columns created: {sum(dummy_breakdown.values())}")
-    print(f"  - Breakdown by original feature:")
-    
-    for feat, count in sorted(dummy_breakdown.items(), key=lambda x: x[1], reverse=True):
-        print(f"    * {feat}: {count} dummies")
-    
-    # Count numeric features (unchanged)
-    numeric_unchanged = len([col for col in df_categorical.columns 
-                            if col not in categorical_features and col != 'medicaid_only'])
-    
-    print(f"\nFinal dataset:")
-    print(f"  - Numeric features (unchanged): {numeric_unchanged}")
-    print(f"  - Dummy-encoded features: {sum(dummy_breakdown.values())}")
-    print(f"  - Total features: {len(df_encoded.columns) - 1}")
-    
-    # Check if all features are numeric
-    non_numeric = [col for col in df_encoded.columns 
-                   if df_encoded[col].dtype not in ['int64', 'float64']]
-    
-    all_numeric = len(non_numeric) == 0
-    print(f"\nAll features numeric: {all_numeric}")
-    
-    if not all_numeric:
-        print(f"  Non-numeric columns found: {non_numeric}")
-    
-    print(f"Ready for modeling: {all_numeric}")
-    print("=" * 80)
+
 
 
 def main():
@@ -1023,18 +725,12 @@ def main():
     output_dir = 'feature_engineering/output'
     
     # 1. Load and prepare data
-    df = load_and_prepare_data(input_file)
+    df = fe_utils.load_and_prepare_data(input_file)
     
-    # 2. Identify categorical variables
-    categorical_vars = identify_categorical_variables(df)
+    # 2. Run standard preprocessing pipeline (Identify, Group, Missing)
+    df, categorical_cols, numeric_cols = fe_utils.run_preprocessing_pipeline(df)
     
-    # 3. Group high-cardinality features
-    df = group_high_cardinality_features(df)
-    
-    # 4. Handle missing values
-    df = handle_missing_values(df)
-    
-    # 5. Select business features
+    # 3. Select business features
     df_business, feature_groups = select_business_features(df)
     
     # 6. Identify categorical features in final dataset
@@ -1055,7 +751,7 @@ def main():
                          correlations, group_correlations, output_dir)
     
     # 11. Print verification
-    print_categorical_verification(df_business, df_encoded, categorical_features, dummy_breakdown)
+    fe_utils.print_verification(df_encoded)
     
     print("\n" + "=" * 80)
     print("BUSINESS FEATURE SELECTION COMPLETE")
