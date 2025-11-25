@@ -10,8 +10,8 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
    - Load `data/processed/psam_p38_cleaned.csv`
    - Filter to ages 18-65: `AGEP >= 18` and `AGEP <= 65`
    - Create target variable: `medicaid_only = (HINS4 == 1) & (PRIVCOV == 2)` as binary (0/1)
-   - Print target distribution
-   - Drop unnecessary columns: PWGTP replicates, F* flags, IDs, insurance columns, `NAICSP`, `SOCP`
+   - Print target distribution and class imbalance ratio
+   - Drop unnecessary columns: `PWGTP1-PWGTP80`, F* flags, IDs, insurance columns (HINS1-7, PUBCOV, PRIVCOV, HICOV), `NAICSP`, `SOCP`
 
 2. **Identify and Preprocess Categorical Variables**:
    
@@ -20,105 +20,74 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
    - Use dtype detection + unique value analysis
    - Common categoricals needed for meta-features: `SEX`, `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `OCCP`, `INDP`, `RELSHIPP`, `MIG`, `STATE`, `PUMA`, `REGION`, `CIT`, `NATIVITY`, `RAC1P`, `HISP`, `DIS`, disability flags (`DDRS`, `DEAR`, `DEYE`, `DOUT`, `DPHY`, `DREM`), `LANX`, `MIL`, `WKL`, `WRK`, `DIVISION`, `QTRBIR`, etc.
    
-   **Step 2: Group High-Cardinality**
+   **Step 2: Group High-Cardinality Features**
    - **`OCCP`**: Convert to string, zero-pad to 4 digits (20 → '0020'), extract first 2 → `OCCP_2digit`
+     - Example: OCCP=20 → '0020' → '00', OCCP=4720 → '4720' → '47'
    - **`INDP`**: Convert to string, zero-pad to 4 digits (170 → '0170'), extract first 2 → `INDP_2digit`
+     - Example: INDP=170 → '0170' → '01', INDP=6991 → '6991' → '69'
+   - Drop original `OCCP` and `INDP`
    
-   **Step 3: Create Categorical Meta-Features**
-   - Many meta-features will themselves be categorical (e.g., `poverty_level_category`, `life_stage`, `job_stability_category`, `occupation_sector`)
-   - Track which meta-features are categorical vs numeric scores
-   - Final meta-feature set will include:
-     - **Numeric scores** (0-100): affordability_score, employment_quality_score, health_risk_score, insurance_readiness_score
-     - **Categorical segments**: poverty_level_category, income_tier, life_stage, family_stage, health_urgency_category, education_category, occupation_sector, industry_sector, primary_income_type, job_stability_category
-     - **Binary flags**: subsidy_eligible, recent_life_transition, aging_out_risk, career_transition_age, underemployed_flag, income_volatility_proxy
-   
-   **Step 4: Verify Meta-Feature Types**
-   - Print: "Numeric meta-features: [list]"
-   - Print: "Categorical meta-features: [list]"
-   - Print: "Binary meta-features: [list]"
+   **Step 3: Handle Missing Values**
+   - Numeric: fill with median
+   - Categorical: fill with 'Missing' category (preserves signal of missingness)
+   - Document missing value patterns
 
-3. **Realistic Meta-Features** (create ~25-35 features):
+3. **Business Feature Groups** (select and engineer):
 
-   **A. Affordability Composite Score (1 feature)**
-   - `affordability_score`: Weighted composite of:
-     - POVPIP normalized (higher = more affordable)
-     - Income stability (multiple income sources)
-     - Employment stability
-   - Scale 0-100, higher = more able to afford private insurance
-   - Formula: `(POVPIP/500 * 40) + (income_source_count/5 * 30) + (employment_stability * 30)`
+   **GROUP 1: Income & Affordability (4 features)**
+   - Raw features: none
+   - Engineer:
+     - `income_group`: categorize WAGP in 5 groups
+     - `poverty_band`: Categorize POVPIP into '<100%', '100-138%', '138-200%', '200-400%', '>400%'
+     - `has_wage_income`: Binary (WAGP > 0)
+     - `has_self_employment`: Binary (SEMP > 0)
 
-   **B. Income-Based Segments (3 features)**
-   - `poverty_level_category`: '<100% FPL', '100-138% (Medicaid eligible)', '138-200%', '200-400%', '>400%' based on POVPIP
-   - `income_tier`: 'Low (<$25k)', 'Lower_middle ($25k-$50k)', 'Middle ($50k-$75k)', 'Upper_middle ($75k-$100k)', 'High (>$100k)' based on PINCP
-   - `subsidy_eligible`: Binary (POVPIP < 400% → eligible for ACA subsidies)
+   **GROUP 2: Employment Quality (2 features)**
+   - Raw features: none
+   - Engineer:
+     - `employment_status_simple`: Recode ESR to 'Employed', 'Unemployed', 'Not_in_labor_force'
+     - `employer_type`: Simplify COW to 'Private', 'Government', 'Self_employed', 'Unpaid'
 
-   **C. Employment Quality Index (2 features)**
-   - `employment_quality_score`: Weighted composite (0-100):
-     - Full-time status: 40 points
-     - Private/government employer (vs self-employed): 30 points
-     - Professional occupation (OCCP_2digit in ['11', '13', '15', '17', '19', '21', '23', '25', '27', '29']): 30 points
-   - `job_stability_category`: 'Stable_fulltime', 'Stable_parttime', 'Unstable', 'Not_working' based on ESR, WKHP, WKWN
+   **GROUP 3: Demographics & Life Stage (5 features)**
+   - Raw features: `AGEP`, `SEX`, `MAR`
+   - Engineer:
+     - `age_group`: Cut into '18-25', '26-35', '36-45', '46-55', '56-65'
+     - `marital_status_simple`: Recode MAR to 'Married', 'Divorced_Separated', 'Widowed', 'Never_married'
 
-   **D. Life Stage & Transition Indicators (5 features)**
-   - `life_stage`: 'Young_adult (18-25)', 'Early_career (26-35)', 'Mid_career (36-50)', 'Late_career (51-65)'
-   - `family_stage`: 'Single', 'Married_no_kids', 'Married_with_kids', 'Single_parent' (use RELSHIPP, MAR, household structure if available)
-   - `recent_life_transition`: Binary (married recently OR moved recently OR job change)
-   - `aging_out_risk`: Binary (age == 26, likely losing parent/Medicaid coverage)
-   - `career_transition_age`: Binary (age between 22-26, typical post-college job entry)
+   **GROUP 4: Education (2 features)**
+   - Raw features: none
+   - Engineer:
+     - `education_level`: Recode SCHL to 'Less_than_HS', 'HS_diploma', 'Some_college', 'Bachelors', 'Graduate'
+     - `currently_enrolled`: Binary (SCH in [2, 3])
 
-   **E. Health Risk Score (2 features)**
-   - `health_risk_score`: Weighted sum (0-100):
-     - Disability count × 15 points each
-     - Age factor (higher age = higher base risk): (AGEP - 18) / 47 * 20 points
-   - `health_urgency_category`: 'Low (0-1 disabilities, young)', 'Medium (2+ disabilities OR age 50+)', 'High (multiple disabilities + age 50+)'
+   **GROUP 5: Health & Disability (0 features)**
+   - Raw features: none
+   - Engineer:
+     - none
 
-   **F. Education-Career Alignment (2 features)**
-   - `education_category`: 'No_HS', 'HS_only', 'Some_college', 'College_grad', 'Advanced_degree' from SCHL
-   - `underemployed_flag`: Binary (high education + low income, e.g., Bachelors+ with POVPIP < 200%)
+   **GROUP 6: Geography (4 features)**
+   - Raw features: `STATE`, `PUMA`, `REGION`, `DIVISION`
+   - Keep as-is (categorical)
 
-   **G. Geographic Market Indicators (3 features)**
-   - `state`: Keep STATE as-is (for state-specific Medicaid rules)
-   - `urban_rural`: Classify based on PUMA patterns (if identifiable, otherwise use REGION as proxy)
-   - `high_opportunity_state`: Binary (states with high private insurance penetration and Medicaid expansion - e.g., CA, NY, MA)
-
-   **H. Occupation-Industry Sector (2 features)**
-   - `occupation_sector`: Group OCCP_2digit into 'Management' (11-13), 'Professional' (15-29), 'Service' (31-39), 'Sales' (41-43), 'Office' (51-53), 'Construction' (47-49), 'Production' (51-53), 'Other'
-   - `industry_sector`: Group INDP_2digit into 'Healthcare' (62), 'Education' (61), 'Retail' (44-45), 'Manufacturing' (31-33), 'Professional_services' (54), 'Public_admin' (92), 'Other'
-
-   **I. Income Stability Indicators (3 features)**
-   - `income_source_diversity`: Count of non-zero income types (WAGP, SEMP, INTP, RETP, SSP, SSIP, PAP, OIP)
-   - `primary_income_type`: 'Wages', 'Self_employment', 'Investment', 'Retirement', 'Social_security', 'Multiple' based on largest source
-   - `income_volatility_proxy`: Binary (self-employment income OR part-time OR seasonal work)
-
-   **J. Insurance Readiness Score (1 feature)**
-   - `insurance_readiness_score`: Composite (0-100) predicting likelihood to purchase:
-     - Affordability score: 40%
-     - Employment quality: 30%
-     - Life transition: 20%
-     - Health urgency: 10%
-
-4. **Feature Validation**:
-   - Calculate correlation of each meta-feature with target
-   - Identify top 10 most predictive meta-features
-   - Check for missing values in engineered features
-   - Ensure all features are human-interpretable
+4. **Feature Selection Logic**:
+   - Total target: ~17 features (including engineered)
+   - Document rationale for each feature/group in code comments
+   - Calculate correlation with target for each group
 
 5. **Save Outputs**:
-   - **Categorical version**: `feature_engineering/output/03_fe_realistic_categorical.csv` (~25-35 columns + target)
+   - **Categorical version**: `feature_engineering/output/03_fe_realistic_categorical.csv` (~50-70 columns)
    - **Encoded version**: 
-     - Identify categorical meta-features (e.g., poverty_level_category, life_stage, occupation_sector, etc.)
-     - Create dummy variables: `pd.get_dummies(df, columns=categorical_meta_features, drop_first=True)`
-     - Keep numeric scores and binary flags as-is
-     - Expected: ~25-35 features → ~60-80 after encoding
+     - Identify all categorical columns in final realistic feature set
+     - Create dummy variables: `pd.get_dummies(df, columns=categorical_cols, drop_first=True)`
      - Save as `feature_engineering/output/03_fe_realistic_encoded.csv`
-     - Print detailed encoding summary: "Categorical meta-features: [N], Resulting dummy columns: [M]"
-   - **Feature dictionary**: Save to `feature_engineering/output/03_fe_realistic_feature_dictionary.txt` with:
-     - Each feature name
-     - Plain English description
-     - Formula/logic used
-     - Business interpretation
-     - Marketing use case
-   - **Correlation report**: Save to `feature_engineering/output/03_fe_realistic_report.txt` with correlations and predictive value
+     - Print: "Categorical features: [list], Dummy columns created: [N]"
+   - **Realisitc report**: Save to `feature_engineering/output/03_fe_realistic_report.txt` with:
+     - Feature count by group
+     - Engineered feature definitions
+     - Rationale for each group
+     - Correlation with target by feature and by group
+     - Marketing use cases for each feature group
+   - **Feature metadata CSV**: Feature name, group, data type, engineering method to `feature_engineering/output/03_fe_realistic_metadata.csv`
 
 6. **Visualizations**:
    - Feature importance (correlation with target) bar chart
