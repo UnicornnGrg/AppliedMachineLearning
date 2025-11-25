@@ -36,9 +36,9 @@ Create a Python script for business logic-driven feature selection from PUMS cen
    - Categorical: fill with 'Missing' category (preserves signal of missingness)
    - Document missing value patterns
 
-3. **Business Feature Groups** (select and engineer):
+3. **Feature Groups** (select and engineer):
 
-   **GROUP 1: Income & Affordability (~5-10 features)**
+   **GROUP 1: Income & Affordability (8 features)**
    - Raw features: `WAGP`, `POVPIP`, `SEMP`
    - Engineer:
      - `income_group`: categorize WAGP in 5 groups
@@ -47,39 +47,37 @@ Create a Python script for business logic-driven feature selection from PUMS cen
      - `has_wage_income`: Binary (WAGP > 0)
      - `has_self_employment`: Binary (SEMP > 0)
 
-   **GROUP 2: Employment Quality (~10-15 features)**
+   **GROUP 2: Employment Quality (7 features)**
    - Raw features: `ESR`, `COW`, `WKL`, `OCCP_2digit`, `INDP_2digit`
    - Note: `ESR`, `COW`, `WKL` are ALL categorical - will need dummy encoding
    - Engineer:
      - `employment_status_simple`: Recode ESR to 'Employed', 'Unemployed', 'Not_in_labor_force'
      - `employer_type`: Simplify COW to 'Private', 'Government', 'Self_employed', 'Unpaid'
 
-   **GROUP 3: Demographics & Life Stage (~10-12 features)**
+   **GROUP 3: Demographics & Life Stage (9 features)**
    - Raw features: `AGEP`, `SEX`, `MAR`, `MIG`, `NATIVITY`, `RAC1P`, `HISP`
    - Engineer:
      - `age_group`: Cut into '18-25', '26-35', '36-45', '46-55', '56-65'
      - `marital_status_simple`: Recode MAR to 'Married', 'Divorced_Separated', 'Widowed', 'Never_married'
 
-   **GROUP 4: Education (~3-4 features)**
+   **GROUP 4: Education (4 features)**
    - Raw features: `SCHL`, `SCH`
    - Engineer:
      - `education_level`: Recode SCHL to 'Less_than_HS', 'HS_diploma', 'Some_college', 'Bachelors', 'Graduate'
      - `currently_enrolled`: Binary (SCH in [2, 3])
 
-   **GROUP 5: Health & Disability (~4 features)**
+   **GROUP 5: Health & Disability (5 features)**
    - Raw features: `DIS`, `DEAR`, `DEYE`, `DPHY`
    - Engineer:
      - `has_any_disability`: Binary (DIS == 1)
 
-   **GROUP 6: Geography (~4-5 features)**
+   **GROUP 6: Geography (4 features)**
    - Raw features: `STATE`, `PUMA`, `REGION`, `DIVISION`
    - Keep as-is (categorical)
 
 4. **Feature Selection Logic**:
-   - Total target: ~50-70 features (including engineered)
-   - Prioritize features with clear business interpretation
-   - Document business rationale for each feature/group in code comments
-   - Calculate correlation with target for each business group
+   - Document rationale for each feature/group in code comments
+   - Calculate correlation with target for each feature group
 
 5. **Save Outputs**:
    - **Categorical version**: `feature_engineering/output/02_fe_business_categorical.csv` (~50-70 columns)
@@ -90,17 +88,17 @@ Create a Python script for business logic-driven feature selection from PUMS cen
      - Save as `feature_engineering/output/02_fe_business_encoded.csv`
      - Print: "Categorical features: [list], Dummy columns created: [N]"
    - **Business report**: Save to `feature_engineering/output/02_fe_business_report.txt` with:
-     - Feature count by business group
+     - Feature count by feature group
      - Engineered feature definitions
-     - Business rationale for each group
-     - Correlation with target by feature and by group
+     - Rationale for each group
+     - Correlation with target by feature and by feature group
      - Marketing use cases for each feature group
-   - **Feature metadata CSV**: Feature name, business group, data type, engineering method to `feature_engineering/output/02_fe_business_metadata.csv`
+   - **Feature metadata CSV**: Feature name, feature group, data type, engineering method to `feature_engineering/output/02_fe_business_metadata.csv`
 
 6. **Visualizations**:
-   - Bar chart: feature count by business group
-   - Bar chart: average correlation with target by business group
-   - Heatmap: correlation matrix organized by business groups
+   - Bar chart: feature count by feature group
+   - Bar chart: average correlation with target by feature group
+   - Heatmap: correlation matrix organized by feature groups
    - Distribution plots: target rate by key categorical features (employment status, education level, poverty band)
    - Save all to `feature_engineering/output/` with prefix `02_fe_` as PNG with 300 DPI
 
@@ -132,7 +130,7 @@ Ready for modeling: [True/False]
 ```
 
 **Code Structure**:
-- Use separate functions for each business group engineering
+- Use separate functions for each feature group engineering
 - Include detailed comments explaining business rationale
 - Use meaningful variable names reflecting business concepts
 - Main execution in `if __name__ == "__main__":`

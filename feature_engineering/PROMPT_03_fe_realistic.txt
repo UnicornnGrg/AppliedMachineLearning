@@ -2,7 +2,7 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
 
 **File**: `03_fe_realistic.py`
 
-**Purpose**: Create ~25-35 highly interpretable, actionable features combining multiple raw features into composite scores and indicators
+**Purpose**: Create highly interpretable, actionable features combining multiple raw features into composite scores and indicators
 
 **Requirements**:
 
@@ -15,11 +15,15 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
 
 2. **Identify and Preprocess Categorical Variables**:
    
-   **Step 1: Identify Raw Categoricals**
-   - Before engineering meta-features, identify all categorical variables in raw data
-   - Use dtype detection + unique value analysis
-   - Common categoricals needed for meta-features: `SEX`, `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `OCCP`, `INDP`, `RELSHIPP`, `MIG`, `STATE`, `PUMA`, `REGION`, `CIT`, `NATIVITY`, `RAC1P`, `HISP`, `DIS`, disability flags (`DDRS`, `DEAR`, `DEYE`, `DOUT`, `DPHY`, `DREM`), `LANX`, `MIL`, `WKL`, `WRK`, `DIVISION`, `QTRBIR`, etc.
-   
+   **Step 1: Categorical Detection**
+   - Identify all categorical variables using dtype and unique value analysis
+   - Separate into groups:
+     - **Binary indicators** (2 unique values): `SEX`, `DIS`, `DDRS`, `DEAR`, `DEYE`, `DOUT`, `DPHY`, `DREM`, `LANX`, `MIL`, `NATIVITY`, `GCL`, `RACAIAN`, `RACASN`, `RACBLK`, `RACNH`, `RACPI`, `RACWHT`, etc.
+     - **Low-cardinality** (3-15 values): `MAR`, `ESR`, `COW`, `SCHL`, `SCH`, `CIT`, `RELSHIPP`, `MIG`, `WKL`, `WRK`, `REGION`, `DIVISION`, `QTRBIR`, `RACNUM`, `RC`, etc.
+     - **Medium-cardinality** (15-50 values): `STATE`, `PUMA`, `RAC1P`, `HISP`, `RAC2P`, `RAC3P`, `ANC`, `ANC1P`, `ANC2P`, `MSP`
+     - **High-cardinality to group**: `OCCP`, `INDP`
+   - Print categorical breakdown by cardinality
+
    **Step 2: Group High-Cardinality Features**
    - **`OCCP`**: Convert to string, zero-pad to 4 digits (20 → '0020'), extract first 2 → `OCCP_2digit`
      - Example: OCCP=20 → '0020' → '00', OCCP=4720 → '4720' → '47'
@@ -70,9 +74,8 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
    - Keep as-is (categorical)
 
 4. **Feature Selection Logic**:
-   - Total target: ~17 features (including engineered)
    - Document rationale for each feature/group in code comments
-   - Calculate correlation with target for each group
+   - Calculate correlation with target for each feature group
 
 5. **Save Outputs**:
    - **Categorical version**: `feature_engineering/output/03_fe_realistic_categorical.csv` (~50-70 columns)
@@ -82,19 +85,19 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
      - Save as `feature_engineering/output/03_fe_realistic_encoded.csv`
      - Print: "Categorical features: [list], Dummy columns created: [N]"
    - **Realisitc report**: Save to `feature_engineering/output/03_fe_realistic_report.txt` with:
-     - Feature count by group
+     - Feature count by feature group
      - Engineered feature definitions
-     - Rationale for each group
-     - Correlation with target by feature and by group
+     - Rationale for each feature group
+     - Correlation with target by feature and by feature group
      - Marketing use cases for each feature group
-   - **Feature metadata CSV**: Feature name, group, data type, engineering method to `feature_engineering/output/03_fe_realistic_metadata.csv`
+   - **Feature metadata CSV**: Feature name, feature group, data type, engineering method to `feature_engineering/output/03_fe_realistic_metadata.csv`
 
 6. **Visualizations**:
-   - Feature importance (correlation with target) bar chart
-   - Distribution of composite scores (affordability, employment quality, health risk, insurance readiness)
-   - Target rate by key categorical features (life stage, job stability, poverty level)
-   - Correlation matrix of all meta-features
-   - Save to `feature_engineering/output/` with prefix `03_fe_` as PNG with 300 DPI
+   - Bar chart: feature count by feature group
+   - Bar chart: average correlation with target by feature group
+   - Heatmap: correlation matrix organized by feature groups
+   - Distribution plots: target rate by key categorical features (employment status, education level, poverty band)
+   - Save all to `feature_engineering/output/` with prefix `03_fe_` as PNG with 300 DPI
 
 7. **CATEGORICAL VARIABLE VERIFICATION** (print to console):
 ```
