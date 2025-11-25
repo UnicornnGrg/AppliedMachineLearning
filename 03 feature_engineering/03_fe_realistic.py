@@ -1,18 +1,12 @@
 """
-Business Logic-Driven Feature Selection for Medicaid-Only Insurance Prediction
+Realistic Feature Selection for Medicaid-Only Insurance Prediction
 
 Purpose:
-    Domain-driven feature selection based on insurance industry knowledge and 
-    marketing priorities. Focuses on creating interpretable features that align
-    with business understanding of factors affecting insurance coverage.
+    Feature selection based on realistic business constraints and interpretability.
+    Focuses on a concise set of high-value features that are easy to collect and explain.
 
 Target:
     Predict Medicaid-only individuals (potential market for private insurance upsell)
-    
-Business Context:
-    - Medicaid-only individuals represent upsell opportunities for private insurance
-    - Features prioritized for affordability, employment stability, and life transitions
-    - All features must be interpretable for marketing teams and business stakeholders
 """
 
 import pandas as pd
@@ -28,15 +22,10 @@ warnings.filterwarnings('ignore')
 # Set visualization style
 fe_utils.setup_environment()
 
+
 def engineer_income_affordability_features(df):
     """
     GROUP 1: Income & Affordability Features
-    
-    Business Rationale:
-        - Income is primary determinant of insurance affordability
-        - Medicaid eligibility tied to Federal Poverty Level (FPL)
-        - Multiple income sources indicate financial stability
-        - Key for premium pricing and subsidy eligibility assessment
     """
     print("\n" + "=" * 60)
     print("GROUP 1: INCOME & AFFORDABILITY FEATURES")
@@ -44,15 +33,7 @@ def engineer_income_affordability_features(df):
     
     features = []
     
-    # Raw features
-    if 'WAGP' in df.columns:
-        features.append('WAGP')
-    if 'POVPIP' in df.columns:
-        features.append('POVPIP')
-    if 'SEMP' in df.columns:
-        features.append('SEMP')
-    
-    # Income grouping for market segmentation
+    # Engineer: income_group
     if 'WAGP' in df.columns:
         df['income_group'] = pd.cut(df['WAGP'], 
                                      bins=[0, 15000, 30000, 50000, 75000, np.inf],
@@ -60,30 +41,25 @@ def engineer_income_affordability_features(df):
         features.append('income_group')
         print("Created income_group: Very_Low (<15k), Low (15-30k), Medium (30-50k), High (50-75k), Very_High (>75k)")
     
-    # Income source diversity (financial stability indicator)
-    income_cols = ['WAGP', 'SEMP', 'INTP', 'RETP', 'SSP', 'SSIP', 'PAP']
-    available_income_cols = [col for col in income_cols if col in df.columns]
-    if available_income_cols:
-        df['income_source_count'] = (df[available_income_cols] > 0).sum(axis=1)
-        features.append('income_source_count')
-        print(f"Created income_source_count from {len(available_income_cols)} sources")
-    
-    # Poverty level bands (Medicaid eligibility thresholds)
+    # Engineer: poverty_band
     if 'POVPIP' in df.columns:
         df['poverty_band'] = pd.cut(df['POVPIP'],
                                      bins=[0, 100, 138, 200, 400, np.inf],
                                      labels=['<100%', '100-138%', '138-200%', '200-400%', '>400%'])
         features.append('poverty_band')
-        print("Created poverty_band: <100% (eligible), 100-138% (expansion), 138-200% (subsidies), 200-400%, >400%")
+        print("Created poverty_band: <100%, 100-138%, 138-200%, 200-400%, >400%")
     
-    # Binary income indicators
+    # Engineer: has_wage_income
     if 'WAGP' in df.columns:
         df['has_wage_income'] = (df['WAGP'] > 0).astype(int)
         features.append('has_wage_income')
+        print("Created has_wage_income: Binary (WAGP > 0)")
     
+    # Engineer: has_self_employment
     if 'SEMP' in df.columns:
         df['has_self_employment'] = (df['SEMP'] > 0).astype(int)
         features.append('has_self_employment')
+        print("Created has_self_employment: Binary (SEMP > 0)")
     
     print(f"\nTotal Income & Affordability features: {len(features)}")
     return df, features
@@ -92,12 +68,6 @@ def engineer_income_affordability_features(df):
 def engineer_employment_quality_features(df):
     """
     GROUP 2: Employment Quality Features
-    
-    Business Rationale:
-        - Employment status directly affects insurance access and affordability
-        - Employer type indicates employer-sponsored insurance availability
-        - Occupation/industry proxies for income stability and benefits
-        - Unemployed/self-employed are high-priority segments for individual market
     """
     print("\n" + "=" * 60)
     print("GROUP 2: EMPLOYMENT QUALITY FEATURES")
@@ -105,28 +75,7 @@ def engineer_employment_quality_features(df):
     
     features = []
     
-    # Raw categorical features (will be dummy-encoded later)
-    if 'ESR' in df.columns:
-        features.append('ESR')
-        print("ESR: Employment status (categorical)")
-    
-    if 'COW' in df.columns:
-        features.append('COW')
-        print("COW: Class of worker (categorical)")
-    
-    if 'WKL' in df.columns:
-        features.append('WKL')
-        print("WKL: When last worked (categorical)")
-    
-    if 'OCCP_2digit' in df.columns:
-        features.append('OCCP_2digit')
-        print("OCCP_2digit: Occupation major group (categorical)")
-    
-    if 'INDP_2digit' in df.columns:
-        features.append('INDP_2digit')
-        print("INDP_2digit: Industry major group (categorical)")
-    
-    # Simplified employment status for interpretability
+    # Engineer: employment_status_simple
     if 'ESR' in df.columns:
         esr_mapping = {
             1: 'Employed',      # Civilian employed, at work
@@ -140,7 +89,7 @@ def engineer_employment_quality_features(df):
         features.append('employment_status_simple')
         print("Created employment_status_simple: Employed, Unemployed, Not_in_labor_force")
     
-    # Simplified employer type
+    # Engineer: employer_type
     if 'COW' in df.columns:
         cow_mapping = {
             1: 'Private',         # Private for-profit
@@ -164,13 +113,6 @@ def engineer_employment_quality_features(df):
 def engineer_demographics_life_stage_features(df):
     """
     GROUP 3: Demographics & Life Stage Features
-    
-    Business Rationale:
-        - Age groups have different insurance needs and enrollment patterns
-        - Marital status affects household coverage decisions
-        - Migration indicates life transitions (job change, relocation)
-        - Race/ethnicity important for targeted outreach and health equity
-        - Life transitions create insurance shopping moments
     """
     print("\n" + "=" * 60)
     print("GROUP 3: DEMOGRAPHICS & LIFE STAGE FEATURES")
@@ -185,24 +127,16 @@ def engineer_demographics_life_stage_features(df):
         features.append('SEX')
     if 'MAR' in df.columns:
         features.append('MAR')
-    if 'MIG' in df.columns:
-        features.append('MIG')
-    if 'NATIVITY' in df.columns:
-        features.append('NATIVITY')
-    if 'RAC1P' in df.columns:
-        features.append('RAC1P')
-    if 'HISP' in df.columns:
-        features.append('HISP')
     
-    # Age groups (life stage segmentation)
+    # Engineer: age_group
     if 'AGEP' in df.columns:
         df['age_group'] = pd.cut(df['AGEP'],
                                  bins=[17, 25, 35, 45, 55, 65],
                                  labels=['18-25', '26-35', '36-45', '46-55', '56-65'])
         features.append('age_group')
-        print("Created age_group: 18-25 (young adults), 26-35, 36-45, 46-55, 56-65 (pre-Medicare)")
+        print("Created age_group: 18-25, 26-35, 36-45, 46-55, 56-65")
     
-    # Simplified marital status
+    # Engineer: marital_status_simple
     if 'MAR' in df.columns:
         mar_mapping = {
             1: 'Married',              # Married
@@ -222,12 +156,6 @@ def engineer_demographics_life_stage_features(df):
 def engineer_education_features(df):
     """
     GROUP 4: Education Features
-    
-    Business Rationale:
-        - Education level correlates with employment quality and income
-        - Current enrollment affects coverage needs (student plans)
-        - Higher education associated with better insurance literacy
-        - Key segmentation variable for marketing messaging
     """
     print("\n" + "=" * 60)
     print("GROUP 4: EDUCATION FEATURES")
@@ -235,15 +163,8 @@ def engineer_education_features(df):
     
     features = []
     
-    # Raw features
+    # Engineer: education_level
     if 'SCHL' in df.columns:
-        features.append('SCHL')
-    if 'SCH' in df.columns:
-        features.append('SCH')
-    
-    # Education level grouping
-    if 'SCHL' in df.columns:
-        # SCHL codes: 1-15 (Less than HS), 16-17 (HS), 18-20 (Some college), 21 (Bachelor's), 22-24 (Graduate)
         def map_education(schl):
             if pd.isna(schl) or schl == 0:
                 return 'Unknown'
@@ -262,11 +183,11 @@ def engineer_education_features(df):
         features.append('education_level')
         print("Created education_level: Less_than_HS, HS_diploma, Some_college, Bachelors, Graduate")
     
-    # Currently enrolled (student status)
+    # Engineer: currently_enrolled
     if 'SCH' in df.columns:
         df['currently_enrolled'] = df['SCH'].isin([2, 3]).astype(int)
         features.append('currently_enrolled')
-        print("Created currently_enrolled: binary indicator for student status")
+        print("Created currently_enrolled: Binary (SCH in [2, 3])")
     
     print(f"\nTotal Education features: {len(features)}")
     return df, features
@@ -275,31 +196,13 @@ def engineer_education_features(df):
 def engineer_health_disability_features(df):
     """
     GROUP 5: Health & Disability Features
-    
-    Business Rationale:
-        - Disability status affects coverage needs and costs
-        - Important for plan design and benefit adequacy assessment
-        - Protected class requiring careful handling in marketing
-        - High healthcare utilizers more likely to seek comprehensive coverage
     """
     print("\n" + "=" * 60)
     print("GROUP 5: HEALTH & DISABILITY FEATURES")
     print("=" * 60)
     
     features = []
-    
-    # Raw disability indicators
-    disability_cols = ['DIS', 'DEAR', 'DEYE', 'DPHY']
-    for col in disability_cols:
-        if col in df.columns:
-            features.append(col)
-    
-    # Any disability indicator
-    available_disability_cols = [col for col in disability_cols if col in df.columns]
-    if available_disability_cols:
-        df['has_any_disability'] = (df[available_disability_cols] == 1).any(axis=1).astype(int)
-        features.append('has_any_disability')
-        print(f"Created has_any_disability from {len(available_disability_cols)} disability indicators")
+    # No features for this group in realistic scenario
     
     print(f"\nTotal Health & Disability features: {len(features)}")
     return df, features
@@ -308,12 +211,6 @@ def engineer_health_disability_features(df):
 def add_geography_features(df):
     """
     GROUP 6: Geography Features
-    
-    Business Rationale:
-        - Insurance markets vary significantly by state (regulations, competition)
-        - PUMA captures local healthcare access and economic conditions
-        - Region/Division useful for multi-state marketing campaigns
-        - State Medicaid expansion status affects eligibility
     """
     print("\n" + "=" * 60)
     print("GROUP 6: GEOGRAPHY FEATURES")
@@ -331,12 +228,12 @@ def add_geography_features(df):
     return df, features
 
 
-def select_business_features(df):
+def select_realistic_features(df):
     """
-    Combine all business feature groups into final feature set.
+    Combine all realistic feature groups into final feature set.
     """
     print("\n" + "=" * 60)
-    print("BUILDING FINAL BUSINESS FEATURE SET")
+    print("BUILDING FINAL REALISTIC FEATURE SET")
     print("=" * 60)
     
     # Engineer features by group
@@ -348,18 +245,18 @@ def select_business_features(df):
     df, geography_features = add_geography_features(df)
     
     # Combine all features
-    all_business_features = (income_features + employment_features + 
+    all_realistic_features = (income_features + employment_features + 
                             demographics_features + education_features + 
                             health_features + geography_features)
     
     # Add target
-    all_business_features.append('medicaid_only')
+    all_realistic_features.append('medicaid_only')
     
     # Select only these columns
-    df_business = df[all_business_features].copy()
+    df_realistic = df[all_realistic_features].copy()
     
-    print(f"\nFinal business feature set: {len(all_business_features) - 1} features + 1 target")
-    print(f"Final dataset shape: {df_business.shape}")
+    print(f"\nFinal realistic feature set: {len(all_realistic_features) - 1} features + 1 target")
+    print(f"Final dataset shape: {df_realistic.shape}")
     
     # Create feature metadata
     feature_groups = {}
@@ -375,13 +272,13 @@ def select_business_features(df):
         feature_groups[feat] = 'Health_Disability'
     for feat in geography_features:
         feature_groups[feat] = 'Geography'
-    
-    return df_business, feature_groups
+        
+    return df_realistic, feature_groups
 
 
 def identify_final_categorical_features(df):
     """
-    Identify all categorical features in the final business dataset.
+    Identify all categorical features in the final realistic dataset.
     """
     categorical_features = []
     
@@ -430,7 +327,7 @@ def calculate_feature_correlations(df, feature_groups):
         if group_corrs:
             group_correlations[group] = np.mean(np.abs(group_corrs))
     
-    print(f"\nAverage absolute correlation by business group:")
+    print(f"\nAverage absolute correlation by realistic group:")
     for group, corr in sorted(group_correlations.items(), key=lambda x: x[1], reverse=True):
         print(f"  {group}: {corr:.4f}")
     
@@ -443,7 +340,7 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
     Save all output files.
     """
     # Save datasets using shared util
-    fe_utils.save_datasets(df_categorical, df_encoded, output_dir, '02_fe_business')
+    fe_utils.save_datasets(df_categorical, df_encoded, output_dir, '03_fe_realistic')
     
     output_dir = Path(output_dir)
     
@@ -462,15 +359,15 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
         })
     
     metadata_df = pd.DataFrame(metadata)
-    metadata_path = output_dir / '02_fe_business_metadata.csv'
+    metadata_path = output_dir / '03_fe_realistic_metadata.csv'
     metadata_df.to_csv(metadata_path, index=False)
     print(f"\nSaved feature metadata: {metadata_path}")
     
-    # 4. Business report
-    report_path = output_dir / '02_fe_business_report.txt'
+    # 4. Realistic report
+    report_path = output_dir / '03_fe_realistic_report.txt'
     with open(report_path, 'w') as f:
         f.write("=" * 80 + "\n")
-        f.write("BUSINESS LOGIC-DRIVEN FEATURE SELECTION REPORT\n")
+        f.write("REALISTIC FEATURE SELECTION REPORT\n")
         f.write("=" * 80 + "\n\n")
         
         f.write("OVERVIEW\n")
@@ -479,7 +376,7 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
         f.write(f"Target variable: medicaid_only\n")
         f.write(f"Dataset size: {len(df_categorical):,} records\n\n")
         
-        f.write("FEATURE COUNT BY BUSINESS GROUP\n")
+        f.write("FEATURE COUNT BY GROUP\n")
         f.write("-" * 80 + "\n")
         group_counts = metadata_df['business_group'].value_counts()
         for group, count in group_counts.items():
@@ -490,7 +387,6 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
         f.write("-" * 80 + "\n")
         engineered = [
             ('income_group', 'Income categorization for market segmentation'),
-            ('income_source_count', 'Number of income sources (financial stability)'),
             ('poverty_band', 'Federal Poverty Level bands (Medicaid eligibility)'),
             ('has_wage_income', 'Binary indicator for wage income'),
             ('has_self_employment', 'Binary indicator for self-employment income'),
@@ -499,51 +395,12 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
             ('age_group', 'Life stage segmentation'),
             ('marital_status_simple', 'Simplified marital status'),
             ('education_level', 'Education attainment level'),
-            ('currently_enrolled', 'Student enrollment status'),
-            ('has_any_disability', 'Any disability indicator'),
-            ('OCCP_2digit', 'Major occupation group'),
-            ('INDP_2digit', 'Major industry group')
+            ('currently_enrolled', 'Student enrollment status')
         ]
         for feat, desc in engineered:
             if feat in df_categorical.columns:
                 f.write(f"{feat}: {desc}\n")
         f.write("\n")
-        
-        f.write("BUSINESS RATIONALE BY GROUP\n")
-        f.write("-" * 80 + "\n\n")
-        
-        f.write("GROUP 1: Income & Affordability\n")
-        f.write("  - Primary determinant of insurance affordability\n")
-        f.write("  - Medicaid eligibility tied to Federal Poverty Level\n")
-        f.write("  - Multiple income sources indicate financial stability\n")
-        f.write("  - Key for premium pricing and subsidy eligibility\n\n")
-        
-        f.write("GROUP 2: Employment Quality\n")
-        f.write("  - Employment status affects insurance access\n")
-        f.write("  - Employer type indicates employer-sponsored insurance availability\n")
-        f.write("  - Unemployed/self-employed are high-priority segments\n")
-        f.write("  - Occupation/industry proxies for income stability\n\n")
-        
-        f.write("GROUP 3: Demographics & Life Stage\n")
-        f.write("  - Age groups have different insurance needs\n")
-        f.write("  - Marital status affects household coverage decisions\n")
-        f.write("  - Life transitions create insurance shopping moments\n")
-        f.write("  - Race/ethnicity important for targeted outreach\n\n")
-        
-        f.write("GROUP 4: Education\n")
-        f.write("  - Correlates with employment quality and income\n")
-        f.write("  - Student enrollment affects coverage needs\n")
-        f.write("  - Higher education associated with better insurance literacy\n\n")
-        
-        f.write("GROUP 5: Health & Disability\n")
-        f.write("  - Affects coverage needs and healthcare costs\n")
-        f.write("  - Important for benefit adequacy assessment\n")
-        f.write("  - High utilizers more likely to seek comprehensive coverage\n\n")
-        
-        f.write("GROUP 6: Geography\n")
-        f.write("  - Insurance markets vary by state regulations\n")
-        f.write("  - Local healthcare access and economic conditions\n")
-        f.write("  - State Medicaid expansion status affects eligibility\n\n")
         
         f.write("CORRELATION WITH TARGET BY FEATURE\n")
         f.write("-" * 80 + "\n")
@@ -559,39 +416,6 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
             f.write(f"{group:30s} {corr:.4f}\n")
         f.write("\n")
         
-        f.write("MARKETING USE CASES\n")
-        f.write("-" * 80 + "\n\n")
-        
-        f.write("Income & Affordability Features:\n")
-        f.write("  - Premium affordability segmentation\n")
-        f.write("  - Subsidy eligibility screening\n")
-        f.write("  - Payment plan design\n\n")
-        
-        f.write("Employment Quality Features:\n")
-        f.write("  - Identifying employer-sponsored insurance gaps\n")
-        f.write("  - Self-employed/gig economy targeting\n")
-        f.write("  - Industry-specific benefit packages\n\n")
-        
-        f.write("Demographics & Life Stage Features:\n")
-        f.write("  - Age-appropriate plan recommendations\n")
-        f.write("  - Life event trigger campaigns (marriage, divorce, relocation)\n")
-        f.write("  - Culturally-targeted outreach\n\n")
-        
-        f.write("Education Features:\n")
-        f.write("  - Student plan offerings\n")
-        f.write("  - Educational content personalization\n")
-        f.write("  - Literacy-appropriate communication\n\n")
-        
-        f.write("Health & Disability Features:\n")
-        f.write("  - Benefit adequacy assessment\n")
-        f.write("  - High-cost condition management programs\n")
-        f.write("  - Accessibility accommodations\n\n")
-        
-        f.write("Geography Features:\n")
-        f.write("  - State-specific regulatory compliance\n")
-        f.write("  - Provider network availability\n")
-        f.write("  - Regional marketing campaign targeting\n\n")
-        
         f.write("DUMMY ENCODING SUMMARY\n")
         f.write("-" * 80 + "\n")
         f.write(f"Total categorical features encoded: {len(dummy_breakdown)}\n")
@@ -601,7 +425,7 @@ def save_outputs(df_categorical, df_encoded, feature_groups, correlations,
         for feat, count in sorted(dummy_breakdown.items(), key=lambda x: x[1], reverse=True)[:10]:
             f.write(f"  {feat:30s} {count:3d} dummies\n")
     
-    print(f"\nSaved business report: {report_path}")
+    print(f"\nSaved realistic report: {report_path}")
 
 
 def create_visualizations(df_categorical, df_encoded, feature_groups, 
@@ -615,29 +439,29 @@ def create_visualizations(df_categorical, df_encoded, feature_groups,
     
     output_dir = Path(output_dir)
     
-    # 1. Feature count by business group
+    # 1. Feature count by group
     plt.figure(figsize=(12, 6))
     group_counts = pd.Series(feature_groups).value_counts().sort_values(ascending=True)
     group_counts.plot(kind='barh', color='steelblue')
     plt.xlabel('Number of Features', fontsize=12)
-    plt.ylabel('Business Group', fontsize=12)
-    plt.title('Feature Count by Business Group', fontsize=14, fontweight='bold')
+    plt.ylabel('Group', fontsize=12)
+    plt.title('Feature Count by Group', fontsize=14, fontweight='bold')
     plt.tight_layout()
-    plt.savefig(output_dir / '02_fe_business_feature_counts.png', dpi=300, bbox_inches='tight')
+    plt.savefig(output_dir / '03_fe_realistic_feature_counts.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("Saved: 02_fe_business_feature_counts.png")
+    print("Saved: 03_fe_realistic_feature_counts.png")
     
-    # 2. Average correlation by business group
+    # 2. Average correlation by group
     plt.figure(figsize=(12, 6))
     group_corr_series = pd.Series(group_correlations).sort_values(ascending=True)
     group_corr_series.plot(kind='barh', color='coral')
     plt.xlabel('Average Absolute Correlation with Target', fontsize=12)
-    plt.ylabel('Business Group', fontsize=12)
-    plt.title('Average Correlation with Target by Business Group', fontsize=14, fontweight='bold')
+    plt.ylabel('Group', fontsize=12)
+    plt.title('Average Correlation with Target by Group', fontsize=14, fontweight='bold')
     plt.tight_layout()
-    plt.savefig(output_dir / '02_fe_business_group_correlations.png', dpi=300, bbox_inches='tight')
+    plt.savefig(output_dir / '03_fe_realistic_group_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("Saved: 02_fe_business_group_correlations.png")
+    print("Saved: 03_fe_realistic_group_correlations.png")
     
     # 3. Correlation heatmap (top features by group)
     numeric_features = [col for col in df_categorical.columns 
@@ -654,7 +478,7 @@ def create_visualizations(df_categorical, df_encoded, feature_groups,
         
         fe_utils.plot_correlation_heatmap(
             df_categorical, 
-            output_dir / '02_fe_business_correlation_heatmap.png',
+            output_dir / '03_fe_realistic_correlation_heatmap.png',
             top_features=features_to_plot
         )
     
@@ -688,14 +512,11 @@ def create_visualizations(df_categorical, df_encoded, feature_groups,
             axes[idx].axis('off')
         
         plt.tight_layout()
-        plt.savefig(output_dir / '02_fe_business_target_distributions.png', dpi=300, bbox_inches='tight')
+        plt.savefig(output_dir / '03_fe_realistic_target_distributions.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("Saved: 02_fe_business_target_distributions.png")
+        print("Saved: 03_fe_realistic_target_distributions.png")
     
     print(f"\nAll visualizations saved to: {output_dir}")
-
-
-
 
 
 def main():
@@ -703,7 +524,7 @@ def main():
     Main execution function.
     """
     print("\n" + "=" * 80)
-    print("BUSINESS LOGIC-DRIVEN FEATURE SELECTION")
+    print("REALISTIC FEATURE SELECTION")
     print("PUMS Census Data - Medicaid-Only Insurance Prediction")
     print("=" * 80)
     
@@ -717,38 +538,38 @@ def main():
     # 2. Run standard preprocessing pipeline (Identify, Group, Missing)
     df, categorical_cols, numeric_cols = fe_utils.run_preprocessing_pipeline(df)
     
-    # 3. Select business features
-    df_business, feature_groups = select_business_features(df)
+    # 3. Select realistic features
+    df_realistic, feature_groups = select_realistic_features(df)
     
-    # 6. Identify categorical features in final dataset
-    categorical_features = identify_final_categorical_features(df_business)
+    # 4. Identify categorical features in final dataset
+    categorical_features = identify_final_categorical_features(df_realistic)
     
-    # 7. Create encoded dataset
-    df_encoded, dummy_breakdown = create_encoded_dataset(df_business, categorical_features)
+    # 5. Create encoded dataset
+    df_encoded, dummy_breakdown = create_encoded_dataset(df_realistic, categorical_features)
     
-    # 8. Calculate correlations
-    correlations, group_correlations = calculate_feature_correlations(df_business, feature_groups)
+    # 6. Calculate correlations
+    correlations, group_correlations = calculate_feature_correlations(df_realistic, feature_groups)
     
-    # 9. Save outputs
-    save_outputs(df_business, df_encoded, feature_groups, correlations, 
+    # 7. Save outputs
+    save_outputs(df_realistic, df_encoded, feature_groups, correlations, 
                 group_correlations, dummy_breakdown, output_dir)
     
-    # 10. Create visualizations
-    create_visualizations(df_business, df_encoded, feature_groups, 
+    # 8. Create visualizations
+    create_visualizations(df_realistic, df_encoded, feature_groups, 
                          correlations, group_correlations, output_dir)
     
-    # 11. Print verification
+    # 9. Print verification
     fe_utils.print_verification(df_encoded)
     
     print("\n" + "=" * 80)
-    print("BUSINESS FEATURE SELECTION COMPLETE")
+    print("REALISTIC FEATURE SELECTION COMPLETE")
     print("=" * 80)
     print(f"\nOutputs saved to: {output_dir}/")
-    print("  - 02_fe_business_categorical.csv")
-    print("  - 02_fe_business_encoded.csv")
-    print("  - 02_fe_business_metadata.csv")
-    print("  - 02_fe_business_report.txt")
-    print("  - 02_fe_business_*.png (visualizations)")
+    print("  - 03_fe_realistic_categorical.csv")
+    print("  - 03_fe_realistic_encoded.csv")
+    print("  - 03_fe_realistic_metadata.csv")
+    print("  - 03_fe_realistic_report.txt")
+    print("  - 03_fe_realistic_*.png (visualizations)")
 
 
 if __name__ == "__main__":

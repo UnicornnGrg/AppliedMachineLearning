@@ -77,32 +77,32 @@ Top 20 features by absolute correlation:
   POVPIP                                   -0.3544
   WKL                                       0.3054
   ESR                                       0.2921
-  DIS                                      -0.2515
   has_any_disability                        0.2515
+  STATE                                        nan
+  REGION                                       nan
+  DIVISION                                     nan
+  DIS                                      -0.2515
   WAGP                                     -0.2474
   has_wage_income                          -0.2467
+  DPHY                                     -0.2263
   SCHL                                     -0.1998
   MAR                                       0.1694
+  DEYE                                     -0.0945
   COW                                      -0.0833
   income_source_count                      -0.0823
   MIG                                       0.0805
   RAC1P                                     0.0720
-  has_self_employment                      -0.0429
-  SEMP                                     -0.0315
-  currently_enrolled                       -0.0158
-  STATE                                        nan
+  DEAR                                     -0.0669
   PUMA                                     -0.0442
-  REGION                                       nan
-  DIVISION                                     nan
 
 CORRELATION WITH TARGET BY GROUP
 --------------------------------------------------------------------------------
-Geography                      nan
-Employment_Quality             0.2270
-Health_Disability              0.1781
 Income_Affordability           0.1675
 Education                      0.0800
 Demographics_Life_Stage        0.0531
+Geography                      nan
+Employment_Quality             0.2270
+Health_Disability              0.1781
 
 MARKETING USE CASES
 --------------------------------------------------------------------------------

@@ -1,0 +1,67 @@
+================================================================================
+REALISTIC FEATURE SELECTION REPORT
+================================================================================
+
+OVERVIEW
+--------------------------------------------------------------------------------
+Total features selected: 17
+Target variable: medicaid_only
+Dataset size: 4,534 records
+
+FEATURE COUNT BY GROUP
+--------------------------------------------------------------------------------
+Demographics_Life_Stage: 5 features
+Income_Affordability: 4 features
+Geography: 4 features
+Employment_Quality: 2 features
+Education: 2 features
+
+ENGINEERED FEATURES
+--------------------------------------------------------------------------------
+income_group: Income categorization for market segmentation
+poverty_band: Federal Poverty Level bands (Medicaid eligibility)
+has_wage_income: Binary indicator for wage income
+has_self_employment: Binary indicator for self-employment income
+employment_status_simple: Simplified employment status
+employer_type: Simplified employer type
+age_group: Life stage segmentation
+marital_status_simple: Simplified marital status
+education_level: Education attainment level
+currently_enrolled: Student enrollment status
+
+CORRELATION WITH TARGET BY FEATURE
+--------------------------------------------------------------------------------
+Top 20 features by absolute correlation:
+
+  has_wage_income                          -0.2467
+  MAR                                       0.1694
+  STATE                                        nan
+  REGION                                       nan
+  DIVISION                                     nan
+  PUMA                                     -0.0442
+  has_self_employment                      -0.0429
+  currently_enrolled                       -0.0158
+  AGEP                                     -0.0136
+  SEX                                      -0.0005
+
+CORRELATION WITH TARGET BY GROUP
+--------------------------------------------------------------------------------
+Income_Affordability           0.1448
+Education                      0.0158
+Geography                      nan
+Demographics_Life_Stage        0.0612
+
+DUMMY ENCODING SUMMARY
+--------------------------------------------------------------------------------
+Total categorical features encoded: 7
+Total dummy columns created: 23
+Final encoded feature count: 33
+
+Top 10 features by dummy expansion:
+  income_group                     4 dummies
+  poverty_band                     4 dummies
+  age_group                        4 dummies
+  education_level                  4 dummies
+  employer_type                    3 dummies
+  employment_status_simple         2 dummies
+  marital_status_simple            2 dummies
