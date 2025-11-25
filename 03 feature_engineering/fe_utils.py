@@ -10,6 +10,9 @@ import os
 import warnings
 import logging
 from typing import List, Tuple, Dict, Optional, Union
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import joblib
 
 # Configure logging
 logging.basicConfig(
@@ -399,3 +402,126 @@ def print_verification(df_encoded: pd.DataFrame, target_col: str = 'medicaid_onl
         logger.info("All columns are numeric.")
         logger.info("Ready for modeling: YES")
     logger.info("=" * 80)
+
+def apply_pca(df: pd.DataFrame, target_col: str = 'medicaid_only', n_components: float = 0.95) -> Tuple[pd.DataFrame, PCA, StandardScaler, List[str]]:
+    """
+    Apply PCA to the dataset.
+    1. Standardize features
+    2. Apply PCA
+    3. Return transformed dataframe, PCA object, Scaler, and feature names
+    """
+    logger.info("\n" + "=" * 60)
+    logger.info("APPLYING PCA (SHARED)")
+    logger.info("=" * 60)
+    
+    # Separate target
+    if target_col in df.columns:
+        y = df[target_col]
+        X = df.drop(columns=[target_col])
+    else:
+        y = None
+        X = df
+        
+    feature_names = X.columns.tolist()
+    
+    # Standardize
+    logger.info("Standardizing features...")
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # PCA
+    logger.info(f"Applying PCA (n_components={n_components})...")
+    pca = PCA(n_components=n_components)
+    X_pca = pca.fit_transform(X_scaled)
+    
+    # Create DataFrame
+    pca_cols = [f'PC{i+1}' for i in range(X_pca.shape[1])]
+    df_pca = pd.DataFrame(X_pca, columns=pca_cols)
+    
+    if y is not None:
+        df_pca[target_col] = y.reset_index(drop=True)
+        
+    logger.info(f"Original features: {X.shape[1]}")
+    logger.info(f"PCA components: {X_pca.shape[1]}")
+    logger.info(f"Explained variance: {np.sum(pca.explained_variance_ratio_):.4f}")
+    
+    return df_pca, pca, scaler, feature_names
+
+def save_pca_models(pca: PCA, scaler: StandardScaler, output_dir: str, prefix: str):
+    """Save PCA model and scaler."""
+    try:
+        os.makedirs(output_dir, exist_ok=True)
+        joblib.dump(pca, os.path.join(output_dir, f'{prefix}_model.pkl'))
+        joblib.dump(scaler, os.path.join(output_dir, f'{prefix}_scaler.pkl'))
+        logger.info(f"Saved PCA model and scaler to {output_dir}")
+    except Exception as e:
+        logger.error(f"Failed to save PCA models: {e}")
+
+def plot_pca_scree(pca: PCA, output_path: str):
+    """Plot Scree Plot."""
+    logger.info(f"\nGenerating Scree Plot...")
+    
+    n_components = min(30, len(pca.explained_variance_ratio_))
+    variance = pca.explained_variance_ratio_[:n_components]
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(1, n_components + 1), variance, 'bo-', linewidth=2)
+    plt.title('Scree Plot (First 30 Components)')
+    plt.xlabel('Principal Component')
+    plt.ylabel('Proportion of Variance Explained')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    logger.info(f"Saved: {output_path}")
+
+def plot_pca_cumulative_variance(pca: PCA, output_path: str):
+    """Plot Cumulative Variance."""
+    logger.info(f"\nGenerating Cumulative Variance Plot...")
+    
+    cumulative_variance = np.cumsum(pca.explained_variance_ratio_)
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(1, len(cumulative_variance) + 1), cumulative_variance, 'r-', linewidth=2)
+    plt.axhline(y=0.95, color='k', linestyle='--', label='95% Explained Variance')
+    plt.title('Cumulative Variance Explained')
+    plt.xlabel('Number of Components')
+    plt.ylabel('Cumulative Variance')
+    plt.legend(loc='best')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    logger.info(f"Saved: {output_path}")
+
+def analyze_pca_loadings(pca: PCA, feature_names: List[str], n_components: int = 10) -> pd.DataFrame:
+    """
+    Analyze PCA loadings to interpret components.
+    Returns DataFrame of loadings.
+    """
+    logger.info("\nAnalyzing PCA Loadings...")
+    
+    n_comps = min(n_components, pca.n_components_)
+    loadings = pd.DataFrame(
+        pca.components_[:n_comps].T,
+        columns=[f'PC{i+1}' for i in range(n_comps)],
+        index=feature_names
+    )
+    
+    return loadings
+
+def plot_pca_loadings_heatmap(loadings_df: pd.DataFrame, output_path: str, n_features: int = 30):
+    """Plot heatmap of top feature loadings."""
+    logger.info(f"\nGenerating Loadings Heatmap...")
+    
+    # Select top features by max absolute loading across displayed components
+    loadings_abs = loadings_df.abs().max(axis=1)
+    top_features = loadings_abs.sort_values(ascending=False).head(n_features).index
+    
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(loadings_df.loc[top_features], cmap='coolwarm', center=0, annot=False)
+    plt.title(f'PCA Loadings Heatmap (Top {n_features} Features)')
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    logger.info(f"Saved: {output_path}")

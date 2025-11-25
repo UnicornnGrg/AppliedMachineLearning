@@ -1,0 +1,74 @@
+================================================================================
+PCA ANALYSIS REPORT: 05_fe_pca_business
+================================================================================
+
+DIMENSIONALITY REDUCTION
+--------------------------------------------------------------------------------
+Original Dimensions: 241
+PCA Dimensions: 192
+Reduction Ratio: 20.33%
+Total Variance Explained: 95.1761%
+
+TOP COMPONENTS EXPLAINED VARIANCE
+--------------------------------------------------------------------------------
+PC1: 2.7757% (Cumulative: 2.7757%)
+PC2: 2.0619% (Cumulative: 4.8376%)
+PC3: 1.6944% (Cumulative: 6.5320%)
+PC4: 1.2321% (Cumulative: 7.7641%)
+PC5: 1.1372% (Cumulative: 8.9013%)
+PC6: 1.0931% (Cumulative: 9.9944%)
+PC7: 1.0482% (Cumulative: 11.0427%)
+PC8: 0.9508% (Cumulative: 11.9935%)
+PC9: 0.8387% (Cumulative: 12.8322%)
+PC10: 0.8281% (Cumulative: 13.6603%)
+
+COMPONENT INTERPRETATION (Top 5 Features by Absolute Loading)
+--------------------------------------------------------------------------------
+
+PC1:
+  - ESR: 0.2889
+  - WKL: 0.2853
+  - employment_status_simple_Not_in_labor_force: 0.2793
+  - WAGP: -0.2738
+  - OCCP_2digit_42: 0.2440
+
+PC2:
+  - AGEP: 0.3117
+  - marital_status_simple_Never_married: -0.2865
+  - MAR: -0.2815
+  - has_wage_income: -0.2569
+  - marital_status_simple_Married: 0.2445
+
+PC3:
+  - COW: 0.3825
+  - employer_type_Self_employed: 0.3600
+  - employer_type_Private: -0.3366
+  - has_self_employment: 0.3214
+  - SEMP: 0.2807
+
+PC4:
+  - SCHL: 0.2846
+  - SEX: 0.2641
+  - INDP_2digit_78: 0.2478
+  - education_level_Graduate: 0.2370
+  - education_level_HS_diploma: -0.2352
+
+PC5:
+  - INDP_2digit_99: 0.4820
+  - OCCP_2digit_99: 0.4820
+  - employer_type_Unpaid: 0.3851
+  - employment_status_simple_Unemployed: 0.2291
+  - SEX: -0.2034
+
+CORRELATION WITH TARGET
+--------------------------------------------------------------------------------
+  PC1: 0.4038
+  PC9: -0.1049
+  PC4: -0.0786
+  PC2: 0.0700
+  PC19: 0.0672
+  PC6: -0.0573
+  PC11: 0.0540
+  PC13: -0.0529
+  PC31: -0.0502
+  PC21: 0.0495

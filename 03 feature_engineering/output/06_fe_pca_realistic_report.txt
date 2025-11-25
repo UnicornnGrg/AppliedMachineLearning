@@ -1,0 +1,74 @@
+================================================================================
+PCA ANALYSIS REPORT: 06_fe_pca_realistic
+================================================================================
+
+DIMENSIONALITY REDUCTION
+--------------------------------------------------------------------------------
+Original Dimensions: 33
+PCA Dimensions: 21
+Reduction Ratio: 36.36%
+Total Variance Explained: 95.0296%
+
+TOP COMPONENTS EXPLAINED VARIANCE
+--------------------------------------------------------------------------------
+PC1: 13.4900% (Cumulative: 13.4900%)
+PC2: 8.2921% (Cumulative: 21.7821%)
+PC3: 6.6770% (Cumulative: 28.4590%)
+PC4: 5.9558% (Cumulative: 34.4148%)
+PC5: 5.2429% (Cumulative: 39.6577%)
+PC6: 4.9408% (Cumulative: 44.5985%)
+PC7: 4.7220% (Cumulative: 49.3204%)
+PC8: 4.2022% (Cumulative: 53.5226%)
+PC9: 4.1738% (Cumulative: 57.6964%)
+PC10: 4.0065% (Cumulative: 61.7029%)
+
+COMPONENT INTERPRETATION (Top 5 Features by Absolute Loading)
+--------------------------------------------------------------------------------
+
+PC1:
+  - MAR: 0.4398
+  - marital_status_simple_Never_married: 0.4282
+  - marital_status_simple_Married: -0.4021
+  - AGEP: -0.3511
+  - poverty_band_>400%: -0.2574
+
+PC2:
+  - has_wage_income: 0.5010
+  - employer_type_Self_employed: -0.3590
+  - employment_status_simple_Not_in_labor_force: -0.3482
+  - has_self_employment: -0.3305
+  - income_group_Very_High: 0.2546
+
+PC3:
+  - employer_type_Self_employed: 0.4478
+  - employer_type_Private: -0.4197
+  - has_self_employment: 0.4182
+  - age_group_56-65: -0.3374
+  - AGEP: -0.2803
+
+PC4:
+  - poverty_band_200-400%: 0.5234
+  - poverty_band_>400%: -0.4259
+  - income_group_Medium: 0.3871
+  - income_group_Very_High: -0.3487
+  - MAR: -0.2134
+
+PC5:
+  - education_level_Some_college: 0.5501
+  - education_level_HS_diploma: -0.3719
+  - age_group_26-35: -0.2965
+  - age_group_56-65: 0.2484
+  - age_group_36-45: -0.2216
+
+CORRELATION WITH TARGET
+--------------------------------------------------------------------------------
+  PC2: -0.2362
+  PC1: 0.1723
+  PC3: -0.1580
+  PC5: -0.1262
+  PC16: 0.1091
+  PC4: -0.1043
+  PC6: 0.0763
+  PC17: 0.0627
+  PC21: -0.0625
+  PC15: -0.0621
