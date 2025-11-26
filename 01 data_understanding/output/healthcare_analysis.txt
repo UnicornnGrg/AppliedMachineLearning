@@ -1,4 +1,4 @@
-Top 10 Healthcare Coverage Combinations (% of Total):
+Top 10 Healthcare Coverage Combinations (% of Population 18-65):
 hins_combination
 Employer-based                     59.327803
 Direct-purchase                    11.465646
@@ -11,9 +11,22 @@ Medicare, Medicaid                  1.276324
 Medicaid, No coverage               1.127420
 Employer-based, Tricare/VA          0.914699
 
-Public vs. Private Insurance Status (% of Total):
+Distribution of Public vs. Private Insurance Status (% of Population 18-65):
 insurance_status
-Both public and private     5.849819
-Not insured                 5.892363
-Public only                13.507764
 Private only               74.750053
+Public only                13.507764
+Not insured                 5.892363
+Both public and private     5.849819
+
+Medicaid Coverage Rate by Age Group (% of Age Group):
+age_group
+18-22    12.915129
+23-27     9.574468
+28-32    13.507625
+33-37     9.142857
+38-42    11.423221
+43-47     7.708779
+48-52     9.950249
+53-57    11.707317
+58-62    10.544218
+63-65     9.547739
