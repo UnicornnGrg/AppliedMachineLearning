@@ -1,0 +1,286 @@
+================================================================================
+PUMS DATA CLEANING REPORT
+Generated on: 2025-11-26 16:09:41
+Input file: 00 data/raw/psam_p38.csv
+================================================================================
+
+Initial data shape: (8403, 287)
+Initial columns: ['RT', 'SERIALNO', 'DIVISION', 'SPORDER', 'PUMA', 'REGION', 'STATE', 'ADJINC', 'PWGTP', 'AGEP', 'CIT', 'CITWP', 'COW', 'DDRS', 'DEAR', 'DEYE', 'DOUT', 'DPHY', 'DRAT', 'DRATX', 'DREM', 'ENG', 'FER', 'GCL', 'GCM', 'GCR', 'HIMRKS', 'HINS1', 'HINS2', 'HINS3', 'HINS4', 'HINS5', 'HINS6', 'HINS7', 'INTP', 'JWMNP', 'JWRIP', 'JWTRNS', 'LANX', 'MAR', 'MARHD', 'MARHM', 'MARHT', 'MARHW', 'MARHYP', 'MIG', 'MIL', 'MLPA', 'MLPB', 'MLPCD', 'MLPE', 'MLPFG', 'MLPH', 'MLPIK', 'MLPJ', 'NWAB', 'NWAV', 'NWLA', 'NWLK', 'NWRE', 'OIP', 'PAP', 'RELSHIPP', 'RETP', 'SCH', 'SCHG', 'SCHL', 'SEMP', 'SEX', 'SSIP', 'SSP', 'WAGP', 'WKHP', 'WKL', 'WKWN', 'WRK', 'YOEP', 'ANC', 'ANC1P', 'ANC2P', 'DECADE', 'DIS', 'DRIVESP', 'ESP', 'ESR', 'FOD1P', 'FOD2P', 'HICOV', 'HISP', 'INDP', 'JWAP', 'JWDP', 'LANP', 'MIGPUMA', 'MIGSP', 'MSP', 'NAICSP', 'NATIVITY', 'NOP', 'OC', 'OCCP', 'PAOC', 'PERNP', 'PINCP', 'POBP', 'POVPIP', 'POWPUMA', 'POWSP', 'PRIVCOV', 'PUBCOV', 'QTRBIR', 'RAC1P', 'RAC2P', 'RAC3P', 'RACAIAN', 'RACASN', 'RACBLK', 'RACNH', 'RACNUM', 'RACPI', 'RACSOR', 'RACWHT', 'RC', 'SCIENGP', 'SCIENGRLP', 'SFN', 'SFR', 'SOCP', 'VPS', 'WAOB', 'FAGEP', 'FANCP', 'FCITP', 'FCITWP', 'FCOWP', 'FDDRSP', 'FDEARP', 'FDEYEP', 'FDISP', 'FDOUTP', 'FDPHYP', 'FDRATP', 'FDRATXP', 'FDREMP', 'FENGP', 'FESRP', 'FFERP', 'FFODP', 'FGCLP', 'FGCMP', 'FGCRP', 'FHICOVP', 'FHIMRKSP', 'FHINS1P', 'FHINS2P', 'FHINS3C', 'FHINS3P', 'FHINS4C', 'FHINS4P', 'FHINS5C', 'FHINS5P', 'FHINS6P', 'FHINS7P', 'FHISP', 'FINDP', 'FINTP', 'FJWDP', 'FJWMNP', 'FJWRIP', 'FJWTRNSP', 'FLANP', 'FLANXP', 'FMARP', 'FMARHDP', 'FMARHMP', 'FMARHTP', 'FMARHWP', 'FMARHYP', 'FMIGP', 'FMIGSP', 'FMILPP', 'FMILSP', 'FOCCP', 'FOIP', 'FPAP', 'FPERNP', 'FPINCP', 'FPOBP', 'FPOWSP', 'FPRIVCOVP', 'FPUBCOVP', 'FRACP', 'FRELSHIPP', 'FRETP', 'FSCHGP', 'FSCHLP', 'FSCHP', 'FSEMP', 'FSEXP', 'FSSIP', 'FSSP', 'FWAGP', 'FWKHP', 'FWKLP', 'FWKWNP', 'FWRKP', 'FYOEP', 'PWGTP1', 'PWGTP2', 'PWGTP3', 'PWGTP4', 'PWGTP5', 'PWGTP6', 'PWGTP7', 'PWGTP8', 'PWGTP9', 'PWGTP10', 'PWGTP11', 'PWGTP12', 'PWGTP13', 'PWGTP14', 'PWGTP15', 'PWGTP16', 'PWGTP17', 'PWGTP18', 'PWGTP19', 'PWGTP20', 'PWGTP21', 'PWGTP22', 'PWGTP23', 'PWGTP24', 'PWGTP25', 'PWGTP26', 'PWGTP27', 'PWGTP28', 'PWGTP29', 'PWGTP30', 'PWGTP31', 'PWGTP32', 'PWGTP33', 'PWGTP34', 'PWGTP35', 'PWGTP36', 'PWGTP37', 'PWGTP38', 'PWGTP39', 'PWGTP40', 'PWGTP41', 'PWGTP42', 'PWGTP43', 'PWGTP44', 'PWGTP45', 'PWGTP46', 'PWGTP47', 'PWGTP48', 'PWGTP49', 'PWGTP50', 'PWGTP51', 'PWGTP52', 'PWGTP53', 'PWGTP54', 'PWGTP55', 'PWGTP56', 'PWGTP57', 'PWGTP58', 'PWGTP59', 'PWGTP60', 'PWGTP61', 'PWGTP62', 'PWGTP63', 'PWGTP64', 'PWGTP65', 'PWGTP66', 'PWGTP67', 'PWGTP68', 'PWGTP69', 'PWGTP70', 'PWGTP71', 'PWGTP72', 'PWGTP73', 'PWGTP74', 'PWGTP75', 'PWGTP76', 'PWGTP77', 'PWGTP78', 'PWGTP79', 'PWGTP80']
+
+========================================
+DATA EXPLORATION
+========================================
+Shape: (8403, 287)
+Columns: ['RT', 'SERIALNO', 'DIVISION', 'SPORDER', 'PUMA', 'REGION', 'STATE', 'ADJINC', 'PWGTP', 'AGEP', 'CIT', 'CITWP', 'COW', 'DDRS', 'DEAR', 'DEYE', 'DOUT', 'DPHY', 'DRAT', 'DRATX', 'DREM', 'ENG', 'FER', 'GCL', 'GCM', 'GCR', 'HIMRKS', 'HINS1', 'HINS2', 'HINS3', 'HINS4', 'HINS5', 'HINS6', 'HINS7', 'INTP', 'JWMNP', 'JWRIP', 'JWTRNS', 'LANX', 'MAR', 'MARHD', 'MARHM', 'MARHT', 'MARHW', 'MARHYP', 'MIG', 'MIL', 'MLPA', 'MLPB', 'MLPCD', 'MLPE', 'MLPFG', 'MLPH', 'MLPIK', 'MLPJ', 'NWAB', 'NWAV', 'NWLA', 'NWLK', 'NWRE', 'OIP', 'PAP', 'RELSHIPP', 'RETP', 'SCH', 'SCHG', 'SCHL', 'SEMP', 'SEX', 'SSIP', 'SSP', 'WAGP', 'WKHP', 'WKL', 'WKWN', 'WRK', 'YOEP', 'ANC', 'ANC1P', 'ANC2P', 'DECADE', 'DIS', 'DRIVESP', 'ESP', 'ESR', 'FOD1P', 'FOD2P', 'HICOV', 'HISP', 'INDP', 'JWAP', 'JWDP', 'LANP', 'MIGPUMA', 'MIGSP', 'MSP', 'NAICSP', 'NATIVITY', 'NOP', 'OC', 'OCCP', 'PAOC', 'PERNP', 'PINCP', 'POBP', 'POVPIP', 'POWPUMA', 'POWSP', 'PRIVCOV', 'PUBCOV', 'QTRBIR', 'RAC1P', 'RAC2P', 'RAC3P', 'RACAIAN', 'RACASN', 'RACBLK', 'RACNH', 'RACNUM', 'RACPI', 'RACSOR', 'RACWHT', 'RC', 'SCIENGP', 'SCIENGRLP', 'SFN', 'SFR', 'SOCP', 'VPS', 'WAOB', 'FAGEP', 'FANCP', 'FCITP', 'FCITWP', 'FCOWP', 'FDDRSP', 'FDEARP', 'FDEYEP', 'FDISP', 'FDOUTP', 'FDPHYP', 'FDRATP', 'FDRATXP', 'FDREMP', 'FENGP', 'FESRP', 'FFERP', 'FFODP', 'FGCLP', 'FGCMP', 'FGCRP', 'FHICOVP', 'FHIMRKSP', 'FHINS1P', 'FHINS2P', 'FHINS3C', 'FHINS3P', 'FHINS4C', 'FHINS4P', 'FHINS5C', 'FHINS5P', 'FHINS6P', 'FHINS7P', 'FHISP', 'FINDP', 'FINTP', 'FJWDP', 'FJWMNP', 'FJWRIP', 'FJWTRNSP', 'FLANP', 'FLANXP', 'FMARP', 'FMARHDP', 'FMARHMP', 'FMARHTP', 'FMARHWP', 'FMARHYP', 'FMIGP', 'FMIGSP', 'FMILPP', 'FMILSP', 'FOCCP', 'FOIP', 'FPAP', 'FPERNP', 'FPINCP', 'FPOBP', 'FPOWSP', 'FPRIVCOVP', 'FPUBCOVP', 'FRACP', 'FRELSHIPP', 'FRETP', 'FSCHGP', 'FSCHLP', 'FSCHP', 'FSEMP', 'FSEXP', 'FSSIP', 'FSSP', 'FWAGP', 'FWKHP', 'FWKLP', 'FWKWNP', 'FWRKP', 'FYOEP', 'PWGTP1', 'PWGTP2', 'PWGTP3', 'PWGTP4', 'PWGTP5', 'PWGTP6', 'PWGTP7', 'PWGTP8', 'PWGTP9', 'PWGTP10', 'PWGTP11', 'PWGTP12', 'PWGTP13', 'PWGTP14', 'PWGTP15', 'PWGTP16', 'PWGTP17', 'PWGTP18', 'PWGTP19', 'PWGTP20', 'PWGTP21', 'PWGTP22', 'PWGTP23', 'PWGTP24', 'PWGTP25', 'PWGTP26', 'PWGTP27', 'PWGTP28', 'PWGTP29', 'PWGTP30', 'PWGTP31', 'PWGTP32', 'PWGTP33', 'PWGTP34', 'PWGTP35', 'PWGTP36', 'PWGTP37', 'PWGTP38', 'PWGTP39', 'PWGTP40', 'PWGTP41', 'PWGTP42', 'PWGTP43', 'PWGTP44', 'PWGTP45', 'PWGTP46', 'PWGTP47', 'PWGTP48', 'PWGTP49', 'PWGTP50', 'PWGTP51', 'PWGTP52', 'PWGTP53', 'PWGTP54', 'PWGTP55', 'PWGTP56', 'PWGTP57', 'PWGTP58', 'PWGTP59', 'PWGTP60', 'PWGTP61', 'PWGTP62', 'PWGTP63', 'PWGTP64', 'PWGTP65', 'PWGTP66', 'PWGTP67', 'PWGTP68', 'PWGTP69', 'PWGTP70', 'PWGTP71', 'PWGTP72', 'PWGTP73', 'PWGTP74', 'PWGTP75', 'PWGTP76', 'PWGTP77', 'PWGTP78', 'PWGTP79', 'PWGTP80']
+Data types:
+int64      199
+float64     84
+object       4
+
+Missing values:
+   Column  Missing  Percentage
+    CITWP     8307   98.857551
+      COW     3169   37.712722
+     DDRS      483    5.747947
+     DOUT     1503   17.886469
+     DPHY      483    5.747947
+     DRAT     8217   97.786505
+    DRATX     7681   91.407831
+     DREM      483    5.747947
+      ENG     8032   95.584910
+      FER     6778   80.661668
+      GCL     2947   35.070808
+      GCM     8364   99.535880
+      GCR     8323   99.047959
+     INTP     1503   17.886469
+    JWMNP     4718   56.146614
+    JWRIP     4958   59.002737
+   JWTRNS     4349   51.755325
+     LANX      483    5.747947
+    MARHD     3353   39.902416
+    MARHM     3353   39.902416
+    MARHT     3353   39.902416
+    MARHW     3353   39.902416
+   MARHYP     3353   39.902416
+      MIG       94    1.118648
+      MIL     1729   20.575985
+     MLPA     7791   92.716887
+     MLPB     7791   92.716887
+    MLPCD     7791   92.716887
+     MLPE     7791   92.716887
+    MLPFG     7791   92.716887
+     MLPH     7791   92.716887
+    MLPIK     7791   92.716887
+     MLPJ     7791   92.716887
+     NWAB     1604   19.088421
+     NWAV     1604   19.088421
+     NWLA     1604   19.088421
+     NWLK     1604   19.088421
+     NWRE     1604   19.088421
+      OIP     1503   17.886469
+      PAP     1503   17.886469
+     RETP     1503   17.886469
+      SCH      290    3.451148
+     SCHG     6490   77.234321
+     SCHL      290    3.451148
+     SEMP     1503   17.886469
+     SSIP     1503   17.886469
+      SSP     1503   17.886469
+     WAGP     1503   17.886469
+     WKHP     3759   44.734024
+      WKL     1604   19.088421
+     WKWN     3759   44.734024
+      WRK     2451   29.168154
+     YOEP     8107   96.477449
+   DECADE     8107   96.477449
+  DRIVESP     4958   59.002737
+      ESP     6674   79.424015
+      ESR     1604   19.088421
+    FOD1P     6546   77.900750
+    FOD2P     8182   97.369987
+     INDP     3169   37.712722
+     JWAP     4718   56.146614
+     JWDP     4718   56.146614
+     LANP     8032   95.584910
+  MIGPUMA     7436   88.492205
+    MIGSP     7436   88.492205
+      MSP     1503   17.886469
+   NAICSP     3169   37.712722
+      NOP     6674   79.424015
+       OC      434    5.164822
+     OCCP     3169   37.712722
+     PAOC     5261   62.608592
+    PERNP     1604   19.088421
+    PINCP     1503   17.886469
+   POVPIP      401    4.772105
+  POWPUMA     4349   51.755325
+    POWSP     4349   51.755325
+       RC      434    5.164822
+  SCIENGP     6546   77.900750
+SCIENGRLP     6546   77.900750
+      SFN     8309   98.881352
+      SFR     8309   98.881352
+     SOCP     3169   37.712722
+      VPS     7791   92.716887
+  FHINS3C     6301   74.985124
+  FHINS4C     7326   87.183149
+  FHINS5C     7991   95.096989
+
+========================================
+HANDLING MISSING VALUES
+========================================
+
+Dropped 42 columns with >50.0% missing:
+  - CITWP
+  - DRAT
+  - DRATX
+  - ENG
+  - FER
+  - GCM
+  - GCR
+  - JWMNP
+  - JWRIP
+  - JWTRNS
+  - MLPA
+  - MLPB
+  - MLPCD
+  - MLPE
+  - MLPFG
+  - MLPH
+  - MLPIK
+  - MLPJ
+  - SCHG
+  - YOEP
+  - DECADE
+  - DRIVESP
+  - ESP
+  - FOD1P
+  - FOD2P
+  - JWAP
+  - JWDP
+  - LANP
+  - MIGPUMA
+  - MIGSP
+  - NOP
+  - PAOC
+  - POWPUMA
+  - POWSP
+  - SCIENGP
+  - SCIENGRLP
+  - SFN
+  - SFR
+  - VPS
+  - FHINS3C
+  - FHINS4C
+  - FHINS5C
+
+Numeric columns imputed with median:
+  - COW: filled with median=1.00
+  - DDRS: filled with median=2.00
+  - DOUT: filled with median=2.00
+  - DPHY: filled with median=2.00
+  - DREM: filled with median=2.00
+  - GCL: filled with median=2.00
+  - INTP: filled with median=0.00
+  - LANX: filled with median=2.00
+  - MARHD: filled with median=2.00
+  - MARHM: filled with median=2.00
+  - MARHT: filled with median=1.00
+  - MARHW: filled with median=2.00
+  - MARHYP: filled with median=1995.00
+  - MIG: filled with median=1.00
+  - MIL: filled with median=4.00
+  - NWAB: filled with median=3.00
+  - NWAV: filled with median=5.00
+  - NWLA: filled with median=3.00
+  - NWLK: filled with median=3.00
+  - NWRE: filled with median=3.00
+  - OIP: filled with median=0.00
+  - PAP: filled with median=0.00
+  - RETP: filled with median=0.00
+  - SCH: filled with median=1.00
+  - SCHL: filled with median=18.00
+  - SEMP: filled with median=0.00
+  - SSIP: filled with median=0.00
+  - SSP: filled with median=0.00
+  - WAGP: filled with median=12000.00
+  - WKHP: filled with median=40.00
+  - WKL: filled with median=1.00
+  - WKWN: filled with median=52.00
+  - WRK: filled with median=1.00
+  - ESR: filled with median=1.00
+  - INDP: filled with median=6991.00
+  - MSP: filled with median=1.00
+  - OC: filled with median=0.00
+  - OCCP: filled with median=4220.00
+  - PERNP: filled with median=21000.00
+  - PINCP: filled with median=37000.00
+  - POVPIP: filled with median=379.00
+  - RC: filled with median=0.00
+
+Categorical columns imputed with mode:
+  - NAICSP: filled with mode=111
+  - SOCP: filled with mode=119013
+
+Shape after handling missing values: (8403, 245)
+
+========================================
+CONVERTING DATA TYPES
+========================================
+
+Columns converted to category:
+  - SEX
+  - MAR
+  - RAC1P
+  - HISP
+  - CIT
+  - ESR
+  - SCHL
+  - SCH
+  - COW
+  - DIS
+  - DEAR
+  - DEYE
+  - DREM
+  - LANX
+
+Columns converted to numeric:
+  - AGEP
+  - WAGP
+  - PINCP
+  - WKHP
+  - POVPIP
+
+Shape after type conversion: (8403, 245)
+
+========================================
+HANDLING DATA LEAKAGE
+========================================
+
+Dropped leakage columns (would leak target information):
+  - PRIVCOV
+  - PUBCOV
+  - HINS1
+  - HINS2
+  - HINS3
+  - HINS4
+  - HINS5
+  - HINS6
+  - HINS7
+
+Shape after leakage handling: (8403, 236)
+
+========================================
+REMOVING DUPLICATES
+========================================
+
+No duplicates found
+
+Shape after duplicate removal: (8403, 236)
+
+========================================
+HANDLING OUTLIERS
+========================================
+
+Outlier detection applied to columns: ['WAGP', 'PINCP', 'PERNP']
+Using IQR method with factor: 3.0
+
+Outliers removed:
+  - WAGP: Removed 91 outliers (range: -135000.00 - 180000.00)
+  - PINCP: Removed 129 outliers (range: -105600.00 - 180700.00)
+
+Total rows removed due to outliers: 220
+
+Shape after outlier handling: (8183, 236)
+
+========================================
+DATA VALIDATION
+========================================
+
+Data quality issues found and corrected:
+Negative income: 11
+
+Actions taken:
+  - Removed 11 rows with negative income
+
+Shape after validation: (8172, 236)
