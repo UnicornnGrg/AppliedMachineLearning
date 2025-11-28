@@ -52,11 +52,10 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
      - `employment_status_simple`: Recode ESR to 'Employed', 'Unemployed', 'Not_in_labor_force'
      - `employer_type`: Simplify COW to 'Private', 'Government', 'Self_employed', 'Unpaid'
 
-   **GROUP 3: Demographics & Life Stage (5 features)**
-   - Raw features: `AGEP`, `SEX`, `MAR`
+   **GROUP 3: Demographics & Life Stage (3 features)**
+   - Raw features: `SEX`, `MAR`
    - Engineer:
      - `age_group`: Cut into '18-25', '26-35', '36-45', '46-55', '56-65'
-     - `marital_status_simple`: Recode MAR to 'Married', 'Divorced_Separated', 'Widowed', 'Never_married'
 
    **GROUP 4: Education (2 features)**
    - Raw features: none
@@ -69,8 +68,8 @@ Create a Python script for realistic meta-feature engineering from PUMS census d
    - Engineer:
      - none
 
-   **GROUP 6: Geography (4 features)**
-   - Raw features: `STATE`, `PUMA`, `REGION`, `DIVISION`
+   **GROUP 6: Geography (3 features)**
+   - Raw features: `STATE`, `REGION`, `DIVISION`
    - Keep as-is (categorical)
 
 4. **Feature Selection Logic**:

@@ -38,41 +38,37 @@ Create a Python script for business logic-driven feature selection from PUMS cen
 
 3. **Feature Groups** (select and engineer):
 
-   **GROUP 1: Income & Affordability (8 features)**
-   - Raw features: `WAGP`, `POVPIP`, `SEMP`
+   **GROUP 1: Income & Affordability (4 features)**
+   - Raw features:
    - Engineer:
      - `income_group`: categorize WAGP in 5 groups
      - `income_source_count`: Count non-zero income sources
      - `poverty_band`: Categorize POVPIP into '<100%', '100-138%', '138-200%', '200-400%', '>400%'
-     - `has_wage_income`: Binary (WAGP > 0)
      - `has_self_employment`: Binary (SEMP > 0)
 
-   **GROUP 2: Employment Quality (7 features)**
-   - Raw features: `ESR`, `COW`, `WKL`, `OCCP_2digit`, `INDP_2digit`
-   - Note: `ESR`, `COW`, `WKL` are ALL categorical - will need dummy encoding
-   - Engineer:
+   **GROUP 2: Employment Quality (5 features)**
+   - Raw features: `WKL`, `OCCP_2digit`, `INDP_2digit`
+  - Engineer:
      - `employment_status_simple`: Recode ESR to 'Employed', 'Unemployed', 'Not_in_labor_force'
      - `employer_type`: Simplify COW to 'Private', 'Government', 'Self_employed', 'Unpaid'
 
    **GROUP 3: Demographics & Life Stage (9 features)**
-   - Raw features: `AGEP`, `SEX`, `MAR`, `MIG`, `NATIVITY`, `RAC1P`, `HISP`
+   - Raw features: `SEX`, `MAR`, `MIG`
    - Engineer:
      - `age_group`: Cut into '18-25', '26-35', '36-45', '46-55', '56-65'
      - `marital_status_simple`: Recode MAR to 'Married', 'Divorced_Separated', 'Widowed', 'Never_married'
 
    **GROUP 4: Education (4 features)**
-   - Raw features: `SCHL`, `SCH`
+   - Raw features: `SCH`
    - Engineer:
-     - `education_level`: Recode SCHL to 'Less_than_HS', 'HS_diploma', 'Some_college', 'Bachelors', 'Graduate'
      - `currently_enrolled`: Binary (SCH in [2, 3])
 
    **GROUP 5: Health & Disability (5 features)**
-   - Raw features: `DIS`, `DEAR`, `DEYE`, `DPHY`
+   - Raw features: 
    - Engineer:
-     - `has_any_disability`: Binary (DIS == 1)
 
    **GROUP 6: Geography (4 features)**
-   - Raw features: `STATE`, `PUMA`, `REGION`, `DIVISION`
+   - Raw features: `STATE`, `REGION`, `DIVISION`
    - Keep as-is (categorical)
 
 4. **Feature Selection Logic**:
