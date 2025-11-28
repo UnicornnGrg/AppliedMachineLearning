@@ -8,31 +8,33 @@ from sklearn.metrics import (
 )
 
 class ModelEvaluator:
-    def __init__(self, output_dir):
+    def __init__(self, output_dir, reports_dir, plots_dir):
         self.output_dir = output_dir
-        os.makedirs(self.output_dir, exist_ok=True)
+        self.reports_dir = reports_dir
+        self.plots_dir = plots_dir
 
-    def evaluate(self, model, X_test, y_test, dataset_name, experiment_name, best_params=None):
+    def evaluate(self, model, X, y, dataset_name, experiment_name, phase="test", best_params=None):
         """
-        Evaluates the model on the test set and saves metrics, reports, and plots.
+        Evaluates the model on the provided set (test or validation) and saves metrics.
         """
-        y_pred = model.predict(X_test)
-        y_prob = model.predict_proba(X_test)[:, 1] if hasattr(model, "predict_proba") else None
+        y_pred = model.predict(X)
+        y_prob = model.predict_proba(X)[:, 1] if hasattr(model, "predict_proba") else None
 
         # Calculate Metrics
         metrics = {
             "dataset": dataset_name,
             "model": experiment_name,
+            "phase": phase,
             "best_params": str(best_params) if best_params else "N/A",
-            "accuracy": accuracy_score(y_test, y_pred),
-            "precision": precision_score(y_test, y_pred, zero_division=0),
-            "recall": recall_score(y_test, y_pred, zero_division=0),
-            "f1": f1_score(y_test, y_pred, zero_division=0),
-            "roc_auc": roc_auc_score(y_test, y_prob) if y_prob is not None else None
+            "accuracy": accuracy_score(y, y_pred),
+            "precision": precision_score(y, y_pred, zero_division=0),
+            "recall": recall_score(y, y_pred, zero_division=0),
+            "f1": f1_score(y, y_pred, zero_division=0),
+            "roc_auc": roc_auc_score(y, y_prob) if y_prob is not None else None
         }
 
         # Print Summary
-        print(f"Results for {experiment_name} on {dataset_name}:")
+        print(f"Results for {experiment_name} on {dataset_name} ({phase}):")
         print(f"  F1: {metrics['f1']:.4f}")
         if metrics['roc_auc'] is not None:
             print(f"  AUC: {metrics['roc_auc']:.4f}")
@@ -41,10 +43,10 @@ class ModelEvaluator:
         self._save_metrics_csv(metrics)
 
         # Save Detailed Report
-        self._save_report(experiment_name, dataset_name, metrics, y_test, y_pred)
+        self._save_report(experiment_name, dataset_name, phase, metrics, y, y_pred)
 
         # Save Confusion Matrix
-        self._save_confusion_matrix(y_test, y_pred, experiment_name, dataset_name)
+        self._save_confusion_matrix(y, y_pred, experiment_name, dataset_name, phase)
 
         return metrics
 
@@ -58,30 +60,31 @@ class ModelEvaluator:
         else:
             metrics_df.to_csv(metrics_file, mode='w', header=True, index=False)
 
-    def _save_report(self, experiment_name, dataset_name, metrics, y_test, y_pred):
-        report_path = os.path.join(self.output_dir, f"{experiment_name}_{dataset_name}_report.txt")
+    def _save_report(self, experiment_name, dataset_name, phase, metrics, y_true, y_pred):
+        report_path = os.path.join(self.reports_dir, f"{experiment_name}_{dataset_name}_{phase}_report.txt")
         with open(report_path, "w") as f:
             f.write(f"Experiment: {experiment_name}\n")
             f.write(f"Dataset: {dataset_name}\n")
+            f.write(f"Phase: {phase}\n")
             f.write(f"Best Params: {metrics['best_params']}\n")
             f.write("-" * 30 + "\n")
             for k, v in metrics.items():
                 f.write(f"{k}: {v}\n")
             f.write("\n" + "-" * 30 + "\n")
             f.write("Classification Report:\n")
-            f.write(classification_report(y_test, y_pred, zero_division=0))
+            f.write(classification_report(y_true, y_pred, zero_division=0))
 
-    def _save_confusion_matrix(self, y_test, y_pred, experiment_name, dataset_name):
+    def _save_confusion_matrix(self, y_true, y_pred, experiment_name, dataset_name, phase):
         try:
-            cm = confusion_matrix(y_test, y_pred)
+            cm = confusion_matrix(y_true, y_pred)
             plt.figure(figsize=(8, 6))
             sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-            plt.title(f'Confusion Matrix: {experiment_name} - {dataset_name}')
+            plt.title(f'Confusion Matrix: {experiment_name} - {dataset_name} ({phase})')
             plt.ylabel('True Label')
             plt.xlabel('Predicted Label')
             plt.tight_layout()
             
-            plot_path = os.path.join(self.output_dir, f"{experiment_name}_{dataset_name}_confusion_matrix.png")
+            plot_path = os.path.join(self.plots_dir, f"{experiment_name}_{dataset_name}_{phase}_confusion_matrix.png")
             plt.savefig(plot_path)
             plt.close()
         except Exception as e:

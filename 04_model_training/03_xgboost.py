@@ -21,7 +21,7 @@ def main():
         try:
             X, y = trainer.load_data(ds_name)
             trainer.run_training(
-                model=XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42),
+                model=XGBClassifier(eval_metric='logloss', random_state=42),
                 param_grid=param_grid,
                 dataset_name=ds_name,
                 X=X,

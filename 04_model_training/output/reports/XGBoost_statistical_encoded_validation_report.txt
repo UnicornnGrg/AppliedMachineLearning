@@ -1,0 +1,25 @@
+Experiment: XGBoost
+Dataset: statistical_encoded
+Phase: validation
+Best Params: {'subsample': 0.8, 'n_estimators': 100, 'max_depth': 10, 'learning_rate': 0.1, 'colsample_bytree': 1.0}
+------------------------------
+dataset: statistical_encoded
+model: XGBoost
+phase: validation
+best_params: {'subsample': 0.8, 'n_estimators': 100, 'max_depth': 10, 'learning_rate': 0.1, 'colsample_bytree': 1.0}
+accuracy: 0.925
+precision: 0.6451612903225806
+recall: 0.3333333333333333
+f1: 0.43956043956043955
+roc_auc: 0.9004032258064516
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.94      0.98      0.96       620
+           1       0.65      0.33      0.44        60
+
+    accuracy                           0.93       680
+   macro avg       0.79      0.66      0.70       680
+weighted avg       0.91      0.93      0.91       680

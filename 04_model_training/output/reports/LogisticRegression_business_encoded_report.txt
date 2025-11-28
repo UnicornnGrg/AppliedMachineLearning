@@ -1,0 +1,23 @@
+Experiment: LogisticRegression
+Dataset: business_encoded
+Best Params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+------------------------------
+dataset: business_encoded
+model: LogisticRegression
+best_params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+accuracy: 0.9128996692392503
+precision: 0.5142857142857142
+recall: 0.225
+f1: 0.3130434782608696
+roc_auc: 0.8673972188633615
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.95       827
+           1       0.51      0.23      0.31        80
+
+    accuracy                           0.91       907
+   macro avg       0.72      0.60      0.63       907
+weighted avg       0.89      0.91      0.90       907

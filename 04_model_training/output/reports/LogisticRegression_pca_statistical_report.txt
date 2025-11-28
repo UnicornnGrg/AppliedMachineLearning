@@ -1,0 +1,23 @@
+Experiment: LogisticRegression
+Dataset: pca_statistical
+Best Params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+------------------------------
+dataset: pca_statistical
+model: LogisticRegression
+best_params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+accuracy: 0.9206174200661521
+precision: 0.5512820512820513
+recall: 0.5375
+f1: 0.5443037974683544
+roc_auc: 0.8587666263603385
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.96      0.96      0.96       827
+           1       0.55      0.54      0.54        80
+
+    accuracy                           0.92       907
+   macro avg       0.75      0.75      0.75       907
+weighted avg       0.92      0.92      0.92       907

@@ -1,0 +1,23 @@
+Experiment: RandomForest
+Dataset: realistic_encoded
+Best Params: {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_depth': None}
+------------------------------
+dataset: realistic_encoded
+model: RandomForest
+best_params: {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_depth': None}
+accuracy: 0.918412348401323
+precision: 0.575
+recall: 0.2875
+f1: 0.38333333333333336
+roc_auc: 0.8646387545344618
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.96       827
+           1       0.57      0.29      0.38        80
+
+    accuracy                           0.92       907
+   macro avg       0.75      0.63      0.67       907
+weighted avg       0.90      0.92      0.91       907

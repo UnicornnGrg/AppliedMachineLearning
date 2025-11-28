@@ -1,0 +1,23 @@
+Experiment: RandomForest
+Dataset: pca_business
+Best Params: {'n_estimators': 200, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_depth': None}
+------------------------------
+dataset: pca_business
+model: RandomForest
+best_params: {'n_estimators': 200, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_depth': None}
+accuracy: 0.9162072767364939
+precision: 0.6428571428571429
+recall: 0.1125
+f1: 0.19148936170212766
+roc_auc: 0.860799576783555
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.92      0.99      0.96       827
+           1       0.64      0.11      0.19        80
+
+    accuracy                           0.92       907
+   macro avg       0.78      0.55      0.57       907
+weighted avg       0.90      0.92      0.89       907

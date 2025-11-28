@@ -1,0 +1,25 @@
+Experiment: XGBoost
+Dataset: business_encoded
+Phase: validation
+Best Params: {'subsample': 0.8, 'n_estimators': 200, 'max_depth': 6, 'learning_rate': 0.1, 'colsample_bytree': 1.0}
+------------------------------
+dataset: business_encoded
+model: XGBoost
+phase: validation
+best_params: {'subsample': 0.8, 'n_estimators': 200, 'max_depth': 6, 'learning_rate': 0.1, 'colsample_bytree': 1.0}
+accuracy: 0.9176470588235294
+precision: 0.5666666666666667
+recall: 0.2833333333333333
+f1: 0.37777777777777777
+roc_auc: 0.86997311827957
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.96       620
+           1       0.57      0.28      0.38        60
+
+    accuracy                           0.92       680
+   macro avg       0.75      0.63      0.67       680
+weighted avg       0.90      0.92      0.90       680

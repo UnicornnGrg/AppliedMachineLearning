@@ -1,0 +1,25 @@
+Experiment: XGBoost
+Dataset: pca_business
+Phase: validation
+Best Params: {'subsample': 0.8, 'n_estimators': 200, 'max_depth': 3, 'learning_rate': 0.2, 'colsample_bytree': 1.0}
+------------------------------
+dataset: pca_business
+model: XGBoost
+phase: validation
+best_params: {'subsample': 0.8, 'n_estimators': 200, 'max_depth': 3, 'learning_rate': 0.2, 'colsample_bytree': 1.0}
+accuracy: 0.9117647058823529
+precision: 0.5
+recall: 0.2
+f1: 0.2857142857142857
+roc_auc: 0.7943279569892473
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.95       620
+           1       0.50      0.20      0.29        60
+
+    accuracy                           0.91       680
+   macro avg       0.71      0.59      0.62       680
+weighted avg       0.89      0.91      0.89       680
