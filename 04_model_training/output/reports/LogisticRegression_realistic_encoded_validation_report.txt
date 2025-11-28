@@ -1,0 +1,25 @@
+Experiment: LogisticRegression
+Dataset: realistic_encoded
+Phase: validation
+Best Params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+------------------------------
+dataset: realistic_encoded
+model: LogisticRegression
+phase: validation
+best_params: {'C': 10, 'penalty': 'l2', 'solver': 'lbfgs'}
+accuracy: 0.9220588235294118
+precision: 0.6521739130434783
+recall: 0.25
+f1: 0.3614457831325301
+roc_auc: 0.8592741935483871
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.99      0.96       620
+           1       0.65      0.25      0.36        60
+
+    accuracy                           0.92       680
+   macro avg       0.79      0.62      0.66       680
+weighted avg       0.91      0.92      0.91       680

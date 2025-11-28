@@ -1,0 +1,25 @@
+Experiment: RandomForest
+Dataset: business_encoded
+Phase: validation
+Best Params: {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_depth': 20}
+------------------------------
+dataset: business_encoded
+model: RandomForest
+phase: validation
+best_params: {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_depth': 20}
+accuracy: 0.9147058823529411
+precision: 0.5416666666666666
+recall: 0.21666666666666667
+f1: 0.30952380952380953
+roc_auc: 0.8623118279569892
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.95       620
+           1       0.54      0.22      0.31        60
+
+    accuracy                           0.91       680
+   macro avg       0.74      0.60      0.63       680
+weighted avg       0.89      0.91      0.90       680

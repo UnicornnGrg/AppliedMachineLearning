@@ -1,0 +1,25 @@
+Experiment: LogisticRegression
+Dataset: pca_business
+Phase: validation
+Best Params: {'C': 100, 'penalty': 'l2', 'solver': 'lbfgs'}
+------------------------------
+dataset: pca_business
+model: LogisticRegression
+phase: validation
+best_params: {'C': 100, 'penalty': 'l2', 'solver': 'lbfgs'}
+accuracy: 0.9058823529411765
+precision: 0.45
+recall: 0.3
+f1: 0.36
+roc_auc: 0.776209677419355
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.96      0.95       620
+           1       0.45      0.30      0.36        60
+
+    accuracy                           0.91       680
+   macro avg       0.69      0.63      0.65       680
+weighted avg       0.89      0.91      0.90       680
