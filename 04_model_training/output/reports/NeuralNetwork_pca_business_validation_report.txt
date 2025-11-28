@@ -1,0 +1,25 @@
+Experiment: NeuralNetwork
+Dataset: pca_business
+Phase: validation
+Best Params: {'learning_rate_init': 0.01, 'hidden_layer_sizes': (50,), 'alpha': 0.0001, 'activation': 'relu'}
+------------------------------
+dataset: pca_business
+model: NeuralNetwork
+phase: validation
+best_params: {'learning_rate_init': 0.01, 'hidden_layer_sizes': (50,), 'alpha': 0.0001, 'activation': 'relu'}
+accuracy: 0.9088235294117647
+precision: 0.4722222222222222
+recall: 0.2833333333333333
+f1: 0.3541666666666667
+roc_auc: 0.7985483870967741
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.97      0.95       620
+           1       0.47      0.28      0.35        60
+
+    accuracy                           0.91       680
+   macro avg       0.70      0.63      0.65       680
+weighted avg       0.89      0.91      0.90       680

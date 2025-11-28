@@ -1,0 +1,25 @@
+Experiment: NeuralNetwork
+Dataset: realistic_encoded
+Phase: validation
+Best Params: {'learning_rate_init': 0.01, 'hidden_layer_sizes': (50,), 'alpha': 0.001, 'activation': 'relu'}
+------------------------------
+dataset: realistic_encoded
+model: NeuralNetwork
+phase: validation
+best_params: {'learning_rate_init': 0.01, 'hidden_layer_sizes': (50,), 'alpha': 0.001, 'activation': 'relu'}
+accuracy: 0.9205882352941176
+precision: 0.8
+recall: 0.13333333333333333
+f1: 0.22857142857142856
+roc_auc: 0.8645430107526881
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.92      1.00      0.96       620
+           1       0.80      0.13      0.23        60
+
+    accuracy                           0.92       680
+   macro avg       0.86      0.57      0.59       680
+weighted avg       0.91      0.92      0.89       680

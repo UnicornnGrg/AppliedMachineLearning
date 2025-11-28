@@ -1,0 +1,25 @@
+Experiment: NeuralNetwork
+Dataset: business_encoded
+Phase: validation
+Best Params: {'learning_rate_init': 0.001, 'hidden_layer_sizes': (100,), 'alpha': 0.001, 'activation': 'tanh'}
+------------------------------
+dataset: business_encoded
+model: NeuralNetwork
+phase: validation
+best_params: {'learning_rate_init': 0.001, 'hidden_layer_sizes': (100,), 'alpha': 0.001, 'activation': 'tanh'}
+accuracy: 0.913235294117647
+precision: 0.5185185185185185
+recall: 0.23333333333333334
+f1: 0.3218390804597701
+roc_auc: 0.6539516129032258
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.98      0.95       620
+           1       0.52      0.23      0.32        60
+
+    accuracy                           0.91       680
+   macro avg       0.72      0.61      0.64       680
+weighted avg       0.89      0.91      0.90       680

@@ -1,0 +1,25 @@
+Experiment: LightGBM
+Dataset: pca_statistical
+Phase: validation
+Best Params: {'num_leaves': 50, 'n_estimators': 200, 'max_depth': 20, 'learning_rate': 0.2}
+------------------------------
+dataset: pca_statistical
+model: LightGBM
+phase: validation
+best_params: {'num_leaves': 50, 'n_estimators': 200, 'max_depth': 20, 'learning_rate': 0.2}
+accuracy: 0.9191176470588235
+precision: 0.6190476190476191
+recall: 0.21666666666666667
+f1: 0.32098765432098764
+roc_auc: 0.8547043010752688
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.99      0.96       620
+           1       0.62      0.22      0.32        60
+
+    accuracy                           0.92       680
+   macro avg       0.77      0.60      0.64       680
+weighted avg       0.90      0.92      0.90       680

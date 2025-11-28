@@ -1,0 +1,25 @@
+Experiment: LightGBM
+Dataset: business_encoded
+Phase: validation
+Best Params: {'num_leaves': 31, 'n_estimators': 200, 'max_depth': -1, 'learning_rate': 0.2}
+------------------------------
+dataset: business_encoded
+model: LightGBM
+phase: validation
+best_params: {'num_leaves': 31, 'n_estimators': 200, 'max_depth': -1, 'learning_rate': 0.2}
+accuracy: 0.913235294117647
+precision: 0.5142857142857142
+recall: 0.3
+f1: 0.37894736842105264
+roc_auc: 0.8504838709677419
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.93      0.97      0.95       620
+           1       0.51      0.30      0.38        60
+
+    accuracy                           0.91       680
+   macro avg       0.72      0.64      0.67       680
+weighted avg       0.90      0.91      0.90       680

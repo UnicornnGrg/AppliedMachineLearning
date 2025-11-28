@@ -1,0 +1,25 @@
+Experiment: LightGBM
+Dataset: statistical_encoded
+Phase: validation
+Best Params: {'num_leaves': 50, 'n_estimators': 100, 'max_depth': 10, 'learning_rate': 0.2}
+------------------------------
+dataset: statistical_encoded
+model: LightGBM
+phase: validation
+best_params: {'num_leaves': 50, 'n_estimators': 100, 'max_depth': 10, 'learning_rate': 0.2}
+accuracy: 0.9235294117647059
+precision: 0.6052631578947368
+recall: 0.38333333333333336
+f1: 0.46938775510204084
+roc_auc: 0.8879301075268818
+
+------------------------------
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.94      0.98      0.96       620
+           1       0.61      0.38      0.47        60
+
+    accuracy                           0.92       680
+   macro avg       0.77      0.68      0.71       680
+weighted avg       0.91      0.92      0.92       680
